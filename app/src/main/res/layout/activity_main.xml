@@ -11,7 +11,6 @@
         android:id="@+id/globalAmountTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:drawable/picture_frame"
         android:text="@string/GlobalAmount"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,26 +22,35 @@
         android:id="@+id/limitTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:drawable/picture_frame"
+        android:layout_marginTop="10dp"
         android:text="@string/Limit"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/globalAmountTextView" />
 
-    <Spinner
-        android:id="@+id/filterSpinner"
+    <RelativeLayout
+        android:id="@+id/filterSpinnerBackground"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="10dp"
-        android:clickable="true"
-        android:overScrollMode="always"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/limitTextView"
         app:layout_constraintBottom_toTopOf="@id/datePickerLayout"
-        android:focusable="true"
-        />
+        android:background="@drawable/border"
+        android:padding="0dp"
+        >
+        <Spinner
+            style="@style/Widget.AppCompat.DropDownItem.Spinner"
+            android:id="@+id/filterSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:clickable="true"
+            android:overScrollMode="always"
+            android:focusable="true"
+            />
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/datePickerLayout"
@@ -51,8 +59,8 @@
         android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/filterSpinner"
-        app:layout_constraintBottom_toTopOf="@id/sortSpinner"
+        app:layout_constraintTop_toBottomOf="@id/filterSpinnerBackground"
+        app:layout_constraintBottom_toTopOf="@id/sortSpinnerBackground"
         android:weightSum="1"
         android:orientation="horizontal"
         android:showDividers="middle"
@@ -72,9 +80,8 @@
             android:id="@+id/dateTextView"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:layout_weight="0.6"
-            android:background="@android:drawable/picture_frame" />
+            android:background="@drawable/border"
+            android:layout_weight="0.6"/>
 
         <Button
             android:id="@+id/rightDatePickerButton"
@@ -86,26 +93,38 @@
 
     </LinearLayout>
 
-    <Spinner
-        android:id="@+id/sortSpinner"
+    <RelativeLayout
+        android:id="@+id/sortSpinnerBackground"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="10dp"
-        android:clickable="true"
-        android:contextClickable="true"
-        android:focusable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/datePickerLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/datePickerLayout"
+        app:layout_constraintBottom_toTopOf="@id/transactionListView"
+        android:background="@drawable/border"
+        android:padding="0dp"
+        >
+        <Spinner
+            style="@style/Widget.AppCompat.DropDownItem.Spinner"
+            android:id="@+id/sortSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:clickable="true"
+            android:contextClickable="true"
+            android:focusable="true"
+            />
+    </RelativeLayout>
 
     <ListView
         android:id="@+id/transactionListView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
+        android:background="@drawable/border"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sortSpinner"
+        app:layout_constraintTop_toBottomOf="@+id/sortSpinnerBackground"
         app:layout_constraintBottom_toTopOf="@id/addTransactionButton"/>
 
     <Button

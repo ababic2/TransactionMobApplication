@@ -67,7 +67,7 @@ public class FilterSpinnerAdapter extends ArrayAdapter<FilterItem>{
 
         if (position == 0) {
             TextView textView = convertView.findViewById(R.id.listItemTextView);
-            textView.setText("filter by");
+            textView.setText("Filter by");
 
         }else{
             ImageView imageView = convertView.findViewById(R.id.imageView);

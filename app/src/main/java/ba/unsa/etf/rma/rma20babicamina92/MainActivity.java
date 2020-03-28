@@ -22,17 +22,17 @@ import ba.unsa.etf.rma.rma20babicamina92.models.FilterItem;
 import ba.unsa.etf.rma.rma20babicamina92.models.TransactionListItem;
 
 public class MainActivity extends AppCompatActivity {
-    private Button button1, button2, button3;
+    private Button leftDatePickerButton, rightDatePickerButton, addTransactionButton;
     private ListView listView;
-    private Spinner spinner1;
-    private Spinner spinner2;
+    private Spinner filterSpinner;
+    private Spinner sortSpinner;
 
     private ArrayList<FilterItem> entriesSpinner1 = new ArrayList<FilterItem>();
     private ArrayList<TransactionListItem> transactionListItems = new ArrayList<TransactionListItem>();
     private ArrayList<String> entriesSpinner2 = new ArrayList<String>();
 
-    private FilterSpinnerAdapter adapterSpinner1;
-    private ArrayAdapter<String> adapterSpinner2;
+    private FilterSpinnerAdapter filterSpinnerAdapter;
+    private ArrayAdapter<String> sortSpinnerAdapter;
    // private TransactionListAdapter transactionListAdapter;
 
     @Override
@@ -41,14 +41,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initList();
 
-        //SPINER 1
+        leftDatePickerButton = findViewById(R.id.leftDatePickerButton);
+        rightDatePickerButton = findViewById(R.id.rightDatePickerButton);
+        addTransactionButton = findViewById(R.id.addTransactionButton);
+        sortSpinner = (Spinner) findViewById(R.id.sortSpinner);
+        filterSpinner = (Spinner) findViewById(R.id.filterSpinner);
+        leftDatePickerButton.setOnClickListener(event ->{
+            System.out.println("Kliknut left Date picker button");
+        });
 
-        spinner1 = (Spinner) findViewById(R.id.filterSpinner);
 
-        adapterSpinner1 = new FilterSpinnerAdapter(this, entriesSpinner1);
-        spinner1.setAdapter(adapterSpinner1);
+        filterSpinnerAdapter = new FilterSpinnerAdapter(this, entriesSpinner1);
+        filterSpinner.setAdapter(filterSpinnerAdapter);
 
-        spinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 FilterItem filterItem = (FilterItem)parent.getItemAtPosition(position);
@@ -63,11 +69,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //SPINNER 2
-        spinner2 = (Spinner) findViewById(R.id.sortSpinner);
-        spinner2.setClickable(true);
-
-        adapterSpinner2 =new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, entriesSpinner2) {
+        sortSpinnerAdapter =new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, entriesSpinner2) {
             @Override
             public boolean isEnabled(int position) {
                 if (position == 0) {
@@ -84,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
                 View view = super.getDropDownView(position, convertView, parent);
                 TextView tv = (TextView) view;
                 if(position == 0){
-                    // Set the hint text color gray
                     tv.setTextColor(Color.GRAY);
                 }
                 else {
@@ -93,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                 return view;
             }
         };
-        spinner2.setAdapter(adapterSpinner2);
+        sortSpinner.setAdapter(sortSpinnerAdapter);
     }
 
     private void initList() {
