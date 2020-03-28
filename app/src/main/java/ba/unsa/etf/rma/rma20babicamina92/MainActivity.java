@@ -14,18 +14,27 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import ba.unsa.etf.rma.rma20babicamina92.adapters.FilterSpinnerAdapter;
 //import ba.unsa.etf.rma.rma20babicamina92.adapters.TransactionListAdapter;
+import ba.unsa.etf.rma.rma20babicamina92.contracts.MainContract;
 import ba.unsa.etf.rma.rma20babicamina92.models.FilterItem;
 import ba.unsa.etf.rma.rma20babicamina92.models.TransactionListItem;
+import ba.unsa.etf.rma.rma20babicamina92.presenters.MainPresenter;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainContract.MainView{
     private Button leftDatePickerButton, rightDatePickerButton, addTransactionButton;
     private ListView listView;
     private Spinner filterSpinner;
     private Spinner sortSpinner;
+    private TextView dateTextView;
 
     private ArrayList<FilterItem> entriesSpinner1 = new ArrayList<FilterItem>();
     private ArrayList<TransactionListItem> transactionListItems = new ArrayList<TransactionListItem>();
@@ -33,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FilterSpinnerAdapter filterSpinnerAdapter;
     private ArrayAdapter<String> sortSpinnerAdapter;
+    private MainPresenter mainPresenter;
    // private TransactionListAdapter transactionListAdapter;
 
     @Override
@@ -42,13 +52,11 @@ public class MainActivity extends AppCompatActivity {
         initList();
 
         leftDatePickerButton = findViewById(R.id.leftDatePickerButton);
+        dateTextView = findViewById(R.id.dateTextView);
         rightDatePickerButton = findViewById(R.id.rightDatePickerButton);
         addTransactionButton = findViewById(R.id.addTransactionButton);
         sortSpinner = (Spinner) findViewById(R.id.sortSpinner);
         filterSpinner = (Spinner) findViewById(R.id.filterSpinner);
-        leftDatePickerButton.setOnClickListener(event ->{
-            System.out.println("Kliknut left Date picker button");
-        });
 
 
         filterSpinnerAdapter = new FilterSpinnerAdapter(this, entriesSpinner1);
@@ -95,6 +103,14 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         sortSpinner.setAdapter(sortSpinnerAdapter);
+        mainPresenter = new MainPresenter(this);
+        rightDatePickerButton.setOnClickListener(event -> mainPresenter.datePickerClickedRight());
+        leftDatePickerButton.setOnClickListener(event -> mainPresenter.datePickerCLickedLeft());
+    }
+
+    public void setMonthForTransactions(Date date) {
+        String displayDate = new SimpleDateFormat("MMMM, yyyy", Locale.getDefault()).format(date);
+        dateTextView.setText(displayDate);
     }
 
     private void initList() {
