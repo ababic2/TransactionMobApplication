@@ -14,10 +14,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
@@ -36,9 +33,9 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
     private Spinner sortSpinner;
     private TextView dateTextView;
 
-    private ArrayList<FilterItem> entriesSpinner1 = new ArrayList<FilterItem>();
+    private ArrayList<FilterItem> filterBySpinnerItems = new ArrayList<FilterItem>();
     private ArrayList<TransactionListItem> transactionListItems = new ArrayList<TransactionListItem>();
-    private ArrayList<String> entriesSpinner2 = new ArrayList<String>();
+    private ArrayList<String> sortBySpinnerItems = new ArrayList<String>();
 
     private FilterSpinnerAdapter filterSpinnerAdapter;
     private ArrayAdapter<String> sortSpinnerAdapter;
@@ -49,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initList();
 
         leftDatePickerButton = findViewById(R.id.leftDatePickerButton);
         dateTextView = findViewById(R.id.dateTextView);
@@ -59,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
         filterSpinner = (Spinner) findViewById(R.id.filterSpinner);
 
 
-        filterSpinnerAdapter = new FilterSpinnerAdapter(this, entriesSpinner1);
+        filterSpinnerAdapter = new FilterSpinnerAdapter(this, filterBySpinnerItems);
         filterSpinner.setAdapter(filterSpinnerAdapter);
 
         filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -77,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
             }
         });
 
-        sortSpinnerAdapter =new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, entriesSpinner2) {
+        sortSpinnerAdapter =new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, sortBySpinnerItems) {
             @Override
             public boolean isEnabled(int position) {
                 if (position == 0) {
@@ -106,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
         mainPresenter = new MainPresenter(this);
         rightDatePickerButton.setOnClickListener(event -> mainPresenter.datePickerClickedRight());
         leftDatePickerButton.setOnClickListener(event -> mainPresenter.datePickerCLickedLeft());
+        mainPresenter.initialize();
     }
 
     public void setMonthForTransactions(Date date) {
@@ -113,39 +110,16 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
         dateTextView.setText(displayDate);
     }
 
-    private void initList() {
-        entriesSpinner1.add(new FilterItem("INDIVIDUALPAYMENT",R.drawable.individualpay));
-        entriesSpinner1.add(new FilterItem("REGULARPAYMENT",R.drawable.regularpayment));
-        entriesSpinner1.add(new FilterItem("PURCHASE",R.drawable.pursache));
-        entriesSpinner1.add(new FilterItem("INDIVIDUALINCOME",R.drawable.individualpay)); // dodaj slikicuuu
-        entriesSpinner1.add(new FilterItem("REGULARINCOME",R.drawable.individualpay)); //addd phootoooo
+    @Override
+    public void setFilterBySpinnerItems(ArrayList<FilterItem> filterItems) {
+        filterBySpinnerItems.clear();
+        filterBySpinnerItems.addAll(filterItems);
+    }
 
-        entriesSpinner1.add(new FilterItem("INDIVIDUALPAYMENT",R.drawable.individualpay));
-        entriesSpinner1.add(new FilterItem("REGULARPAYMENT",R.drawable.regularpayment));
-        entriesSpinner1.add(new FilterItem("PURCHASE",R.drawable.pursache));
-        entriesSpinner1.add(new FilterItem("INDIVIDUALINCOME",R.drawable.individualpay)); // dodaj slikicuuu
-        entriesSpinner1.add(new FilterItem("REGULARINCOME",R.drawable.individualpay)); //addd phootoooo
-
-        entriesSpinner1.add(new FilterItem("INDIVIDUALPAYMENT",R.drawable.individualpay));
-        entriesSpinner1.add(new FilterItem("REGULARPAYMENT",R.drawable.regularpayment));
-        entriesSpinner1.add(new FilterItem("PURCHASE",R.drawable.pursache));
-        entriesSpinner1.add(new FilterItem("INDIVIDUALINCOME",R.drawable.individualpay)); // dodaj slikicuuu
-        entriesSpinner1.add(new FilterItem("REGULARINCOME",R.drawable.individualpay)); //addd phootoooo
-
-        entriesSpinner2.add("Sort by");
-        entriesSpinner2.add("Price - Ascending");
-        entriesSpinner2.add("Price - Descending");
-        entriesSpinner2.add("Title - Ascending");
-        entriesSpinner2.add("Title - Descending");
-        entriesSpinner2.add("Date - Ascending");
-        entriesSpinner2.add("Date - Descending");
-        entriesSpinner2.add("Price - Descending");
-        entriesSpinner2.add("Title - Ascending");
-        entriesSpinner2.add("Title - Descending");
-        entriesSpinner2.add("Date - Ascending");
-        entriesSpinner2.add("Date - Descending");
-
-       // transactionListItems.add()
+    @Override
+    public void setSortBySpinnerItems(ArrayList<String> sortSpinnerItems) {
+        this.sortBySpinnerItems.clear();
+        this.sortBySpinnerItems.addAll(sortSpinnerItems);
     }
 
 }
