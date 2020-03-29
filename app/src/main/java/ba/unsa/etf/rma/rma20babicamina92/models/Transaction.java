@@ -1,6 +1,7 @@
 package ba.unsa.etf.rma.rma20babicamina92.models;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class Transaction implements Comparable<Transaction>{
     public enum Type {
@@ -96,5 +97,34 @@ public class Transaction implements Comparable<Transaction>{
     @Override
     public int compareTo(Transaction o) {
         return 0;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Transaction that = (Transaction) o;
+
+        if (amount != that.amount) return false;
+        if (transactionInterval != that.transactionInterval) return false;
+        if (!Objects.equals(date, that.date)) return false;
+        if (!Objects.equals(title, that.title)) return false;
+        if (!Objects.equals(itemDescription, that.itemDescription))
+            return false;
+        if (!Objects.equals(endDate, that.endDate)) return false;
+        return transactionType == that.transactionType;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = date != null ? date.hashCode() : 0;
+        result = 31 * result + amount;
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (itemDescription != null ? itemDescription.hashCode() : 0);
+        result = 31 * result + transactionInterval;
+        result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
+        result = 31 * result + (transactionType != null ? transactionType.hashCode() : 0);
+        return result;
     }
 }
