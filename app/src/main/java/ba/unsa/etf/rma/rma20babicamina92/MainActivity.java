@@ -35,10 +35,8 @@ import ba.unsa.etf.rma.rma20babicamina92.presenters.MainPresenter;
         private TextView dateTextView;
 
         private ArrayList<FilterItem> filterBySpinnerItems = new ArrayList<FilterItem>();
-        //private ArrayList<TransactionListItem> transactionListItems = new ArrayList<TransactionListItem>();
         private ArrayList<String> sortBySpinnerItems = new ArrayList<String>();
         private ArrayList<Transaction> transactionArrayList = new ArrayList<Transaction>();
-        private ArrayList<Transaction> filterTransactionArrayList = new ArrayList<Transaction>();
 
         private FilterSpinnerAdapter filterSpinnerAdapter;
         private ArrayAdapter<String> sortSpinnerAdapter;
@@ -107,8 +105,7 @@ import ba.unsa.etf.rma.rma20babicamina92.presenters.MainPresenter;
             leftDatePickerButton.setOnClickListener(event -> mainPresenter.datePickerCLickedLeft());
             mainPresenter.initialize();
 
-            System.out.println("ev me ovdje ");
-            transactionListAdapter = new TransactionListAdapter(this,R.layout.transaction_list,filterTransactionListByDate());
+            transactionListAdapter = new TransactionListAdapter(this,R.layout.transaction_list,transactionArrayList);
             listView.setAdapter(transactionListAdapter);
 
         }
@@ -133,26 +130,11 @@ import ba.unsa.etf.rma.rma20babicamina92.presenters.MainPresenter;
         @Override
         public void setTransactionListItems(ArrayList<Transaction> transactionArrayList) {
             this.transactionArrayList.clear();
-            this.transactionArrayList.addAll(transactionArrayList);
-        }
-
-        @Override
-        public ArrayList<Transaction>  filterTransactionListByDate() {
-            ArrayList<Transaction> arrayOfTransactionsByDate = new ArrayList<>();
-            String dateFromTextView = dateTextView.getText().toString();
-
-            for(Transaction transaction : transactionArrayList) {
-                String transactionDate = new SimpleDateFormat("MMMM, yyyy", Locale.getDefault()).format(transaction.getDate());
-
-                if(transactionDate.equals(dateFromTextView)) {
-                    arrayOfTransactionsByDate.add(transaction);
-                }
-            }
-
-            return arrayOfTransactionsByDate;
-            //filterTransactionArrayList.addAll(arrayOfTransactionsByDate);
-
-            //filterTransactionListByType(arrayOfTransactionsByDate);
+            System.out.println(transactionArrayList.size());
+//            for(int i = 0; i < transactionArrayList.size(); i++) {
+//                this.transactionArrayList.add(transactionArrayList.get(i));
+//                transactionListAdapter.notifyDataSetChanged();
+            //}
         }
 
         @Override

@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import ba.unsa.etf.rma.rma20babicamina92.R;
 import ba.unsa.etf.rma.rma20babicamina92.contracts.MainContract;
@@ -76,15 +77,27 @@ public class MainPresenter implements MainContract.MainPresenter {
     public void datePickerClickedRight() {
         date.setMonth(date.getMonth() + 1);
         mainActivity.setMonthForTransactions(date);
-        mainActivity.filterTransactionListByDate();
-        mainActivity.notifyAdapter();
+
+        ArrayList<Transaction> transactions = getTransactionsByDate();
+        mainActivity.setTransactionListItems(transactions);
     }
 
     @Override
     public void datePickerCLickedLeft() {
         date.setMonth(date.getMonth() - 1);
         mainActivity.setMonthForTransactions(date);
-        mainActivity.filterTransactionListByDate();
-        mainActivity.notifyAdapter();
+        ArrayList<Transaction> transactions = getTransactionsByDate();
+        mainActivity.setTransactionListItems(transactions);
+    }
+
+    private ArrayList<Transaction> getTransactionsByDate() {
+        ArrayList<Transaction> transactions = new ArrayList<>();
+
+        for(int i = 0; i < transactionArrayList.size(); i++) {
+            if(transactionArrayList.get(i).getDate().getMonth() == date.getMonth() && transactionArrayList.get(i).getDate().getYear() == date.getYear()) {
+                transactions.add(transactionArrayList.get(i));
+            }
+        }
+        return transactions;
     }
 }

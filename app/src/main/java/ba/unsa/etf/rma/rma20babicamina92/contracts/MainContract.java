@@ -15,8 +15,6 @@ public class MainContract {
 
         void setTransactionListItems(ArrayList<Transaction> transactionArrayList);
 
-        ArrayList<Transaction> filterTransactionListByDate();
-
         void filterTransactionListByType(ArrayList<Transaction> listOfTransaction);
 
         void notifyAdapter();

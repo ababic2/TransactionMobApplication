@@ -2,18 +2,18 @@ package ba.unsa.etf.rma.rma20babicamina92.models;
 
 public class FilterItem {
     private String filterName;
-    private int fImage;
+    private int image;
 
-    public FilterItem(String filterName, int fImage) {
+    public FilterItem(String filterName, int image) {
         this.filterName = filterName;
-        this.fImage = fImage;
+        this.image = image;
     }
 
     public String getFilterName() {
         return filterName;
     }
 
-    public int getfImage() {
-        return fImage;
+    public int getImage() {
+        return image;
     }
 }

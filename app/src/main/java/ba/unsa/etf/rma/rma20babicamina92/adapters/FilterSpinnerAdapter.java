@@ -75,7 +75,7 @@ public class FilterSpinnerAdapter extends ArrayAdapter<FilterItem>{
             FilterItem currentItem = getItem(position);
 
             if(currentItem != null) {
-                imageView.setImageResource(currentItem.getfImage());
+                imageView.setImageResource(currentItem.getImage());
                 textView.setText(currentItem.getFilterName());
             }
         }
