@@ -1,23 +1,23 @@
 package ba.unsa.etf.rma.rma20babicamina92.presenters;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
 import ba.unsa.etf.rma.rma20babicamina92.R;
 import ba.unsa.etf.rma.rma20babicamina92.contracts.MainContract;
 import ba.unsa.etf.rma.rma20babicamina92.models.FilterItem;
+import ba.unsa.etf.rma.rma20babicamina92.models.MainModel;
 import ba.unsa.etf.rma.rma20babicamina92.models.Transaction;
 import ba.unsa.etf.rma.rma20babicamina92.models.Transaction.Type;
 import ba.unsa.etf.rma.rma20babicamina92.utils.Filter;
 
 public class MainPresenter implements MainContract.MainPresenter {
+    private MainModel model;
+
     private Map<String, Comparator<Transaction>> comparatorMap;
     private Map<String, Filter> filterMap;
     private Date date;
@@ -30,6 +30,7 @@ public class MainPresenter implements MainContract.MainPresenter {
     private ArrayList<Transaction> transactionArrayList;
 
     public MainPresenter(MainContract.MainView mainActivity) {
+        model = new MainModel();
         date = new Date();
         date.setDate(1);
         sortBy = "Default";
@@ -84,65 +85,9 @@ public class MainPresenter implements MainContract.MainPresenter {
         getSortItems();
         mainActivity.setSortBySpinnerItems(sortSpinnerItems);
 
-        getTransactionListItems();
         mainActivity.setTransactionListItems(getTransactions());
     }
 
-    private void getTransactionListItems() {
-
-        transactionArrayList = new ArrayList<Transaction>(
-                Arrays.asList(
-                        new Transaction(
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.FEBRUARY,
-                                        11
-                                ).getTime(),
-                                186,
-                                "lijekovi",
-                                "description",
-                                12,
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.FEBRUARY,
-                                        11
-                                ).getTime(),
-                                "INDIVIDUALPAYMENT"),
-                        new Transaction(
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.FEBRUARY,
-                                        22
-                                ).getTime(),
-                                200,
-                                "kompjuteri",
-                                "description",
-                                12,
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.FEBRUARY,
-                                        11
-                                ).getTime(),
-                                "REGULARPAYMENT"),
-                        new Transaction(
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.APRIL,
-                                        11
-                                ).getTime(),
-                                1225,
-                                "title2",
-                                "description",
-                                12,
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.MAY,
-                                        11
-                                ).getTime(),
-                                "PURCHASE")
-                )
-        );
-    }
 
     private void getSortItems() {
         sortSpinnerItems = new ArrayList<>();
@@ -197,8 +142,7 @@ public class MainPresenter implements MainContract.MainPresenter {
 
     private ArrayList<Transaction> getTransactions() {
         ArrayList<Transaction> transactions = new ArrayList<>();
-        System.out.println(this.transactionArrayList);
-
+        this.transactionArrayList = model.getTransactions();
         for(int i = 0; i < transactionArrayList.size(); i++) {
             if(filterMap.get(type.toString()).test(transactionArrayList.get(i))) {
                 transactions.add(transactionArrayList.get(i));

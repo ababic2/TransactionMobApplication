@@ -2,7 +2,10 @@ package ba.unsa.etf.rma.rma20babicamina92;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -53,6 +56,10 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
             filterSpinner = (Spinner) findViewById(R.id.filterSpinner);
             listView = (ListView) findViewById(R.id.transactionListView);
 
+            addTransactionButton.setOnClickListener(event-> {
+                Intent intent = new Intent(this, TransactionActivity.class);
+                startActivity(intent);
+            });
 
             filterSpinner.setOnItemSelectedListener(ListenerProvider.provideFilterSpinnerListener(this));
             sortSpinner.setOnItemSelectedListener(ListenerProvider.provideSortSpinnerListener(this));
@@ -65,6 +72,13 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
             sortSpinner.setAdapter(sortSpinnerAdapter);
             listView.setAdapter(transactionListAdapter);
 
+            listView.setOnItemClickListener((parent, view, position, id) -> {
+                Intent intent = new Intent(this, TransactionActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("transaction", transactionArrayList.get(position));
+                intent.putExtras(bundle);
+                startActivity(intent);
+            });
 
             mainPresenter = new MainPresenter(this);
             rightDatePickerButton.setOnClickListener(event -> mainPresenter.datePickerClickedRight());

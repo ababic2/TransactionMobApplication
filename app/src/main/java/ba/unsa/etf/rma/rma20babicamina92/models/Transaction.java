@@ -1,9 +1,10 @@
 package ba.unsa.etf.rma.rma20babicamina92.models;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
-public class Transaction implements Comparable<Transaction>{
+public class Transaction implements Comparable<Transaction>, Serializable {
     public enum Type {
         INDIVIDUALPAYMENT("INDIVIDUALPAYMENT"),
         REGULARPAYMENT("REGULARPAYMENT"),
@@ -22,6 +23,7 @@ public class Transaction implements Comparable<Transaction>{
     private int transactionInterval;
     private Date endDate;
     private Type transactionType;
+
     public Transaction(Date date, int amount, String title, String itemDescription, int transactionInterval, Date endDate, String transactionType) {
         this.date = date;
         this.amount = amount;
@@ -30,7 +32,6 @@ public class Transaction implements Comparable<Transaction>{
         this.transactionInterval = transactionInterval;
         this.endDate = endDate;
         this.transactionType =  Type.valueOf(transactionType);
-
     }
 
     public Date getDate() {
@@ -39,6 +40,10 @@ public class Transaction implements Comparable<Transaction>{
 
     public String getType() {
         return transactionType.toString();
+    }
+
+    public Type getTransactionType() {
+        return transactionType;
     }
 
     public void setTransactionType(Type transactionType) {

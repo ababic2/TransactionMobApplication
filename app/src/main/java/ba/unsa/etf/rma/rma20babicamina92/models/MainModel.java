@@ -9,7 +9,7 @@ import java.util.List;
 
 public class MainModel {
     private Account account;
-    private List<Transaction> transactions;
+    private ArrayList<Transaction> transactions;
 
     public MainModel() {
         account = new Account(
@@ -351,7 +351,7 @@ public class MainModel {
         return account;
     }
 
-    public List<Transaction> getTransactions() {
+    public ArrayList<Transaction> getTransactions() {
         return transactions;
     }
 
