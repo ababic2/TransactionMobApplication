@@ -1,17 +1,24 @@
 package ba.unsa.etf.rma.rma20babicamina92.presenters;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import ba.unsa.etf.rma.rma20babicamina92.R;
 import ba.unsa.etf.rma.rma20babicamina92.contracts.MainContract;
 import ba.unsa.etf.rma.rma20babicamina92.models.FilterItem;
+import ba.unsa.etf.rma.rma20babicamina92.models.Transaction;
 
 public class MainPresenter implements MainContract.MainPresenter {
     private Date date;
     private MainContract.MainView mainActivity;
     private ArrayList<FilterItem>filterItems;
     private ArrayList<String> sortSpinnerItems;
+    private ArrayList<Transaction> transactionArrayList;
 
     public MainPresenter(MainContract.MainView mainActivity) {
         date = new Date();
@@ -25,6 +32,24 @@ public class MainPresenter implements MainContract.MainPresenter {
 
         getSortItems();
         mainActivity.setSortBySpinnerItems(sortSpinnerItems);
+
+        getTransactionListItems();
+        mainActivity.setTransactionListItems(transactionArrayList);
+    }
+
+    private void getTransactionListItems() {
+
+        transactionArrayList = new ArrayList<Transaction>(
+                Arrays.asList(
+                        new Transaction( new GregorianCalendar(2020, Calendar.FEBRUARY, 11).getTime(),
+                                186, "title","description",12,
+                                new GregorianCalendar(2015, Calendar.FEBRUARY, 11).getTime(),"INDIVIDUALPAYMENT"),
+                        new Transaction( new GregorianCalendar(2020, Calendar.MARCH, 11).getTime(),
+                                1225, "title2","description",12,
+                                new GregorianCalendar(2015, Calendar.FEBRUARY, 11).getTime(),"PURCHASE")
+                )
+        );
+
     }
 
     private void getSortItems() {
@@ -51,11 +76,13 @@ public class MainPresenter implements MainContract.MainPresenter {
     public void datePickerClickedRight() {
         date.setMonth(date.getMonth() + 1);
         mainActivity.setMonthForTransactions(date);
+        mainActivity.filterTransactionListByDate();
     }
 
     @Override
     public void datePickerCLickedLeft() {
         date.setMonth(date.getMonth() - 1);
         mainActivity.setMonthForTransactions(date);
+        mainActivity.filterTransactionListByDate();
     }
 }
