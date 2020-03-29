@@ -35,7 +35,7 @@ public class MainPresenter implements MainContract.MainPresenter {
         mainActivity.setSortBySpinnerItems(sortSpinnerItems);
 
         getTransactionListItems();
-        mainActivity.setTransactionListItems(transactionArrayList);
+        mainActivity.setTransactionListItems(getTransactionsByDate());
     }
 
     private void getTransactionListItems() {

@@ -26,8 +26,10 @@ import ba.unsa.etf.rma.rma20babicamina92.contracts.MainContract;
 import ba.unsa.etf.rma.rma20babicamina92.models.FilterItem;
 import ba.unsa.etf.rma.rma20babicamina92.models.Transaction;
 import ba.unsa.etf.rma.rma20babicamina92.presenters.MainPresenter;
+import ba.unsa.etf.rma.rma20babicamina92.providers.AdapterProvider;
+import ba.unsa.etf.rma.rma20babicamina92.providers.ListenerProvider;
 
-    public class MainActivity extends AppCompatActivity implements MainContract.MainView{
+public class MainActivity extends AppCompatActivity implements MainContract.MainView{
         private Button leftDatePickerButton, rightDatePickerButton, addTransactionButton;
         private ListView listView;
         private Spinner filterSpinner;
@@ -56,57 +58,22 @@ import ba.unsa.etf.rma.rma20babicamina92.presenters.MainPresenter;
             filterSpinner = (Spinner) findViewById(R.id.filterSpinner);
             listView = (ListView) findViewById(R.id.transactionListView);
 
+
+            filterSpinner.setOnItemSelectedListener(ListenerProvider.provideFilterSpinnerOnClickListener(this));
+
             filterSpinnerAdapter = new FilterSpinnerAdapter(this, filterBySpinnerItems);
+            sortSpinnerAdapter = AdapterProvider.provideSortSpinnerAdapter(this, sortBySpinnerItems);
+            transactionListAdapter = new TransactionListAdapter(this,R.layout.transaction_list,transactionArrayList);
+
             filterSpinner.setAdapter(filterSpinnerAdapter);
-
-            filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    FilterItem filterItem = (FilterItem)parent.getItemAtPosition(position);
-                    String clickedName = filterItem.getFilterName();
-                    if(position != 0) {
-                        Toast.makeText(MainActivity.this, clickedName + " selected", Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-                }
-            });
-
-            sortSpinnerAdapter =new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, sortBySpinnerItems) {
-                @Override
-                public boolean isEnabled(int position) {
-                    if (position == 0) {
-                        // Disable the first item from Spinner
-                        // First item will be use for hint
-                        return false;
-                    } else {
-                        return true;
-                    }
-                }
-                @Override
-                public View getDropDownView(int position, View convertView,
-                                            ViewGroup parent) {
-                    View view = super.getDropDownView(position, convertView, parent);
-                    TextView tv = (TextView) view;
-                    if(position == 0){
-                        tv.setTextColor(Color.GRAY);
-                    }
-                    else {
-                        tv.setTextColor(Color.BLACK);
-                    }
-                    return view;
-                }
-            };
             sortSpinner.setAdapter(sortSpinnerAdapter);
+            listView.setAdapter(transactionListAdapter);
+
+
             mainPresenter = new MainPresenter(this);
             rightDatePickerButton.setOnClickListener(event -> mainPresenter.datePickerClickedRight());
             leftDatePickerButton.setOnClickListener(event -> mainPresenter.datePickerCLickedLeft());
             mainPresenter.initialize();
-
-            transactionListAdapter = new TransactionListAdapter(this,R.layout.transaction_list,transactionArrayList);
-            listView.setAdapter(transactionListAdapter);
 
         }
 
@@ -119,40 +86,24 @@ import ba.unsa.etf.rma.rma20babicamina92.presenters.MainPresenter;
         public void setFilterBySpinnerItems(ArrayList<FilterItem> filterItems) {
             filterBySpinnerItems.clear();
             filterBySpinnerItems.addAll(filterItems);
+            filterSpinnerAdapter.notifyDataSetChanged();
         }
 
         @Override
         public void setSortBySpinnerItems(ArrayList<String> sortSpinnerItems) {
             this.sortBySpinnerItems.clear();
             this.sortBySpinnerItems.addAll(sortSpinnerItems);
+            sortSpinnerAdapter.notifyDataSetChanged();
         }
 
         @Override
         public void setTransactionListItems(ArrayList<Transaction> transactionArrayList) {
             this.transactionArrayList.clear();
             System.out.println(transactionArrayList.size());
-//            for(int i = 0; i < transactionArrayList.size(); i++) {
-//                this.transactionArrayList.add(transactionArrayList.get(i));
-//                transactionListAdapter.notifyDataSetChanged();
-            //}
-        }
-
-        @Override
-        public void filterTransactionListByType(ArrayList<Transaction> arrayOfTransactionsByDate) {
-            ArrayList<Transaction> arrayOfTransactionsByType = new ArrayList<>();
-            String typeFromSpinner = filterSpinner.getSelectedItem().toString();
-
-            for(Transaction transaction : transactionArrayList) {
-                String transactionType = transaction.getType();
-                if(transactionType.equals(typeFromSpinner)) {
-                    arrayOfTransactionsByType.add(transaction);
-                }
-            }
-            //filterTransactionArrayList.addAll(arrayOfTransactionsByType);
-        }
-
-        @Override
-        public void notifyAdapter() {
+            this.transactionArrayList.addAll(transactionArrayList);
             transactionListAdapter.notifyDataSetChanged();
         }
+
+
+
     }

@@ -10,14 +10,8 @@ public class MainContract {
     public interface MainView {
         void setMonthForTransactions(Date date);
         void setFilterBySpinnerItems(ArrayList<FilterItem> filterItems);
-
         void setSortBySpinnerItems(ArrayList<String> sortSpinnerItems);
-
         void setTransactionListItems(ArrayList<Transaction> transactionArrayList);
-
-        void filterTransactionListByType(ArrayList<Transaction> listOfTransaction);
-
-        void notifyAdapter();
     }
 
     public interface MainPresenter {
