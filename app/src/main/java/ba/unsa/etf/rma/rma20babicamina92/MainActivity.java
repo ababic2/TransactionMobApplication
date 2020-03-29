@@ -43,7 +43,14 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
         private MainPresenter mainPresenter;
         private TransactionListAdapter transactionListAdapter;
 
-        @Override
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        mainPresenter.initialize();
+    }
+
+    @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
