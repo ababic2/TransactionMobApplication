@@ -44,7 +44,7 @@ public class MainPresenter implements MainContract.MainPresenter {
                         new Transaction( new GregorianCalendar(2020, Calendar.FEBRUARY, 11).getTime(),
                                 186, "title","description",12,
                                 new GregorianCalendar(2015, Calendar.FEBRUARY, 11).getTime(),"INDIVIDUALPAYMENT"),
-                        new Transaction( new GregorianCalendar(2020, Calendar.MARCH, 11).getTime(),
+                        new Transaction( new GregorianCalendar(2020, Calendar.MAY, 11).getTime(),
                                 1225, "title2","description",12,
                                 new GregorianCalendar(2015, Calendar.FEBRUARY, 11).getTime(),"PURCHASE")
                 )
@@ -77,6 +77,7 @@ public class MainPresenter implements MainContract.MainPresenter {
         date.setMonth(date.getMonth() + 1);
         mainActivity.setMonthForTransactions(date);
         mainActivity.filterTransactionListByDate();
+        mainActivity.notifyAdapter();
     }
 
     @Override
@@ -84,5 +85,6 @@ public class MainPresenter implements MainContract.MainPresenter {
         date.setMonth(date.getMonth() - 1);
         mainActivity.setMonthForTransactions(date);
         mainActivity.filterTransactionListByDate();
+        mainActivity.notifyAdapter();
     }
 }

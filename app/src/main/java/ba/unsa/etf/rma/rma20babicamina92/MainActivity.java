@@ -25,7 +25,6 @@ import ba.unsa.etf.rma.rma20babicamina92.adapters.TransactionListAdapter;
 import ba.unsa.etf.rma.rma20babicamina92.contracts.MainContract;
 import ba.unsa.etf.rma.rma20babicamina92.models.FilterItem;
 import ba.unsa.etf.rma.rma20babicamina92.models.Transaction;
-import ba.unsa.etf.rma.rma20babicamina92.models.TransactionListItem;
 import ba.unsa.etf.rma.rma20babicamina92.presenters.MainPresenter;
 
     public class MainActivity extends AppCompatActivity implements MainContract.MainView{
@@ -39,6 +38,7 @@ import ba.unsa.etf.rma.rma20babicamina92.presenters.MainPresenter;
         //private ArrayList<TransactionListItem> transactionListItems = new ArrayList<TransactionListItem>();
         private ArrayList<String> sortBySpinnerItems = new ArrayList<String>();
         private ArrayList<Transaction> transactionArrayList = new ArrayList<Transaction>();
+        private ArrayList<Transaction> filterTransactionArrayList = new ArrayList<Transaction>();
 
         private FilterSpinnerAdapter filterSpinnerAdapter;
         private ArrayAdapter<String> sortSpinnerAdapter;
@@ -107,8 +107,10 @@ import ba.unsa.etf.rma.rma20babicamina92.presenters.MainPresenter;
             leftDatePickerButton.setOnClickListener(event -> mainPresenter.datePickerCLickedLeft());
             mainPresenter.initialize();
 
-            transactionListAdapter = new TransactionListAdapter(this,R.layout.transaction_list,transactionArrayList);
+            System.out.println("ev me ovdje ");
+            transactionListAdapter = new TransactionListAdapter(this,R.layout.transaction_list,filterTransactionListByDate());
             listView.setAdapter(transactionListAdapter);
+
         }
 
         public void setMonthForTransactions(Date date) {
@@ -135,35 +137,40 @@ import ba.unsa.etf.rma.rma20babicamina92.presenters.MainPresenter;
         }
 
         @Override
-        public void filterTransactionListByDate() {
-            ArrayList<Transaction> filterArrayOfTransactions = new ArrayList<>();
+        public ArrayList<Transaction>  filterTransactionListByDate() {
+            ArrayList<Transaction> arrayOfTransactionsByDate = new ArrayList<>();
             String dateFromTextView = dateTextView.getText().toString();
 
             for(Transaction transaction : transactionArrayList) {
                 String transactionDate = new SimpleDateFormat("MMMM, yyyy", Locale.getDefault()).format(transaction.getDate());
+
                 if(transactionDate.equals(dateFromTextView)) {
-                    filterArrayOfTransactions.add(transaction);
+                    arrayOfTransactionsByDate.add(transaction);
                 }
             }
-            if(filterArrayOfTransactions.size() != 0) {
-                setTransactionListItems(filterArrayOfTransactions);
-            } else {
-                transactionArrayList.clear();
-            }
 
+            return arrayOfTransactionsByDate;
+            //filterTransactionArrayList.addAll(arrayOfTransactionsByDate);
+
+            //filterTransactionListByType(arrayOfTransactionsByDate);
         }
 
         @Override
-        public void filterTransactionListByType() {
-            ArrayList<Transaction> filterArrayOfTransactions = new ArrayList<>();
+        public void filterTransactionListByType(ArrayList<Transaction> arrayOfTransactionsByDate) {
+            ArrayList<Transaction> arrayOfTransactionsByType = new ArrayList<>();
             String typeFromSpinner = filterSpinner.getSelectedItem().toString();
 
             for(Transaction transaction : transactionArrayList) {
                 String transactionType = transaction.getType();
                 if(transactionType.equals(typeFromSpinner)) {
-                    filterArrayOfTransactions.add(transaction);
+                    arrayOfTransactionsByType.add(transaction);
                 }
             }
-            setTransactionListItems(filterArrayOfTransactions);
+            //filterTransactionArrayList.addAll(arrayOfTransactionsByType);
+        }
+
+        @Override
+        public void notifyAdapter() {
+            transactionListAdapter.notifyDataSetChanged();
         }
     }

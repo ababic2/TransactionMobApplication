@@ -15,9 +15,11 @@ public class MainContract {
 
         void setTransactionListItems(ArrayList<Transaction> transactionArrayList);
 
-        void filterTransactionListByDate();
+        ArrayList<Transaction> filterTransactionListByDate();
 
-        void filterTransactionListByType();
+        void filterTransactionListByType(ArrayList<Transaction> listOfTransaction);
+
+        void notifyAdapter();
     }
 
     public interface MainPresenter {

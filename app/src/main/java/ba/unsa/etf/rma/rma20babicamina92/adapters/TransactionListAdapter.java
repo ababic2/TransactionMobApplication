@@ -22,7 +22,6 @@ import ba.unsa.etf.rma.rma20babicamina92.MainActivity;
 import ba.unsa.etf.rma.rma20babicamina92.R;
 import ba.unsa.etf.rma.rma20babicamina92.models.FilterItem;
 import ba.unsa.etf.rma.rma20babicamina92.models.Transaction;
-import ba.unsa.etf.rma.rma20babicamina92.models.TransactionListItem;
 
 public class TransactionListAdapter extends ArrayAdapter<Transaction> {
     private int resource;
