@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 import ba.unsa.etf.rma.rma20babicamina92.adapters.FilterSpinnerAdapter;
 import ba.unsa.etf.rma.rma20babicamina92.models.FilterItem;
+import ba.unsa.etf.rma.rma20babicamina92.models.MainModel;
 import ba.unsa.etf.rma.rma20babicamina92.models.Transaction;
 
 public class TransactionActivity extends AppCompatActivity {
@@ -31,12 +32,14 @@ public class TransactionActivity extends AppCompatActivity {
     private Button saveButton, deleteButton;
     private FilterSpinnerAdapter filterSpinnerAdapter;
     private ArrayList<FilterItem> filterBySpinnerItems;
-
+    private MainModel model;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction);
+        model = MainModel.getInstance();
+
         findViewsById();
         Intent intent = getIntent();
         filterBySpinnerItems = new ArrayList<FilterItem>();
@@ -55,6 +58,11 @@ public class TransactionActivity extends AppCompatActivity {
         } else {
             deleteButton.setClickable(false);
         }
+
+        deleteButton.setOnClickListener(event -> {
+            model.deleteTransaction(oldTransaction);
+            finish();
+        });
     }
 
     private void findViewsById() {
