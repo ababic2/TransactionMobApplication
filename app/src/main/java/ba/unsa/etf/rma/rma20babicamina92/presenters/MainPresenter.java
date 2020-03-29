@@ -30,7 +30,7 @@ public class MainPresenter implements MainContract.MainPresenter {
     private ArrayList<Transaction> transactionArrayList;
 
     public MainPresenter(MainContract.MainView mainActivity) {
-        model = new MainModel();
+        model = MainModel.getInstance();
         date = new Date();
         date.setDate(1);
         sortBy = "Default";

@@ -8,10 +8,19 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 public class MainModel {
+    private static MainModel instance;
+
     private Account account;
     private ArrayList<Transaction> transactions;
 
-    public MainModel() {
+    public static MainModel getInstance() {
+        if (instance == null) {
+            instance = new MainModel();
+        }
+        return instance;
+    }
+
+    private MainModel() {
         account = new Account(
                 new BigDecimal(19270.30),
                 new BigDecimal(15000.00),
