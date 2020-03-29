@@ -12,15 +12,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 import ba.unsa.etf.rma.rma20babicamina92.MainActivity;
 import ba.unsa.etf.rma.rma20babicamina92.R;
-import ba.unsa.etf.rma.rma20babicamina92.models.FilterItem;
 import ba.unsa.etf.rma.rma20babicamina92.models.Transaction;
 
 public class TransactionListAdapter extends ArrayAdapter<Transaction> {
@@ -57,7 +52,7 @@ public class TransactionListAdapter extends ArrayAdapter<Transaction> {
                     imageView.setImageResource(R.drawable.regularpayment);
                     break;
                 case "PURCHASE":
-                    imageView.setImageResource(R.drawable.pursache);
+                    imageView.setImageResource(R.drawable.purchase);
                     break;
             }
         }

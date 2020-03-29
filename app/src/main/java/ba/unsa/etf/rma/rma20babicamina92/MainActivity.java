@@ -2,17 +2,12 @@ package ba.unsa.etf.rma.rma20babicamina92;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -59,7 +54,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
             listView = (ListView) findViewById(R.id.transactionListView);
 
 
-            filterSpinner.setOnItemSelectedListener(ListenerProvider.provideFilterSpinnerOnClickListener(this));
+            filterSpinner.setOnItemSelectedListener(ListenerProvider.provideFilterSpinnerListener(this));
+            sortSpinner.setOnItemSelectedListener(ListenerProvider.provideSortSpinnerListener(this));
 
             filterSpinnerAdapter = new FilterSpinnerAdapter(this, filterBySpinnerItems);
             sortSpinnerAdapter = AdapterProvider.provideSortSpinnerAdapter(this, sortBySpinnerItems);
@@ -74,7 +70,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
             rightDatePickerButton.setOnClickListener(event -> mainPresenter.datePickerClickedRight());
             leftDatePickerButton.setOnClickListener(event -> mainPresenter.datePickerCLickedLeft());
             mainPresenter.initialize();
-
         }
 
         public void setMonthForTransactions(Date date) {
@@ -105,5 +100,11 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
         }
 
 
-
+    public void onFilterSelect(FilterItem filterItem) {
+        mainPresenter.setFilterMethod(filterItem);
     }
+
+    public void onSortSelect(String sort) {
+        mainPresenter.setSortMethod(sort);
+    }
+}

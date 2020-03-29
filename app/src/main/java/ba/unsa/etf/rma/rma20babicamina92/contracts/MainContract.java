@@ -12,13 +12,15 @@ public class MainContract {
         void setFilterBySpinnerItems(ArrayList<FilterItem> filterItems);
         void setSortBySpinnerItems(ArrayList<String> sortSpinnerItems);
         void setTransactionListItems(ArrayList<Transaction> transactionArrayList);
+
     }
 
     public interface MainPresenter {
         void initialize();
-
         void datePickerClickedRight();
-
         void datePickerCLickedLeft();
+        void setSortMethod(String sortMethod);
+
+        void setFilterMethod(FilterItem filterItem);
     }
 }
