@@ -1,6 +1,7 @@
 package ba.unsa.etf.rma.rma20babicamina92.models;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Objects;
 
@@ -17,14 +18,14 @@ public class Transaction implements Comparable<Transaction>, Serializable {
         }
     };
     private Date date;
-    private int amount;
+    private BigDecimal amount;
     private String title;
     private String itemDescription;
-    private int transactionInterval;
+    private Integer transactionInterval;
     private Date endDate;
     private Type transactionType;
 
-    public Transaction(Date date, int amount, String title, String itemDescription, int transactionInterval, Date endDate, String transactionType) {
+    public Transaction(Date date, BigDecimal amount, String title, String itemDescription, Integer transactionInterval, Date endDate, String transactionType) {
         this.date = date;
         this.amount = amount;
         this.title = title;
@@ -54,11 +55,11 @@ public class Transaction implements Comparable<Transaction>, Serializable {
         this.date = date;
     }
 
-    public int getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
@@ -78,11 +79,11 @@ public class Transaction implements Comparable<Transaction>, Serializable {
         this.itemDescription = itemDescription;
     }
 
-    public int getTransactionInterval() {
+    public Integer getTransactionInterval() {
         return transactionInterval;
     }
 
-    public void setTransactionInterval(int transactionInterval) {
+    public void setTransactionInterval(Integer transactionInterval) {
         this.transactionInterval = transactionInterval;
     }
 
@@ -111,7 +112,7 @@ public class Transaction implements Comparable<Transaction>, Serializable {
 
         Transaction that = (Transaction) o;
 
-        if (amount != that.amount) return false;
+        if (amount.equals(that.amount)) return false;
         if (transactionInterval != that.transactionInterval) return false;
         if (!Objects.equals(date, that.date)) return false;
         if (!Objects.equals(title, that.title)) return false;
@@ -124,7 +125,7 @@ public class Transaction implements Comparable<Transaction>, Serializable {
     @Override
     public int hashCode() {
         int result = date != null ? date.hashCode() : 0;
-        result = 31 * result + amount;
+        result = 31 * result + amount.hashCode();
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (itemDescription != null ? itemDescription.hashCode() : 0);
         result = 31 * result + transactionInterval;

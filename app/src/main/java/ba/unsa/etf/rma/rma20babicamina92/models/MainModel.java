@@ -38,7 +38,7 @@ public class MainModel {
                                         Calendar.FEBRUARY,
                                         11
                                 ).getTime(),
-                                186,
+                                new BigDecimal(186),
                                 "lijekovi",
                                 "description",
                                 12,
@@ -54,7 +54,7 @@ public class MainModel {
                                         Calendar.FEBRUARY,
                                         22
                                 ).getTime(),
-                                200,
+                                new BigDecimal(186),
                                 "kompjuteri",
                                 "description",
                                 12,
@@ -70,7 +70,7 @@ public class MainModel {
                                         Calendar.FEBRUARY,
                                         11
                                 ).getTime(),
-                                186,
+                                new BigDecimal(186),
                                 "lijekovi",
                                 "description",
                                 12,
@@ -86,7 +86,7 @@ public class MainModel {
                                         Calendar.FEBRUARY,
                                         22
                                 ).getTime(),
-                                200,
+                                new BigDecimal(186),
                                 "kompjuteri",
                                 "description",
                                 12,
@@ -102,7 +102,7 @@ public class MainModel {
                                         Calendar.FEBRUARY,
                                         11
                                 ).getTime(),
-                                186,
+                                new BigDecimal(186),
                                 "lijekovi",
                                 "description",
                                 12,
@@ -118,7 +118,7 @@ public class MainModel {
                                         Calendar.FEBRUARY,
                                         22
                                 ).getTime(),
-                                200,
+                                new BigDecimal(186),
                                 "kompjuteri",
                                 "description",
                                 12,
@@ -134,7 +134,7 @@ public class MainModel {
                                         Calendar.FEBRUARY,
                                         11
                                 ).getTime(),
-                                186,
+                                new BigDecimal(186),
                                 "lijekovi",
                                 "description",
                                 12,
@@ -150,7 +150,7 @@ public class MainModel {
                                         Calendar.FEBRUARY,
                                         22
                                 ).getTime(),
-                                200,
+                                new BigDecimal(186),
                                 "kompjuteri",
                                 "description",
                                 12,
@@ -166,7 +166,7 @@ public class MainModel {
                                         Calendar.FEBRUARY,
                                         11
                                 ).getTime(),
-                                186,
+                                new BigDecimal(186),
                                 "lijekovi",
                                 "description",
                                 12,
@@ -182,7 +182,7 @@ public class MainModel {
                                         Calendar.FEBRUARY,
                                         22
                                 ).getTime(),
-                                200,
+                                new BigDecimal(186),
                                 "kompjuteri",
                                 "description",
                                 12,
@@ -198,7 +198,7 @@ public class MainModel {
                                         Calendar.FEBRUARY,
                                         11
                                 ).getTime(),
-                                186,
+                                new BigDecimal(186),
                                 "lijekovi",
                                 "description",
                                 12,
@@ -214,7 +214,7 @@ public class MainModel {
                                         Calendar.FEBRUARY,
                                         22
                                 ).getTime(),
-                                200,
+                                new BigDecimal(186),
                                 "kompjuteri",
                                 "description",
                                 12,
@@ -230,7 +230,7 @@ public class MainModel {
                                         Calendar.FEBRUARY,
                                         11
                                 ).getTime(),
-                                186,
+                                new BigDecimal(186),
                                 "lijekovi",
                                 "description",
                                 12,
@@ -246,7 +246,7 @@ public class MainModel {
                                         Calendar.FEBRUARY,
                                         22
                                 ).getTime(),
-                                200,
+                                new BigDecimal(186),
                                 "kompjuteri",
                                 "description",
                                 12,
@@ -262,7 +262,7 @@ public class MainModel {
                                         Calendar.FEBRUARY,
                                         11
                                 ).getTime(),
-                                186,
+                                new BigDecimal(186),
                                 "lijekovi",
                                 "description",
                                 12,
@@ -278,7 +278,7 @@ public class MainModel {
                                         Calendar.FEBRUARY,
                                         22
                                 ).getTime(),
-                                200,
+                                new BigDecimal(186),
                                 "kompjuteri",
                                 "description",
                                 12,
@@ -294,7 +294,7 @@ public class MainModel {
                                         Calendar.FEBRUARY,
                                         11
                                 ).getTime(),
-                                186,
+                                new BigDecimal(186),
                                 "lijekovi",
                                 "description",
                                 12,
@@ -310,7 +310,7 @@ public class MainModel {
                                         Calendar.FEBRUARY,
                                         22
                                 ).getTime(),
-                                200,
+                                new BigDecimal(186),
                                 "kompjuteri",
                                 "description",
                                 12,
@@ -326,7 +326,7 @@ public class MainModel {
                                         Calendar.FEBRUARY,
                                         22
                                 ).getTime(),
-                                200,
+                                new BigDecimal(186),
                                 "kompjuteri",
                                 "description",
                                 12,
@@ -342,7 +342,7 @@ public class MainModel {
                                         Calendar.APRIL,
                                         11
                                 ).getTime(),
-                                1225,
+                                new BigDecimal(1860),
                                 "treca",
                                 "description",
                                 12,

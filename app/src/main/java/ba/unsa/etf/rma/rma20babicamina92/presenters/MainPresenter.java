@@ -36,8 +36,8 @@ public class MainPresenter implements MainContract.MainPresenter {
         sortBy = "Default";
         type = Type.ALL;
         comparatorMap = new HashMap<String, Comparator<Transaction>>() {{
-            put("Price - Ascending", (a,b)->Integer.compare(a.getAmount(),b.getAmount()));
-            put("Price - Descending", (a,b)->Integer.compare(b.getAmount(),a.getAmount()));
+            put("Price - Ascending", Transaction::compareTo);
+            put("Price - Descending", (a,b)->b.compareTo(a));
             put("Title - Ascending", (a,b)->a.getTitle().compareTo(b.getTitle()));
             put("Title - Descending", (a,b)->b.getTitle().compareTo(a.getTitle()));
             put("Date - Ascending", (a,b)->a.getDate().compareTo(b.getDate()));

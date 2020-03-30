@@ -1,6 +1,7 @@
 package ba.unsa.etf.rma.rma20babicamina92;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -9,14 +10,20 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import ba.unsa.etf.rma.rma20babicamina92.adapters.FilterSpinnerAdapter;
 import ba.unsa.etf.rma.rma20babicamina92.models.FilterItem;
@@ -53,16 +60,18 @@ public class TransactionActivity extends AppCompatActivity {
         filterSpinnerAdapter = new FilterSpinnerAdapter(this, filterBySpinnerItems);
         typeSpinner.setAdapter(filterSpinnerAdapter);
 
-        if (intent.getExtras().getSerializable("transaction") != null) {
+        if (intent.getExtras() != null) {
             setInitialState(intent.getExtras().getSerializable("transaction"));
         } else {
-            deleteButton.setClickable(false);
+            deleteButton.setEnabled(false);
         }
 
         deleteButton.setOnClickListener(event -> {
             model.deleteTransaction(oldTransaction);
             finish();
         });
+
+
     }
 
     private void findViewsById() {
@@ -81,15 +90,45 @@ public class TransactionActivity extends AppCompatActivity {
         oldTransaction = (Transaction) transaction;
         titleTextView.setText(oldTransaction.getTitle());
         descriptionTextView.setText(oldTransaction.getItemDescription());
-        amountTextView.setText(new BigDecimal(oldTransaction.getAmount()).toString());
-        dateTextView.setText(oldTransaction.getDate().toString());
-        endDateTextView.setText(oldTransaction.getEndDate().toString());
-        transactionIntervalTextView.setText(new Integer(oldTransaction.getTransactionInterval()).toString());
+        amountTextView.setText(oldTransaction.getAmount().toString());
+        String displayDate = new SimpleDateFormat("MMMM, yyyy", Locale.getDefault()).format(oldTransaction.getDate());
+        dateTextView.setText(displayDate);
+        String displayEndDate = new SimpleDateFormat("MMMM, yyyy", Locale.getDefault()).format(oldTransaction.getEndDate());
+        endDateTextView.setText(displayEndDate);
+        transactionIntervalTextView.setText(oldTransaction.getTransactionInterval().toString());
         typeSpinner.setSelection(
                 filterBySpinnerItems.indexOf(
                         new FilterItem(oldTransaction.getTransactionType().toString(), R.drawable.individualpay)
                 )
         );
+        titleTextView.addTextChangedListener(generateTextWatcher(titleTextView));
+        descriptionTextView.addTextChangedListener(generateTextWatcher(descriptionTextView));
+        amountTextView.addTextChangedListener(generateTextWatcher(amountTextView));
+        dateTextView.addTextChangedListener(generateTextWatcher(dateTextView));
+        endDateTextView.addTextChangedListener(generateTextWatcher(endDateTextView));
+        transactionIntervalTextView.addTextChangedListener(generateTextWatcher(transactionIntervalTextView));
+
     }
 
+    private TextWatcher generateTextWatcher(EditText field) {
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                field.setBackgroundColor(Color.GREEN);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        };
+    }
+
+
 }
+
