@@ -6,7 +6,10 @@ import android.widget.AdapterView;
 import android.widget.Toast;
 
 import ba.unsa.etf.rma.rma20babicamina92.MainActivity;
+import ba.unsa.etf.rma.rma20babicamina92.TransactionActivity;
+import ba.unsa.etf.rma.rma20babicamina92.exceptions.InvalidFieldValueException;
 import ba.unsa.etf.rma.rma20babicamina92.models.FilterItem;
+import ba.unsa.etf.rma.rma20babicamina92.models.MainModel;
 
 public class ListenerProvider {
     public static AdapterView.OnItemSelectedListener provideFilterSpinnerListener(Context context) {
@@ -38,6 +41,19 @@ public class ListenerProvider {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+            }
+        };
+    }
+
+    public static View.OnClickListener provideUpdateListener(TransactionActivity transactionActivity, MainModel model) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    transactionActivity.validateFields();
+                } catch (InvalidFieldValueException e) {
+                    Toast.makeText(transactionActivity,e.getMessage(),Toast.LENGTH_LONG).show();
+                }
             }
         };
     }

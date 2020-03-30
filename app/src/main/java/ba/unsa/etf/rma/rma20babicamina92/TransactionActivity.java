@@ -21,14 +21,17 @@ import android.widget.TextView;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
 import ba.unsa.etf.rma.rma20babicamina92.adapters.FilterSpinnerAdapter;
+import ba.unsa.etf.rma.rma20babicamina92.exceptions.InvalidFieldValueException;
 import ba.unsa.etf.rma.rma20babicamina92.models.FilterItem;
 import ba.unsa.etf.rma.rma20babicamina92.models.MainModel;
 import ba.unsa.etf.rma.rma20babicamina92.models.Transaction;
+import ba.unsa.etf.rma.rma20babicamina92.providers.ListenerProvider;
 
 public class TransactionActivity extends AppCompatActivity {
 
@@ -62,6 +65,7 @@ public class TransactionActivity extends AppCompatActivity {
 
         if (intent.getExtras() != null) {
             setInitialState(intent.getExtras().getSerializable("transaction"));
+            saveButton.setOnClickListener(ListenerProvider.provideUpdateListener(this,model));
         } else {
             deleteButton.setEnabled(false);
         }
@@ -130,5 +134,39 @@ public class TransactionActivity extends AppCompatActivity {
     }
 
 
+    public void validateFields() throws InvalidFieldValueException {
+        if (titleTextView.getText().toString().length() == 0) {
+            titleTextView.setBackgroundColor(Color.RED);
+            throw new InvalidFieldValueException("Title is not set");
+        }
+        if (descriptionTextView.getText().toString().length() == 0) {
+            descriptionTextView.setBackgroundColor(Color.RED);
+            throw new InvalidFieldValueException("Description is not set");
+        }
+        try {
+            new BigDecimal(amountTextView.getText().toString());
+        }catch(Exception ignored){
+            amountTextView.setBackgroundColor(Color.RED);
+            throw new InvalidFieldValueException("Amount is not valid");
+        }
+        try{
+            new SimpleDateFormat("MMMM, yyyy", Locale.getDefault()).parse(dateTextView.getText().toString());
+        } catch (ParseException e) {
+            dateTextView.setBackgroundColor(Color.RED);
+            throw new InvalidFieldValueException("Date is not valid");
+        }
+        try{
+            new SimpleDateFormat("MMMM, yyyy", Locale.getDefault()).parse(endDateTextView.getText().toString());
+        } catch (ParseException e) {
+            endDateTextView.setBackgroundColor(Color.RED);
+            throw new InvalidFieldValueException("End date is not valid");
+        }
+        try {
+            Integer.parseInt(transactionIntervalTextView.getText().toString());
+        } catch (Exception ignored) {
+            transactionIntervalTextView.setBackgroundColor(Color.RED);
+            throw new InvalidFieldValueException("Transaction interval is not valid");
+        }
+    }
 }
 
