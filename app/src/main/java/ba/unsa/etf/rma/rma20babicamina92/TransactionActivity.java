@@ -1,5 +1,6 @@
 package ba.unsa.etf.rma.rma20babicamina92;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -18,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -65,7 +68,7 @@ public class TransactionActivity extends AppCompatActivity {
 
         if (intent.getExtras() != null) {
             setInitialState(intent.getExtras().getSerializable("transaction"));
-            saveButton.setOnClickListener(ListenerProvider.provideUpdateListener(this,model));
+            saveButton.setOnClickListener(provideUpdateListener());
         } else {
             deleteButton.setEnabled(false);
         }
@@ -75,6 +78,61 @@ public class TransactionActivity extends AppCompatActivity {
             finish();
         });
 
+
+    }
+
+    private View.OnClickListener provideUpdateListener() {
+        return event -> {
+            String[] poruke = {
+                    "Over monthly limit. Continue?",
+                    "Over total limit. Continue?",
+                    "Over monthly and total limit. Continue?"
+            };
+            int kojaPoruka = -1;
+            try {
+                validateFields();
+                extractTransaction();
+                if (model.isOverMonthlyLimit(oldTransaction,transaction)) {
+                    kojaPoruka = 0;
+                }
+                if (model.isOverTotalLimit(oldTransaction,transaction)) {
+                    if (kojaPoruka == 0) {
+                        kojaPoruka = 2;
+                    } else {
+                        kojaPoruka = 1;
+                    }
+                }
+                if (kojaPoruka != -1) {
+                    new AlertDialog
+                            .Builder(this)
+                            .setTitle("Warning")
+                            .setMessage(poruke[kojaPoruka])
+                            .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                                model.updateTransaction(oldTransaction,transaction);
+                            })
+                            .setNegativeButton(android.R.string.cancel, null).show();
+                } else {
+                    model.updateTransaction(oldTransaction,transaction);
+                }
+            } catch (InvalidFieldValueException e) {
+                Toast.makeText(this,e.getMessage(),Toast.LENGTH_LONG).show();
+            }
+        };
+    }
+
+    private void extractTransaction() {
+        try {
+            transaction = new Transaction(
+                    new SimpleDateFormat("MMMM, yyyy", Locale.getDefault()).parse(dateTextView.getText().toString()),
+                    new BigDecimal(amountTextView.getText().toString()),
+                    titleTextView.getText().toString(),
+                    descriptionTextView.getText().toString(),
+                    Integer.parseInt(transactionIntervalTextView.getText().toString()),
+                    new SimpleDateFormat("MMMM, yyyy", Locale.getDefault()).parse(endDateTextView.getText().toString()),
+                    ((FilterItem)typeSpinner.getSelectedItem()).getFilterName());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
     }
 

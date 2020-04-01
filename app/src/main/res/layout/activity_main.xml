@@ -7,27 +7,59 @@
     android:padding="30dp"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/globalAmountTextView"
+    <LinearLayout
+        android:id="@+id/globalAmountContainer"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/GlobalAmount"
-        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/limitTextView"/>
+        app:layout_constraintBottom_toTopOf="@+id/limitContainer">
+        <TextView
+            android:id="@+id/globalAmountLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/GlobalAmount"
+            android:textSize="18sp"
+            />
 
-    <TextView
-        android:id="@+id/limitTextView"
+        <EditText
+            android:id="@id/globalAmountTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:editable="false"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/limitContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
+        android:foregroundGravity="center"
+        android:gravity="center"
         android:layout_marginTop="10dp"
-        android:text="@string/Limit"
-        android:textSize="18sp"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/globalAmountTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/globalAmountContainer">
+
+        <TextView
+            android:id="@+id/limitLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:text="@string/Limit"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@id/limitTextView"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:editable="false" />
+    </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/filterSpinnerBackground"
@@ -36,7 +68,7 @@
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/limitTextView"
+        app:layout_constraintTop_toBottomOf="@+id/limitContainer"
         app:layout_constraintBottom_toTopOf="@id/datePickerLayout"
         android:background="@drawable/border"
         android:padding="0dp"

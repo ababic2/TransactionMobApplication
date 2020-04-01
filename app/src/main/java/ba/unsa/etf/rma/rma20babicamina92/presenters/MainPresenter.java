@@ -77,7 +77,7 @@ public class MainPresenter implements MainContract.MainPresenter {
     }
 
     public void initialize(){
-
+        mainActivity.setAccountData(model.getAccount());
         mainActivity.setMonthForTransactions(date);
         getFilterItems();
         mainActivity.setFilterBySpinnerItems(filterItems);

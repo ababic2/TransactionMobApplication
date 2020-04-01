@@ -10,6 +10,7 @@ import ba.unsa.etf.rma.rma20babicamina92.TransactionActivity;
 import ba.unsa.etf.rma.rma20babicamina92.exceptions.InvalidFieldValueException;
 import ba.unsa.etf.rma.rma20babicamina92.models.FilterItem;
 import ba.unsa.etf.rma.rma20babicamina92.models.MainModel;
+import ba.unsa.etf.rma.rma20babicamina92.models.Transaction;
 
 public class ListenerProvider {
     public static AdapterView.OnItemSelectedListener provideFilterSpinnerListener(Context context) {
@@ -45,16 +46,4 @@ public class ListenerProvider {
         };
     }
 
-    public static View.OnClickListener provideUpdateListener(TransactionActivity transactionActivity, MainModel model) {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    transactionActivity.validateFields();
-                } catch (InvalidFieldValueException e) {
-                    Toast.makeText(transactionActivity,e.getMessage(),Toast.LENGTH_LONG).show();
-                }
-            }
-        };
-    }
 }

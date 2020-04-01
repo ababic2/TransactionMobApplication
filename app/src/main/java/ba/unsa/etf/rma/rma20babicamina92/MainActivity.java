@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ import ba.unsa.etf.rma.rma20babicamina92.adapters.FilterSpinnerAdapter;
 //import ba.unsa.etf.rma.rma20babicamina92.adapters.TransactionListAdapter;
 import ba.unsa.etf.rma.rma20babicamina92.adapters.TransactionListAdapter;
 import ba.unsa.etf.rma.rma20babicamina92.contracts.MainContract;
+import ba.unsa.etf.rma.rma20babicamina92.models.Account;
 import ba.unsa.etf.rma.rma20babicamina92.models.FilterItem;
 import ba.unsa.etf.rma.rma20babicamina92.models.Transaction;
 import ba.unsa.etf.rma.rma20babicamina92.presenters.MainPresenter;
@@ -33,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
         private Spinner filterSpinner;
         private Spinner sortSpinner;
         private TextView dateTextView;
+        private EditText globalAmountTextView,limitTextView;
 
         private ArrayList<FilterItem> filterBySpinnerItems = new ArrayList<FilterItem>();
         private ArrayList<String> sortBySpinnerItems = new ArrayList<String>();
@@ -62,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
             sortSpinner = (Spinner) findViewById(R.id.sortSpinner);
             filterSpinner = (Spinner) findViewById(R.id.filterSpinner);
             listView = (ListView) findViewById(R.id.transactionListView);
+            globalAmountTextView = findViewById(R.id.globalAmountTextView);
+            limitTextView = findViewById(R.id.limitTextView);
 
             addTransactionButton.setOnClickListener(event-> {
                 Intent intent = new Intent(this, TransactionActivity.class);
@@ -119,6 +124,12 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
             this.transactionArrayList.addAll(transactionArrayList);
             transactionListAdapter.notifyDataSetChanged();
         }
+
+    @Override
+    public void setAccountData(Account account) {
+        limitTextView.setText(String.format(Locale.getDefault(),"%.2f",account.getTotalLimit()));
+        globalAmountTextView.setText(String.format(Locale.getDefault(),"%.2f",account.getBudget()));
+    }
 
 
     public void onFilterSelect(FilterItem filterItem) {

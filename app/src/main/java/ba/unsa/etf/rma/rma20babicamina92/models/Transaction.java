@@ -97,7 +97,15 @@ public class Transaction implements Comparable<Transaction>, Serializable {
 
     @Override
     public String toString() {
-        return title + " "+date;
+        return "Transaction{" +
+                "date=" + date +
+                ", amount=" + amount +
+                ", title='" + title + '\'' +
+                ", itemDescription='" + itemDescription + '\'' +
+                ", transactionInterval=" + transactionInterval +
+                ", endDate=" + endDate +
+                ", transactionType=" + transactionType +
+                '}'+'\n';
     }
 
     @Override
@@ -113,13 +121,15 @@ public class Transaction implements Comparable<Transaction>, Serializable {
         Transaction that = (Transaction) o;
 
         if (amount.equals(that.amount)) return false;
-        if (transactionInterval != that.transactionInterval) return false;
-        if (!Objects.equals(date, that.date)) return false;
+        if (transactionInterval.equals(that.transactionInterval)) return false;
+        if(date.getYear() != that.getDate().getYear()) return false;
+        if(date.getMonth() != that.getDate().getMonth()) return false;
         if (!Objects.equals(title, that.title)) return false;
         if (!Objects.equals(itemDescription, that.itemDescription))
             return false;
-        if (!Objects.equals(endDate, that.endDate)) return false;
-        return transactionType == that.transactionType;
+        if(endDate.getYear() != that.getEndDate().getYear()) return false;
+        if(endDate.getMonth() != that.getEndDate().getMonth()) return false;
+        return transactionType.toString().equals(that.transactionType.toString());
     }
 
     @Override
