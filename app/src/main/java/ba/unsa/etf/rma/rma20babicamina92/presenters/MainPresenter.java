@@ -103,7 +103,7 @@ public class MainPresenter implements MainContract.MainPresenter {
     private void getFilterItems() {
         filterItems = new ArrayList<FilterItem>();
         filterItems.add(new FilterItem("ALL",R.drawable.individualpay));
-        filterItems.add(new FilterItem("INDIVIDUALPAYMENT", R.drawable.individualpay));
+        filterItems.add(new FilterItem("INDIVIDUALPAYMENT", R.drawable.regularpayment));
         filterItems.add(new FilterItem("REGULARPAYMENT",R.drawable.regularpayment));
         filterItems.add(new FilterItem("PURCHASE",R.drawable.purchase));
         filterItems.add(new FilterItem("INDIVIDUALINCOME",R.drawable.individualpay)); // dodaj slikicuuu

@@ -11,9 +11,9 @@ import java.util.List;
 
 public class MainModel {
     private static class Payment {
+
         private BigDecimal amount;
         private Date date;
-
         Payment(BigDecimal amount, Date date) {
             this.amount = amount;
             this.date = date;
@@ -34,14 +34,14 @@ public class MainModel {
         public void setDate(Date date) {
             this.date = date;
         }
+
     }
-
     public static long millisecondsInADay = 86400000;
+
     private static MainModel instance;
-
     private Account account;
-    private ArrayList<Transaction> transactions;
 
+    private ArrayList<Transaction> transactions;
     public static MainModel getInstance() {
         if (instance == null) {
             instance = new MainModel();
@@ -67,7 +67,7 @@ public class MainModel {
                                         Calendar.JANUARY,
                                         10
                                 ).getTime(),
-                                new BigDecimal(100),
+                                new BigDecimal(10),
                                 "prva",
                                 "description od prve",
                                 12,
@@ -83,7 +83,7 @@ public class MainModel {
                                         Calendar.JANUARY,
                                         13
                                 ).getTime(),
-                                new BigDecimal(186),
+                                new BigDecimal(18),
                                 "druga",
                                 "description od druge",
                                 5,
@@ -99,7 +99,7 @@ public class MainModel {
                                         Calendar.FEBRUARY,
                                         22
                                 ).getTime(),
-                                new BigDecimal(200),
+                                new BigDecimal(20),
                                 "treca",
                                 null,
                                 12,
@@ -163,7 +163,7 @@ public class MainModel {
                                         Calendar.APRIL,
                                         15
                                 ).getTime(),
-                                new BigDecimal(150),
+                                new BigDecimal(15),
                                 "sedma",
                                 null,
                                 7,
@@ -179,7 +179,7 @@ public class MainModel {
                                         Calendar.MAY,
                                         2
                                 ).getTime(),
-                                new BigDecimal(186),
+                                new BigDecimal(18),
                                 "osma",
                                 "description od osme",
                                 4,
@@ -195,7 +195,7 @@ public class MainModel {
                                         Calendar.MARCH,
                                         10
                                 ).getTime(),
-                                new BigDecimal(120),
+                                new BigDecimal(12),
                                 "deveta",
                                 "description od devete",
                                 22,
@@ -211,7 +211,7 @@ public class MainModel {
                                         Calendar.APRIL,
                                         22
                                 ).getTime(),
-                                new BigDecimal(200),
+                                new BigDecimal(20),
                                 "deseta",
                                 "description",
                                 5,
@@ -227,7 +227,7 @@ public class MainModel {
                                         Calendar.JANUARY,
                                         11
                                 ).getTime(),
-                                new BigDecimal(100),
+                                new BigDecimal(10),
                                 "jedanaesta",
                                 "description od jedanaeste",
                                 12,
@@ -355,7 +355,7 @@ public class MainModel {
                                         Calendar.JANUARY,
                                         22
                                 ).getTime(),
-                                new BigDecimal(99),
+                                new BigDecimal(9),
                                 "devetnaesta",
                                 "description of 19",
                                 12,
@@ -371,7 +371,7 @@ public class MainModel {
                                         Calendar.APRIL,
                                         11
                                 ).getTime(),
-                                new BigDecimal(1860),
+                                new BigDecimal(18),
                                 "dvadeseta",
                                 "description",
                                 12,
@@ -397,6 +397,10 @@ public class MainModel {
         ArrayList<Transaction> testTransactions = new ArrayList<>(transactions);
         int index = indexOf(oldTransaction);
         testTransactions.set(index, transaction);
+        return testIfOverMonthlyLimit(testTransactions);
+    }
+
+    private boolean testIfOverMonthlyLimit(ArrayList<Transaction> testTransactions) {
         List<Payment> payments = new ArrayList<>();
         for (int i = 0; i < testTransactions.size(); i++) {
             Transaction element = testTransactions.get(i);
@@ -440,6 +444,10 @@ public class MainModel {
         int index = indexOf(oldTransaction);
         testTransactions.set(index, transaction);
 
+        return testIfOverTotalLimit(testTransactions);
+    }
+
+    private boolean testIfOverTotalLimit(ArrayList<Transaction> testTransactions) {
         BigDecimal status = new BigDecimal(0);
 
         for (int i = 0; i < testTransactions.size(); i++) {
@@ -468,6 +476,18 @@ public class MainModel {
         return status.compareTo(account.getTotalLimit()) > 0;
     }
 
+    public boolean isOverMonthlyLimit(Transaction transaction) {
+        ArrayList<Transaction> testTransactions = new ArrayList<>(transactions);
+        testTransactions.add(transaction);
+        return testIfOverMonthlyLimit(testTransactions);
+    }
+
+    public boolean isOverTotalLimit(Transaction transaction) {
+        ArrayList<Transaction> testTransactions = new ArrayList<>(transactions);
+        testTransactions.add(transaction);
+        return testIfOverTotalLimit(testTransactions);
+    }
+
     public void addTransaction(Transaction transaction) {
         transactions.add(transaction);
     }
@@ -482,6 +502,10 @@ public class MainModel {
     private int indexOf(Transaction that) {
         for (int i = 0; i < transactions.size(); i++) {
             Transaction transaction = transactions.get(i);
+            if (!that.getTransactionType().toString().equals(transaction.getTransactionType().toString())) {
+                System.out.println("TYPE");
+                continue;
+            }
             if (!that.getTitle().equals(transaction.getTitle())) {
                 System.out.println("Title");
                 continue;
@@ -506,14 +530,11 @@ public class MainModel {
                 System.out.println("INTERVAL");
                 continue;
             }
-            if (!that.getTransactionType().toString().equals(transaction.getTransactionType().toString())) {
-                System.out.println("TYPE");
-                continue;
-            }
             return i;
         }
         return -1;
     }
+
 
     public void deleteTransaction(Transaction transaction) {
         transactions.remove(transaction);
