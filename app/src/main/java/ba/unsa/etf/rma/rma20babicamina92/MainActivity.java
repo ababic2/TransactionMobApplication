@@ -33,11 +33,12 @@ import ba.unsa.etf.rma.rma20babicamina92.presenters.MainPresenter;
 import ba.unsa.etf.rma.rma20babicamina92.providers.AdapterProvider;
 import ba.unsa.etf.rma.rma20babicamina92.providers.ListenerProvider;
 
-public class MainActivity extends FragmentActivity implements MainContract.MainView{
+public class MainActivity extends FragmentActivity implements MainContract.MainView, TransactionListFragment.MainFragmentActivity{
 
-
+    private ArrayList<String> sortBySpinnerItems = new ArrayList<>();
     private ArrayList<FilterItem> filterBySpinnerItems = new ArrayList<FilterItem>();
     private ArrayList<Transaction> transactionArrayList = new ArrayList<Transaction>();
+    private String monthOfTransaction = "";
 
     private FilterSpinnerAdapter filterSpinnerAdapter;
     private ArrayAdapter<String> sortSpinnerAdapter;
@@ -102,8 +103,8 @@ public class MainActivity extends FragmentActivity implements MainContract.MainV
         }
 
         public void setMonthForTransactions(Date date) {
-//            String displayDate = new SimpleDateFormat("MMMM, yyyy", Locale.getDefault()).format(date);
-//            dateTextView.setText(displayDate);
+            monthOfTransaction = new SimpleDateFormat("MMMM, yyyy", Locale.getDefault()).format(date);
+            refreshListFragment();
         }
 
         @Override
@@ -113,20 +114,25 @@ public class MainActivity extends FragmentActivity implements MainContract.MainV
 //            filterSpinnerAdapter.notifyDataSetChanged();
         }
 
-        @Override
-        public void setSortBySpinnerItems(ArrayList<String> sortSpinnerItems) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            masterFragment = TransactionListFragment.newInstance(sortSpinnerItems);
-            fragmentManager
-                    .beginTransaction()
-                    .replace(R.id.transaction_list, masterFragment)
-                    .commit();
+    @Override
+    public void setSortBySpinnerItems(ArrayList<String> sortSpinnerItems) {
+        this.sortBySpinnerItems = sortSpinnerItems;
+        refreshListFragment();
 //            this.sortBySpinnerItems.clear();
 //            this.sortBySpinnerItems.addAll(sortSpinnerItems);
 //            sortSpinnerAdapter.notifyDataSetChanged();
-        }
+    }
 
-        @Override
+    private void refreshListFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        masterFragment = TransactionListFragment.newInstance(monthOfTransaction,sortBySpinnerItems);
+        fragmentManager
+                .beginTransaction()
+                .replace(R.id.transaction_list, masterFragment)
+                .commit();
+    }
+
+    @Override
         public void setTransactionListItems(ArrayList<Transaction> transactionArrayList) {
 //            this.transactionArrayList.clear();
 //            System.out.println(transactionArrayList.size());
@@ -147,5 +153,15 @@ public class MainActivity extends FragmentActivity implements MainContract.MainV
 
     public void onSortSelect(String sort) {
 //        mainPresenter.setSortMethod(sort);
+    }
+
+    @Override
+    public void onRightClicked(View view) {
+        mainPresenter.datePickerClickedRight();
+    }
+
+    @Override
+    public void onLeftClicked(View view) {
+        mainPresenter.datePickerCLickedLeft();
     }
 }
