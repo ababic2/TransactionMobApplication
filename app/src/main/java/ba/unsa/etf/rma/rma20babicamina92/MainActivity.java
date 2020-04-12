@@ -82,7 +82,6 @@ public class MainActivity extends FragmentActivity implements MainContract.MainV
 //
 //            filterSpinnerAdapter = new FilterSpinnerAdapter(this, filterBySpinnerItems);
 
-//            transactionListAdapter = new TransactionListAdapter(this,R.layout.transaction_list,transactionArrayList);
 //
 //            filterSpinner.setAdapter(filterSpinnerAdapter);
 
@@ -125,7 +124,8 @@ public class MainActivity extends FragmentActivity implements MainContract.MainV
 
     private void refreshListFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        masterFragment = TransactionListFragment.newInstance(monthOfTransaction,sortBySpinnerItems);
+        masterFragment = TransactionListFragment.newInstance(monthOfTransaction,sortBySpinnerItems,transactionArrayList);
+
         fragmentManager
                 .beginTransaction()
                 .replace(R.id.transaction_list, masterFragment)
@@ -133,12 +133,10 @@ public class MainActivity extends FragmentActivity implements MainContract.MainV
     }
 
     @Override
-        public void setTransactionListItems(ArrayList<Transaction> transactionArrayList) {
-//            this.transactionArrayList.clear();
-//            System.out.println(transactionArrayList.size());
-//            this.transactionArrayList.addAll(transactionArrayList);
-//            transactionListAdapter.notifyDataSetChanged();
-        }
+    public void setTransactionListItems(ArrayList<Transaction> transactionArrayList) {
+        this.transactionArrayList = transactionArrayList;
+        refreshListFragment();
+    }
 
     @Override
     public void setAccountData(Account account) {

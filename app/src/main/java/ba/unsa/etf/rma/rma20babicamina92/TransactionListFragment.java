@@ -17,6 +17,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import ba.unsa.etf.rma.rma20babicamina92.adapters.FilterSpinnerAdapter;
+import ba.unsa.etf.rma.rma20babicamina92.adapters.TransactionListAdapter;
 import ba.unsa.etf.rma.rma20babicamina92.models.FilterItem;
 import ba.unsa.etf.rma.rma20babicamina92.models.Transaction;
 import ba.unsa.etf.rma.rma20babicamina92.providers.AdapterProvider;
@@ -26,6 +27,7 @@ public class TransactionListFragment extends Fragment {
 
     private static final String ARG_SORT_ITEMS = "sortItems";
     private static final String ARG_MONTH = "monthOfTransaction";
+    private static final String ARG_TRANSACTIONS = "transactions";
 
 
     private Button leftDatePickerButton, rightDatePickerButton, addTransactionButton;
@@ -44,17 +46,22 @@ public class TransactionListFragment extends Fragment {
     private ArrayAdapter<String> sortSpinnerAdapter;
 
     private MainFragmentActivity mainFragmentActivity;
+    private TransactionListAdapter transactionListAdapter;
 
     public TransactionListFragment() {
         // Required empty public constructor
     }
 
 
-    public static TransactionListFragment newInstance(String monthOfTransaction, ArrayList<String> sortBySpinnerItems) {
+    public static TransactionListFragment newInstance(
+            String monthOfTransaction,
+            ArrayList<String> sortBySpinnerItems,
+            ArrayList<Transaction> transactionArrayList) {
         TransactionListFragment fragment = new TransactionListFragment();
         Bundle args = new Bundle();
         args.putStringArrayList(ARG_SORT_ITEMS, sortBySpinnerItems);
         args.putString(ARG_MONTH,monthOfTransaction);
+        args.putParcelableArrayList(ARG_TRANSACTIONS, transactionArrayList);
         fragment.setArguments(args);
         return fragment;
     }
@@ -65,6 +72,7 @@ public class TransactionListFragment extends Fragment {
         if (getArguments() != null) {
             this.sortBySpinnerItems = getArguments().getStringArrayList(ARG_SORT_ITEMS);
             this.monthOfTransaction = getArguments().getString(ARG_MONTH);
+            this.transactionArrayList = getArguments().getParcelableArrayList(ARG_TRANSACTIONS);
         }
 
 
@@ -99,6 +107,9 @@ public class TransactionListFragment extends Fragment {
         dateTextView.setText(monthOfTransaction);
         rightDatePickerButton.setOnClickListener(mainFragmentActivity::onRightClicked);
         leftDatePickerButton.setOnClickListener(mainFragmentActivity::onLeftClicked);
+
+        transactionListAdapter = new TransactionListAdapter((MainActivity) getActivity(),R.layout.transaction_list,transactionArrayList);
+        listView.setAdapter(transactionListAdapter);
     }
 
     public interface MainFragmentActivity {

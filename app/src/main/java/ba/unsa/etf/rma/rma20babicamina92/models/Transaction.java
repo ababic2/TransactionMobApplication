@@ -1,11 +1,62 @@
 package ba.unsa.etf.rma.rma20babicamina92.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Objects;
 
-public class Transaction implements Comparable<Transaction>, Serializable {
+public class Transaction implements Comparable<Transaction>, Serializable, Parcelable {
+    public static final Creator<Transaction> CREATOR = new Creator<Transaction>() {
+        @Override
+        public Transaction createFromParcel(Parcel in) {
+            return new Transaction(in);
+        }
+
+        @Override
+        public Transaction[] newArray(int size) {
+            return new Transaction[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return hashCode();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(title);
+        dest.writeString(itemDescription);
+        dest.writeSerializable(amount);
+        dest.writeSerializable(date);
+        dest.writeSerializable(endDate);
+        if (transactionInterval == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(transactionInterval);
+        }
+        dest.writeString(transactionType.toString());
+    }
+
+    public Transaction(Parcel parcel) {
+
+        title = parcel.readString();
+        itemDescription = parcel.readString();
+        amount = (BigDecimal) parcel.readSerializable();
+        date = (Date) parcel.readSerializable();
+        endDate = (Date) parcel.readSerializable();
+        if (parcel.readByte() == 0) {
+            transactionInterval = null;
+        } else {
+            transactionInterval = parcel.readInt();
+        }
+        transactionType = Type.valueOf(parcel.readString());
+    }
+
     public enum Type {
         INDIVIDUALPAYMENT("INDIVIDUALPAYMENT"),
         REGULARPAYMENT("REGULARPAYMENT"),
@@ -17,12 +68,13 @@ public class Transaction implements Comparable<Transaction>, Serializable {
         Type(String method) {
         }
     };
-    private Date date;
-    private BigDecimal amount;
+
     private String title;
     private String itemDescription;
-    private Integer transactionInterval;
+    private BigDecimal amount;
+    private Date date;
     private Date endDate;
+    private Integer transactionInterval;
     private Type transactionType;
 
     public Transaction(Date date, BigDecimal amount, String title, String itemDescription, Integer transactionInterval, Date endDate, String transactionType) {
