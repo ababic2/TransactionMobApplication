@@ -1,6 +1,9 @@
 package ba.unsa.etf.rma.rma20babicamina92;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -29,114 +33,119 @@ import ba.unsa.etf.rma.rma20babicamina92.presenters.MainPresenter;
 import ba.unsa.etf.rma.rma20babicamina92.providers.AdapterProvider;
 import ba.unsa.etf.rma.rma20babicamina92.providers.ListenerProvider;
 
-public class MainActivity extends AppCompatActivity implements MainContract.MainView{
-        private Button leftDatePickerButton, rightDatePickerButton, addTransactionButton;
-        private ListView listView;
-        private Spinner filterSpinner;
-        private Spinner sortSpinner;
-        private TextView dateTextView;
-        private EditText globalAmountTextView,limitTextView;
+public class MainActivity extends FragmentActivity implements MainContract.MainView{
 
-        private ArrayList<FilterItem> filterBySpinnerItems = new ArrayList<FilterItem>();
-        private ArrayList<String> sortBySpinnerItems = new ArrayList<String>();
-        private ArrayList<Transaction> transactionArrayList = new ArrayList<Transaction>();
 
-        private FilterSpinnerAdapter filterSpinnerAdapter;
-        private ArrayAdapter<String> sortSpinnerAdapter;
-        private MainPresenter mainPresenter;
-        private TransactionListAdapter transactionListAdapter;
+    private ArrayList<FilterItem> filterBySpinnerItems = new ArrayList<FilterItem>();
+    private ArrayList<Transaction> transactionArrayList = new ArrayList<Transaction>();
+
+    private FilterSpinnerAdapter filterSpinnerAdapter;
+    private ArrayAdapter<String> sortSpinnerAdapter;
+    private MainPresenter mainPresenter;
+    private TransactionListAdapter transactionListAdapter;
+
+    private Fragment masterFragment;
 
 
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        mainPresenter.initialize();
+//        mainPresenter.initialize();
     }
 
     @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_main);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        masterFragment = fragmentManager.findFragmentById(R.id.transaction_list);
+        if (masterFragment == null) {
+            masterFragment = new TransactionListFragment();
+            fragmentManager
+                    .beginTransaction()
+                    .add(R.id.transaction_list, masterFragment)
+                    .commit();
+        } else {
+            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }
 
-            leftDatePickerButton = findViewById(R.id.leftDatePickerButton);
-            dateTextView = findViewById(R.id.dateTextView);
-            rightDatePickerButton = findViewById(R.id.rightDatePickerButton);
-            addTransactionButton = findViewById(R.id.addTransactionButton);
-            sortSpinner = (Spinner) findViewById(R.id.sortSpinner);
-            filterSpinner = (Spinner) findViewById(R.id.filterSpinner);
-            listView = (ListView) findViewById(R.id.transactionListView);
-            globalAmountTextView = findViewById(R.id.globalAmountTextView);
-            limitTextView = findViewById(R.id.limitTextView);
 
-            addTransactionButton.setOnClickListener(event-> {
-                Intent intent = new Intent(this, TransactionActivity.class);
-                startActivity(intent);
-            });
+//
+//            addTransactionButton.setOnClickListener(event-> {
+//                Intent intent = new Intent(this, TransactionActivity.class);
+//                startActivity(intent);
+//            });
+//
+//            filterSpinner.setOnItemSelectedListener(ListenerProvider.provideFilterSpinnerListener(this));
+//            sortSpinner.setOnItemSelectedListener(ListenerProvider.provideSortSpinnerListener(this));
+//
+//            filterSpinnerAdapter = new FilterSpinnerAdapter(this, filterBySpinnerItems);
 
-            filterSpinner.setOnItemSelectedListener(ListenerProvider.provideFilterSpinnerListener(this));
-            sortSpinner.setOnItemSelectedListener(ListenerProvider.provideSortSpinnerListener(this));
+//            transactionListAdapter = new TransactionListAdapter(this,R.layout.transaction_list,transactionArrayList);
+//
+//            filterSpinner.setAdapter(filterSpinnerAdapter);
 
-            filterSpinnerAdapter = new FilterSpinnerAdapter(this, filterBySpinnerItems);
-            sortSpinnerAdapter = AdapterProvider.provideSortSpinnerAdapter(this, sortBySpinnerItems);
-            transactionListAdapter = new TransactionListAdapter(this,R.layout.transaction_list,transactionArrayList);
-
-            filterSpinner.setAdapter(filterSpinnerAdapter);
-            sortSpinner.setAdapter(sortSpinnerAdapter);
-            listView.setAdapter(transactionListAdapter);
-
-            listView.setOnItemClickListener((parent, view, position, id) -> {
-                Intent intent = new Intent(this, TransactionActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("transaction", transactionArrayList.get(position));
-                intent.putExtras(bundle);
-                startActivity(intent);
-            });
-
+//            listView.setAdapter(transactionListAdapter);
+//
+//            listView.setOnItemClickListener((parent, view, position, id) -> {
+//                Intent intent = new Intent(this, TransactionActivity.class);
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable("transaction", transactionArrayList.get(position));
+//                intent.putExtras(bundle);
+//                startActivity(intent);
+//            });
+//
             mainPresenter = new MainPresenter(this);
-            rightDatePickerButton.setOnClickListener(event -> mainPresenter.datePickerClickedRight());
-            leftDatePickerButton.setOnClickListener(event -> mainPresenter.datePickerCLickedLeft());
+//            rightDatePickerButton.setOnClickListener(event -> mainPresenter.datePickerClickedRight());
+//            leftDatePickerButton.setOnClickListener(event -> mainPresenter.datePickerCLickedLeft());
             mainPresenter.initialize();
         }
 
         public void setMonthForTransactions(Date date) {
-            String displayDate = new SimpleDateFormat("MMMM, yyyy", Locale.getDefault()).format(date);
-            dateTextView.setText(displayDate);
+//            String displayDate = new SimpleDateFormat("MMMM, yyyy", Locale.getDefault()).format(date);
+//            dateTextView.setText(displayDate);
         }
 
         @Override
         public void setFilterBySpinnerItems(ArrayList<FilterItem> filterItems) {
-            filterBySpinnerItems.clear();
-            filterBySpinnerItems.addAll(filterItems);
-            filterSpinnerAdapter.notifyDataSetChanged();
+//            filterBySpinnerItems.clear();
+//            filterBySpinnerItems.addAll(filterItems);
+//            filterSpinnerAdapter.notifyDataSetChanged();
         }
 
         @Override
         public void setSortBySpinnerItems(ArrayList<String> sortSpinnerItems) {
-            this.sortBySpinnerItems.clear();
-            this.sortBySpinnerItems.addAll(sortSpinnerItems);
-            sortSpinnerAdapter.notifyDataSetChanged();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            masterFragment = TransactionListFragment.newInstance(sortSpinnerItems);
+            fragmentManager
+                    .beginTransaction()
+                    .replace(R.id.transaction_list, masterFragment)
+                    .commit();
+//            this.sortBySpinnerItems.clear();
+//            this.sortBySpinnerItems.addAll(sortSpinnerItems);
+//            sortSpinnerAdapter.notifyDataSetChanged();
         }
 
         @Override
         public void setTransactionListItems(ArrayList<Transaction> transactionArrayList) {
-            this.transactionArrayList.clear();
-            System.out.println(transactionArrayList.size());
-            this.transactionArrayList.addAll(transactionArrayList);
-            transactionListAdapter.notifyDataSetChanged();
+//            this.transactionArrayList.clear();
+//            System.out.println(transactionArrayList.size());
+//            this.transactionArrayList.addAll(transactionArrayList);
+//            transactionListAdapter.notifyDataSetChanged();
         }
 
     @Override
     public void setAccountData(Account account) {
-        limitTextView.setText(String.format(Locale.getDefault(),"%.2f",account.getTotalLimit()));
-        globalAmountTextView.setText(String.format(Locale.getDefault(),"%.2f",account.getBudget()));
+//        limitTextView.setText(String.format(Locale.getDefault(),"%.2f",account.getTotalLimit()));
+//        globalAmountTextView.setText(String.format(Locale.getDefault(),"%.2f",account.getBudget()));
     }
 
 
     public void onFilterSelect(FilterItem filterItem) {
-        mainPresenter.setFilterMethod(filterItem);
+//        mainPresenter.setFilterMethod(filterItem);
     }
 
     public void onSortSelect(String sort) {
-        mainPresenter.setSortMethod(sort);
+//        mainPresenter.setSortMethod(sort);
     }
 }

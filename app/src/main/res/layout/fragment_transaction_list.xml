@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent">
+
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".TransactionListFragment"
+    android:padding="10dp">
+
+    <LinearLayout
+        android:id="@+id/globalAmountContainer"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/limitContainer">
+        <TextView
+            android:id="@+id/globalAmountLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/GlobalAmount"
+            android:textSize="18sp"
+            />
+
+        <EditText
+            android:id="@id/globalAmountTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:editable="false"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/limitContainer"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:foregroundGravity="center"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/globalAmountContainer">
+
+        <TextView
+            android:id="@+id/limitLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:text="@string/Limit"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@id/limitTextView"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:editable="false" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/filterSpinnerBackground"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/limitContainer"
+        app:layout_constraintBottom_toTopOf="@id/datePickerLayout"
+        android:background="@drawable/border"
+        android:padding="0dp"
+        >
+        <Spinner
+            style="@style/Widget.AppCompat.DropDownItem.Spinner"
+            android:id="@+id/filterSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:clickable="true"
+            android:overScrollMode="always"
+            android:focusable="true"
+            />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/datePickerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/filterSpinnerBackground"
+        app:layout_constraintBottom_toTopOf="@id/sortSpinnerBackground"
+        android:weightSum="1"
+        android:orientation="horizontal"
+        android:showDividers="middle"
+        android:dividerPadding="5dp"
+        android:divider="@android:drawable/divider_horizontal_bright"
+        >
+
+        <Button
+            android:id="@+id/leftDatePickerButton"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:background="@drawable/baseline_arrow_back_black_18dp"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/dateTextView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:background="@drawable/border"
+            android:layout_weight="0.6"/>
+
+        <Button
+            android:id="@+id/rightDatePickerButton"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:background="@drawable/baseline_arrow_forward_black_18dp"
+            android:textSize="30sp" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/sortSpinnerBackground"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/datePickerLayout"
+        app:layout_constraintBottom_toTopOf="@id/transactionListView"
+        android:background="@drawable/border"
+        android:padding="0dp"
+        >
+        <Spinner
+            style="@style/Widget.AppCompat.DropDownItem.Spinner"
+            android:id="@+id/sortSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:clickable="true"
+            android:contextClickable="true"
+            android:focusable="true"
+            />
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/transactionListView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/border"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sortSpinnerBackground"
+        app:layout_constraintBottom_toTopOf="@id/addTransactionButton"/>
+
+    <Button
+        android:id="@+id/addTransactionButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/transactionListView"
+        android:text="Add transaction"
+        android:textAllCaps="false"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
