@@ -30,6 +30,7 @@ public class ListFragmentPresenter {
     private ArrayList<String> sortSpinnerItems;
 
     private Transaction currentlySelectedTransaction;
+    private DetailFragmentPresenter detailFragmentPresenter;
 
     private ListFragmentPresenter() {
 
@@ -48,10 +49,12 @@ public class ListFragmentPresenter {
 
     public void setCurrentlySelectedTransaction(Transaction currentlySelectedTransaction) {
         this.currentlySelectedTransaction = currentlySelectedTransaction;
+        detailFragmentPresenter.refresh();
     }
 
     public void init(ListFragmentInterface view) {
         this.view = view;
+        detailFragmentPresenter = DetailFragmentPresenter.getInstance();
         date = new Date();
         date.setDate(1);
         type = Transaction.Type.ALL;
@@ -167,7 +170,6 @@ public class ListFragmentPresenter {
             }
         }
         Collections.sort(transactions, comparatorMap.get(sortBy));
-        System.out.println(transactions);
         return transactions;
     }
 
@@ -182,5 +184,12 @@ public class ListFragmentPresenter {
         } else {
             return transaction.getDate().getMonth() == date.getMonth() && transaction.getDate().getYear() == date.getYear();
         }
+    }
+
+    public void deleteTransaction(Transaction transaction) {
+        model.deleteTransaction(transaction);
+        currentlySelectedTransaction = null;
+        view.setTransactionListItems(getTransactions());
+        detailFragmentPresenter.refresh();
     }
 }

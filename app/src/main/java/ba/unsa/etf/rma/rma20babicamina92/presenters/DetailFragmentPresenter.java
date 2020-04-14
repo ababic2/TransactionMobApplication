@@ -1,14 +1,16 @@
 package ba.unsa.etf.rma.rma20babicamina92.presenters;
 
+import ba.unsa.etf.rma.rma20babicamina92.fragments.TransactionDetailFragment;
 import ba.unsa.etf.rma.rma20babicamina92.models.Transaction;
 
 public class DetailFragmentPresenter {
     private static DetailFragmentPresenter instance;
 
     private ListFragmentPresenter listFragmentPresenter;
+    private TransactionDetailFragment fragment;
 
     private DetailFragmentPresenter() {
-        listFragmentPresenter = ListFragmentPresenter.getInstance();
+
     }
 
     public static DetailFragmentPresenter getInstance() {
@@ -18,9 +20,23 @@ public class DetailFragmentPresenter {
         return instance;
     }
 
+    public void init(TransactionDetailFragment fragment) {
+        listFragmentPresenter = ListFragmentPresenter.getInstance();
+        this.fragment = fragment;
+    }
+
     public Transaction getTransaction() {
         return listFragmentPresenter.getCurrentlySelectedTransaction();
     }
 
 
+    void refresh() {
+        if (fragment != null) {
+            fragment.refresh();
+        }
+    }
+
+    public void deleteTransaction(Transaction transaction) {
+        listFragmentPresenter.deleteTransaction(transaction);
+    }
 }

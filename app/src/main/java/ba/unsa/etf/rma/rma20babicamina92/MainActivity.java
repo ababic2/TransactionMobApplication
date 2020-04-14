@@ -12,7 +12,7 @@ import ba.unsa.etf.rma.rma20babicamina92.fragments.TransactionListFragment;
 
 public class MainActivity extends FragmentActivity {
 
-    private Fragment masterFragment;
+    private TransactionListFragment masterFragment;
     private TransactionDetailFragment detailFragment;
     private boolean twoPane;
 
@@ -27,7 +27,7 @@ public class MainActivity extends FragmentActivity {
         twoPane = false;
         setContentView(R.layout.activity_main);
         FragmentManager fragmentManager = getSupportFragmentManager();
-        masterFragment = fragmentManager.findFragmentById(R.id.transaction_list);
+        masterFragment = (TransactionListFragment) fragmentManager.findFragmentById(R.id.transaction_list);
         FrameLayout detailFrame = findViewById(R.id.transaction_detail);
         if (masterFragment == null) {
             masterFragment = TransactionListFragment.getInstance();
@@ -35,15 +35,18 @@ public class MainActivity extends FragmentActivity {
                     .beginTransaction()
                     .add(R.id.transaction_list, masterFragment)
                     .commit();
-            if (detailFrame != null) {
-                twoPane = true;
-                detailFragment = new TransactionDetailFragment();
-                fragmentManager.beginTransaction()
-                        .add(R.id.transaction_detail, detailFragment)
-                        .commit();
-            }
+
         } else {
             fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }
+        if (detailFrame != null) {
+            twoPane = true;
+            if (detailFragment == null) {
+                detailFragment = new TransactionDetailFragment();
+            }
+            fragmentManager.beginTransaction()
+                    .add(R.id.transaction_detail, detailFragment)
+                    .commit();
         }
     }
 }

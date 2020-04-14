@@ -493,8 +493,6 @@ public class MainModel {
     }
 
     public void updateTransaction(Transaction oldTransaction, Transaction newTransaction) {
-        System.out.println(transactions);
-        System.out.println(oldTransaction);
         int index = indexOf(oldTransaction);
         transactions.set(index, newTransaction);
     }
@@ -503,31 +501,24 @@ public class MainModel {
         for (int i = 0; i < transactions.size(); i++) {
             Transaction transaction = transactions.get(i);
             if (!that.getTransactionType().toString().equals(transaction.getTransactionType().toString())) {
-                System.out.println("TYPE");
                 continue;
             }
             if (!that.getTitle().equals(transaction.getTitle())) {
-                System.out.println("Title");
                 continue;
             }
             if (!that.getItemDescription().equals(transaction.getItemDescription())) {
-                System.out.println("Description");
                 continue;
             }
             if (!that.getAmount().equals(transaction.getAmount())) {
-                System.out.println("AMOUNT");
                 continue;
             }
             if (!that.getDate().equals(transaction.getDate())) {
-                System.out.println("DAte");
                 continue;
             }
             if (!that.getEndDate().equals(transaction.getEndDate())) {
-                System.out.println("ENDDATE");
                 continue;
             }
             if (!that.getTransactionInterval().equals(transaction.getTransactionInterval())) {
-                System.out.println("INTERVAL");
                 continue;
             }
             return i;

@@ -1,6 +1,7 @@
 package ba.unsa.etf.rma.rma20babicamina92.fragments;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -162,6 +163,24 @@ public class TransactionListFragment extends Fragment implements ListFragmentInt
 
         transactionListAdapter = new TransactionListAdapter((MainActivity) getActivity(),R.layout.transaction_list,transactionArrayList);
         listView.setAdapter(transactionListAdapter);
+
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            if (view.getBackground() == null) {
+                for (int i = 0; i < listView.getChildCount(); i++) {
+                    View child = listView.getChildAt(i);
+                    child.setBackground(null);
+                }
+                view.setBackgroundColor(Color.GREEN);
+                listPresenter.setCurrentlySelectedTransaction((Transaction) parent.getItemAtPosition(position));
+            } else {
+                for (int i = 0; i < listView.getChildCount(); i++) {
+                    View child = listView.getChildAt(i);
+                    child.setBackground(null);
+                }
+                listPresenter.setCurrentlySelectedTransaction(null);
+            }
+        });
+
     }
 
 
@@ -176,6 +195,9 @@ public class TransactionListFragment extends Fragment implements ListFragmentInt
         transactionArrayList.clear();
         transactionArrayList.addAll(transactions);
         transactionListAdapter.notifyDataSetChanged();
+        for (int i = 0; i < listView.getChildCount(); i++) {
+            listView.getChildAt(i).setBackground(null);
+        }
     }
 
     @Override
