@@ -34,7 +34,7 @@ import ba.unsa.etf.rma.rma20babicamina92.exceptions.InvalidFieldValueException;
 import ba.unsa.etf.rma.rma20babicamina92.models.FilterItem;
 import ba.unsa.etf.rma.rma20babicamina92.models.MainModel;
 import ba.unsa.etf.rma.rma20babicamina92.models.Transaction;
-import ba.unsa.etf.rma.rma20babicamina92.providers.ListenerProvider;
+
 
 public class TransactionActivity extends AppCompatActivity {
 

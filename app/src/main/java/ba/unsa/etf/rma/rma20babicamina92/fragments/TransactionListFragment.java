@@ -1,5 +1,6 @@
-package ba.unsa.etf.rma.rma20babicamina92;
+package ba.unsa.etf.rma.rma20babicamina92.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -15,17 +16,24 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
+import ba.unsa.etf.rma.rma20babicamina92.MainActivity;
+import ba.unsa.etf.rma.rma20babicamina92.R;
 import ba.unsa.etf.rma.rma20babicamina92.adapters.FilterSpinnerAdapter;
 import ba.unsa.etf.rma.rma20babicamina92.adapters.TransactionListAdapter;
+import ba.unsa.etf.rma.rma20babicamina92.contracts.ListFragmentInterface;
+import ba.unsa.etf.rma.rma20babicamina92.models.Account;
 import ba.unsa.etf.rma.rma20babicamina92.models.FilterItem;
 import ba.unsa.etf.rma.rma20babicamina92.models.Transaction;
+import ba.unsa.etf.rma.rma20babicamina92.presenters.ListFragmentPresenter;
 import ba.unsa.etf.rma.rma20babicamina92.providers.AdapterProvider;
-import ba.unsa.etf.rma.rma20babicamina92.providers.ListenerProvider;
 
 
-public class TransactionListFragment extends Fragment {
+public class TransactionListFragment extends Fragment implements ListFragmentInterface {
 
     private static final String ARG_SORT_ITEMS = "sortItems";
     private static final String ARG_MONTH = "monthOfTransaction";
@@ -47,18 +55,27 @@ public class TransactionListFragment extends Fragment {
     private String monthOfTransaction;
     private int currentFilterPosition=0;
 
+    Activity activity;
     private FilterSpinnerAdapter filterSpinnerAdapter;
     private ArrayAdapter<String> sortSpinnerAdapter;
 
-    private MainFragmentActivity mainFragmentActivity;
     private TransactionListAdapter transactionListAdapter;
+
+
+    /**
+     * drugi dio
+     */
+    private ListFragmentPresenter listPresenter;
 
     public TransactionListFragment() {
         // Required empty public constructor
     }
 
+    public static TransactionListFragment getInstance() {
+        return new TransactionListFragment();
+    }
 
-    public static TransactionListFragment newInstance(
+    public static TransactionListFragment getInstance(
             ArrayList<FilterItem> filterBySpinnerItems, String monthOfTransaction,
             ArrayList<String> sortBySpinnerItems,
             ArrayList<Transaction> transactionArrayList,
@@ -77,15 +94,10 @@ public class TransactionListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            this.filterBySpinnerItems = getArguments().getParcelableArrayList(ARG_FILTER_ITEMS);
-            this.monthOfTransaction = getArguments().getString(ARG_MONTH);
-            this.sortBySpinnerItems = getArguments().getStringArrayList(ARG_SORT_ITEMS);
-            this.transactionArrayList = getArguments().getParcelableArrayList(ARG_TRANSACTIONS);
-            this.currentFilterPosition = getArguments().getInt(ARG_CURRENT_FILTER);
-        }
-
-
+        filterBySpinnerItems = new ArrayList<>();
+        transactionArrayList = new ArrayList<>();
+        sortBySpinnerItems = new ArrayList<>();
+        monthOfTransaction = "";
     }
 
     @Override
@@ -103,8 +115,10 @@ public class TransactionListFragment extends Fragment {
         globalAmountTextView = view.findViewById(R.id.globalAmountTextView);
         limitTextView = view.findViewById(R.id.limitTextView);
 
-        mainFragmentActivity = (MainFragmentActivity) getActivity();
+        activity = getActivity();
+        listPresenter = ListFragmentPresenter.getInstance();
         initViewData();
+        listPresenter.init(this);
 
 
         return view;
@@ -113,21 +127,26 @@ public class TransactionListFragment extends Fragment {
     private void initViewData() {
         sortSpinnerAdapter = AdapterProvider.provideSortSpinnerAdapter(getActivity(), sortBySpinnerItems);
         sortSpinner.setAdapter(sortSpinnerAdapter);
+        sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                listPresenter.setSortMethod((String) parent.getSelectedItem());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         filterSpinnerAdapter = new FilterSpinnerAdapter(getActivity(), filterBySpinnerItems);
         filterSpinner.setAdapter(filterSpinnerAdapter);
-//        filterSpinner.setOnItemSelectedListener(ListenerProvider.provideFilterSpinnerListener(getActivity()));
         filterSpinner.setSelection(currentFilterPosition);
+
         filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println(position);
-                System.out.println(currentFilterPosition);
-                System.out.println(parent.getSelectedItem());
-                if (position != currentFilterPosition) {
-                    currentFilterPosition = position;
-                    mainFragmentActivity.onFilterSelect((FilterItem) parent.getSelectedItem());
-                }
+                listPresenter.setFilterMethod((FilterItem) parent.getSelectedItem());
             }
 
             @Override
@@ -136,23 +155,46 @@ public class TransactionListFragment extends Fragment {
             }
         });
         dateTextView.setText(monthOfTransaction);
-        rightDatePickerButton.setOnClickListener(mainFragmentActivity::onRightClicked);
-        leftDatePickerButton.setOnClickListener(mainFragmentActivity::onLeftClicked);
+
+        rightDatePickerButton.setOnClickListener(event-> listPresenter.datePickerClickedRight());
+
+        leftDatePickerButton.setOnClickListener(event -> listPresenter.datePickerCLickedLeft());
 
         transactionListAdapter = new TransactionListAdapter((MainActivity) getActivity(),R.layout.transaction_list,transactionArrayList);
         listView.setAdapter(transactionListAdapter);
     }
 
-    public int getCurrentFilterItem() {
-        return currentFilterPosition;
+
+    @Override
+    public void setMonthForTransactions(Date date) {
+        monthOfTransaction = new SimpleDateFormat("MMMM, yyyy", Locale.getDefault()).format(date);
+        dateTextView.setText(monthOfTransaction);
     }
 
-    public interface MainFragmentActivity {
-        void onRightClicked(View view);
-
-        void onLeftClicked(View view);
-
-        void onFilterSelect(FilterItem filterItem);
+    @Override
+    public void setTransactionListItems(ArrayList<Transaction> transactions) {
+        transactionArrayList.clear();
+        transactionArrayList.addAll(transactions);
+        transactionListAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void setFilterItems(ArrayList<FilterItem> filterItems) {
+        filterBySpinnerItems.clear();
+        filterBySpinnerItems.addAll(filterItems);
+        filterSpinnerAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void setSortItems(ArrayList<String> sortItems) {
+        sortBySpinnerItems.clear();
+        sortBySpinnerItems.addAll(sortItems);
+        sortSpinnerAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void setAccountData(Account account) {
+        globalAmountTextView.setText(String.format(Locale.getDefault(),"%.2f",account.getBudget()));
+        limitTextView.setText(String.format(Locale.getDefault(),"%.2f",account.getTotalLimit()));
+    }
 }

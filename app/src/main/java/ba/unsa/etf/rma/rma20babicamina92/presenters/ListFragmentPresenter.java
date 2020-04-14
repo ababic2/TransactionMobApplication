@@ -8,33 +8,52 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ba.unsa.etf.rma.rma20babicamina92.R;
-import ba.unsa.etf.rma.rma20babicamina92.contracts.MainContract;
+import ba.unsa.etf.rma.rma20babicamina92.contracts.ListFragmentInterface;
 import ba.unsa.etf.rma.rma20babicamina92.models.FilterItem;
 import ba.unsa.etf.rma.rma20babicamina92.models.MainModel;
 import ba.unsa.etf.rma.rma20babicamina92.models.Transaction;
-import ba.unsa.etf.rma.rma20babicamina92.models.Transaction.Type;
 import ba.unsa.etf.rma.rma20babicamina92.utils.Filter;
 
-public class MainPresenter implements MainContract.MainPresenter {
+public class ListFragmentPresenter {
+    private static ListFragmentPresenter instance;
+
     private MainModel model;
+    private ListFragmentInterface view;
 
     private Map<String, Comparator<Transaction>> comparatorMap;
     private Map<String, Filter> filterMap;
     private Date date;
-    private Type type;
+    private Transaction.Type type;
     private String sortBy;
 
-    private MainContract.MainView mainActivity;
     private ArrayList<FilterItem>filterItems;
     private ArrayList<String> sortSpinnerItems;
-    private ArrayList<Transaction> transactionArrayList;
 
-    public MainPresenter(MainContract.MainView mainActivity) {
-        model = MainModel.getInstance();
+    public static ListFragmentPresenter getInstance() {
+        if (instance == null) {
+            instance = new ListFragmentPresenter();
+        }
+        return instance;
+    }
+
+    public void init(ListFragmentInterface view) {
+        this.view = view;
         date = new Date();
         date.setDate(1);
+        type = Transaction.Type.ALL;
         sortBy = "Default";
-        type = Type.ALL;
+        setMaps();
+        getSortItems();
+        getFilterItems();
+        model = MainModel.getInstance();
+        view.setAccountData(model.getAccount());
+        view.setFilterItems(filterItems);
+        view.setSortItems(sortSpinnerItems);
+        view.setMonthForTransactions(date);
+        view.setTransactionListItems(getTransactions());
+    }
+
+    private void setMaps() {
         comparatorMap = new HashMap<String, Comparator<Transaction>>() {{
             put("Price - Ascending", Transaction::compareTo);
             put("Price - Descending", (a,b)->b.compareTo(a));
@@ -47,45 +66,31 @@ public class MainPresenter implements MainContract.MainPresenter {
 
         filterMap =  new HashMap<String, Filter>() {{
             put(
-                    Type.INDIVIDUALPAYMENT.toString(),
-                    (a)->isInMonth(a) && a.getType().equals(Type.INDIVIDUALPAYMENT.toString())
+                    Transaction.Type.INDIVIDUALPAYMENT.toString(),
+                    (a)->isInMonth(a) && a.getType().equals(Transaction.Type.INDIVIDUALPAYMENT.toString())
             );
             put(
-                    Type.REGULARPAYMENT.toString(),
-                    (a)->isInMonth(a) && a.getType().equals(Type.REGULARPAYMENT.toString())
+                    Transaction.Type.REGULARPAYMENT.toString(),
+                    (a)->isInMonth(a) && a.getType().equals(Transaction.Type.REGULARPAYMENT.toString())
             );
             put(
-                    Type.PURCHASE.toString(),
-                    (a)->isInMonth(a) && a.getType().equals(Type.PURCHASE.toString())
+                    Transaction.Type.PURCHASE.toString(),
+                    (a)->isInMonth(a) && a.getType().equals(Transaction.Type.PURCHASE.toString())
             );
             put(
-                    Type.INDIVIDUALINCOME.toString(),
-                    (a) -> isInMonth(a) && a.getType().equals(Type.INDIVIDUALINCOME.toString())
+                    Transaction.Type.INDIVIDUALINCOME.toString(),
+                    (a) -> isInMonth(a) && a.getType().equals(Transaction.Type.INDIVIDUALINCOME.toString())
             );
             put(
-                    Type.REGULARINCOME.toString(),
-                    (a)->isInMonth(a) && a.getType().equals(Type.REGULARINCOME.toString())
+                    Transaction.Type.REGULARINCOME.toString(),
+                    (a)->isInMonth(a) && a.getType().equals(Transaction.Type.REGULARINCOME.toString())
             );
             put(
-                    Type.ALL.toString(),
+                    Transaction.Type.ALL.toString(),
                     (a)->isInMonth(a)
             );
 
         }};
-
-        this.mainActivity = mainActivity;
-    }
-
-    public void initialize(){
-        mainActivity.setAccountData(model.getAccount());
-        mainActivity.setMonthForTransactions(date);
-        getFilterItems();
-        mainActivity.setFilterBySpinnerItems(filterItems);
-
-        getSortItems();
-        mainActivity.setSortBySpinnerItems(sortSpinnerItems);
-
-        mainActivity.setTransactionListItems(getTransactions());
     }
 
 
@@ -102,7 +107,7 @@ public class MainPresenter implements MainContract.MainPresenter {
 
     private void getFilterItems() {
         filterItems = new ArrayList<FilterItem>();
-        filterItems.add(new FilterItem("ALL",R.drawable.individualpay));
+        filterItems.add(new FilterItem("ALL", R.drawable.individualpay));
         filterItems.add(new FilterItem("INDIVIDUALPAYMENT", R.drawable.regularpayment));
         filterItems.add(new FilterItem("REGULARPAYMENT",R.drawable.regularpayment));
         filterItems.add(new FilterItem("PURCHASE",R.drawable.purchase));
@@ -111,38 +116,37 @@ public class MainPresenter implements MainContract.MainPresenter {
         filterItems.add(new FilterItem("ALL",android.R.drawable.gallery_thumb)); //addd phootoooo
     }
 
-    @Override
+
     public void datePickerClickedRight() {
         date.setMonth(date.getMonth() + 1);
-        mainActivity.setMonthForTransactions(date);
+        view.setMonthForTransactions(date);
 
-        ArrayList<Transaction> transactions = getTransactions();
-        mainActivity.setTransactionListItems(transactions);
+        view.setTransactionListItems(getTransactions());
     }
 
-    @Override
+
     public void datePickerCLickedLeft() {
         date.setMonth(date.getMonth() - 1);
-        mainActivity.setMonthForTransactions(date);
+        view.setMonthForTransactions(date);
         ArrayList<Transaction> transactions = getTransactions();
-        mainActivity.setTransactionListItems(transactions);
+        view.setTransactionListItems(transactions);
     }
 
-    @Override
+
     public void setSortMethod(String sortMethod) {
         sortBy = sortMethod;
-        mainActivity.setTransactionListItems(getTransactions());
+        view.setTransactionListItems(getTransactions());
     }
 
-    @Override
+
     public void setFilterMethod(FilterItem filterItem) {
-        type = Type.valueOf(filterItem.getFilterName());
-        mainActivity.setTransactionListItems(getTransactions());
+        type = Transaction.Type.valueOf(filterItem.getFilterName());
+        view.setTransactionListItems(getTransactions());
     }
 
     private ArrayList<Transaction> getTransactions() {
         ArrayList<Transaction> transactions = new ArrayList<>();
-        this.transactionArrayList = model.getTransactions();
+        ArrayList<Transaction> transactionArrayList = model.getTransactions();
         for(int i = 0; i < transactionArrayList.size(); i++) {
             if(filterMap.get(type.toString()).test(transactionArrayList.get(i))) {
                 transactions.add(transactionArrayList.get(i));
@@ -155,8 +159,8 @@ public class MainPresenter implements MainContract.MainPresenter {
 
     private boolean isInMonth(Transaction transaction) {
         if (
-                transaction.getType().equals(Type.REGULARINCOME.toString()) ||
-                        transaction.getType().equals(Type.REGULARPAYMENT.toString())
+                transaction.getType().equals(Transaction.Type.REGULARINCOME.toString()) ||
+                        transaction.getType().equals(Transaction.Type.REGULARPAYMENT.toString())
         ) {
             return transaction.getDate().before(date) && transaction.getEndDate().after(date) ||
                     (transaction.getDate().getMonth() == date.getMonth() && transaction.getDate().getYear() == date.getYear()) ||
