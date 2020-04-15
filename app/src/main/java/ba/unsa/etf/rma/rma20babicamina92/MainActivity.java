@@ -1,7 +1,10 @@
 package ba.unsa.etf.rma.rma20babicamina92;
 
 import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -11,8 +14,12 @@ import java.util.Objects;
 
 import ba.unsa.etf.rma.rma20babicamina92.fragments.TransactionDetailFragment;
 import ba.unsa.etf.rma.rma20babicamina92.fragments.TransactionListFragment;
+import ba.unsa.etf.rma.rma20babicamina92.utils.SimpleGestureFilter;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity implements
+        SimpleGestureFilter.SimpleGestureListener {
+
+    private SimpleGestureFilter detector;
 
     private TransactionListFragment masterFragment;
     private TransactionDetailFragment detailFragment;
@@ -51,7 +58,20 @@ public class MainActivity extends FragmentActivity {
         twoPane = false;
         setContentView(R.layout.activity_main);
         cleanStartFragments();
+
+        // Detect touched area
+        detector = new SimpleGestureFilter(MainActivity.this, this);
+
     }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent me) {
+        // Call onTouchEvent of SimpleGestureFilter class
+        this.detector.onTouchEvent(me);
+        return super.dispatchTouchEvent(me);
+    }
+
+
 
     private void cleanStartFragments() {
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -104,5 +124,34 @@ public class MainActivity extends FragmentActivity {
         fragmentManager.beginTransaction()
                 .replace(R.id.transaction_list, masterFragment)
                 .commit();
+    }
+
+    @Override
+    public void onSwipe(int direction) {
+        //Detect the swipe gestures and display toast
+        String showToastMessage = "";
+        System.out.println("DIRECTION UNKNOWN");
+        switch (direction) {
+
+            case SimpleGestureFilter.SWIPE_RIGHT:
+                showToastMessage = "You have Swiped Right.";
+                break;
+            case SimpleGestureFilter.SWIPE_LEFT:
+                showToastMessage = "You have Swiped Left.";
+                break;
+            case SimpleGestureFilter.SWIPE_DOWN:
+                showToastMessage = "You have Swiped Down.";
+                break;
+            case SimpleGestureFilter.SWIPE_UP:
+                showToastMessage = "You have Swiped Up.";
+                break;
+
+        }
+        Toast.makeText(this, showToastMessage, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onDoubleTap() {
+
     }
 }
