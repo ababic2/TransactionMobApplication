@@ -117,8 +117,8 @@ public class GraphsPresenter {
         Date date = new Date();
         if (interval.equals("Month")) {
             for (int i = 0; i < 12; i++) {
-                resultPayments = new ArrayList<>();
                 int j = 0;
+                resultPayments = new ArrayList<>();
                 while (j < payments.size()) {
                     Payment payment = payments.get(j);
                     if (payment.getDate().getYear() == date.getYear()) {
@@ -136,10 +136,9 @@ public class GraphsPresenter {
             Date start = new Date();
             start.setDate(1);
             start.setMonth(0);
-//            System.out.println(payments.size());
+            int j = 0;
             for (int i = 1; ; i++) {
                 resultPayments = new ArrayList<>();
-                int j = 0;
                 while (j < payments.size()) {
                     Payment payment = payments.get(j);
                     if (payment.getDate().getMonth() == start.getMonth()
@@ -160,6 +159,34 @@ public class GraphsPresenter {
                     break;
                 }
                 start.setDate(start.getDate() + 1);
+
+            }
+        } else if (interval.equals("Week")) {
+            Date start = new Date();
+            start.setDate(7);
+            start.setMonth(0);
+            int j = 0;
+            for (int i = 1; ; i++) {
+                resultPayments = new ArrayList<>();
+                while (j < payments.size()) {
+                    Payment payment = payments.get(j);
+                    if (payment.getDate().before(start) || payment.getDate().equals(start)) {
+                        resultPayments.add(payment);
+                    } else if(start.before(payment.getDate())){
+                        result.add(resultPayments);
+                        resultPayments = new ArrayList<>();
+                        start.setDate(start.getDate()+7);
+                        continue;
+                    } else {
+                        break;
+                    }
+                    j++;
+                }
+                result.add(resultPayments);
+                if (start.getYear()>new Date().getYear()) {
+                    break;
+                }
+                start.setDate(start.getDate() + 7);
 
             }
         }
