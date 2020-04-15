@@ -37,4 +37,20 @@ public class AdapterProvider {
             }
         };
     }
+
+
+    public static ArrayAdapter<String> provideIntervalSpinnerAdapter(Context context, List<String> sortBySpinnerItems) {
+        return new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, sortBySpinnerItems) {
+            @Override
+            public boolean isEnabled(int position) {
+                return true;
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+                return super.getDropDownView(position, convertView, parent);
+            }
+        };
+    }
 }

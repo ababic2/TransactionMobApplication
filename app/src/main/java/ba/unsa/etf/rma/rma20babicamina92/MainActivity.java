@@ -2,9 +2,7 @@ package ba.unsa.etf.rma.rma20babicamina92;
 
 import android.os.Bundle;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -12,6 +10,8 @@ import androidx.fragment.app.FragmentManager;
 
 import java.util.Objects;
 
+import ba.unsa.etf.rma.rma20babicamina92.fragments.BudgetFragment;
+import ba.unsa.etf.rma.rma20babicamina92.fragments.GraphsFragment;
 import ba.unsa.etf.rma.rma20babicamina92.fragments.TransactionDetailFragment;
 import ba.unsa.etf.rma.rma20babicamina92.fragments.TransactionListFragment;
 import ba.unsa.etf.rma.rma20babicamina92.utils.SimpleGestureFilter;
@@ -23,6 +23,9 @@ public class MainActivity extends FragmentActivity implements
 
     private TransactionListFragment masterFragment;
     private TransactionDetailFragment detailFragment;
+
+    public static int slider = 0;
+
     public static boolean twoPane;
 
     @Override
@@ -30,27 +33,6 @@ public class MainActivity extends FragmentActivity implements
         super.onPostResume();
     }
 
-    @Override
-    protected void onStart() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.popBackStack();
-        Fragment fragment = fragmentManager.findFragmentById(R.id.transaction_list);
-        if (fragment != null) {
-//            if (fragment instanceof TransactionListFragment) {
-//                fragmentManager
-//                        .beginTransaction()
-//                        .remove(masterFragment)
-//                        .commit();
-//            }
-            if (fragment instanceof TransactionDetailFragment) {
-                fragmentManager
-                        .beginTransaction()
-                        .remove(detailFragment)
-                        .commit();
-            }
-        }
-        super.onStart();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,14 +42,18 @@ public class MainActivity extends FragmentActivity implements
         cleanStartFragments();
 
         // Detect touched area
-        detector = new SimpleGestureFilter(MainActivity.this, this);
+        if (!twoPane) {
+            detector = new SimpleGestureFilter(MainActivity.this, this);
+        }
 
     }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent me) {
         // Call onTouchEvent of SimpleGestureFilter class
-        this.detector.onTouchEvent(me);
+        if (!twoPane) {
+            this.detector.onTouchEvent(me);
+        }
         return super.dispatchTouchEvent(me);
     }
 
@@ -75,36 +61,55 @@ public class MainActivity extends FragmentActivity implements
 
     private void cleanStartFragments() {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        if (fragmentManager.findFragmentById(R.id.transaction_list) != null) {
-            fragmentManager.beginTransaction()
-                    .remove(Objects.requireNonNull(fragmentManager.findFragmentById(R.id.transaction_list)));
-        }
-        if (fragmentManager.findFragmentById(R.id.transaction_detail) != null) {
-            fragmentManager.beginTransaction()
-                    .remove(Objects.requireNonNull(fragmentManager.findFragmentById(R.id.transaction_detail)));
-        }
-        masterFragment = (TransactionListFragment) fragmentManager.findFragmentById(R.id.transaction_list);
-        FrameLayout detailFrame = findViewById(R.id.transaction_detail);
-        if (masterFragment == null) {
-            masterFragment = TransactionListFragment.getInstance();
-            fragmentManager
-                    .beginTransaction()
-                    .add(R.id.transaction_list, masterFragment)
-                    .commit();
-
-        } else {
-            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        }
-        if (detailFrame != null) {
-            twoPane = true;
-            if (detailFragment == null) {
-                detailFragment = new TransactionDetailFragment();
-            }
-            if (fragmentManager.findFragmentById(R.id.transaction_detail) == null) {
+        if (slider == 0) {
+            if (fragmentManager.findFragmentById(R.id.transaction_list) != null) {
                 fragmentManager.beginTransaction()
-                        .add(R.id.transaction_detail, detailFragment)
-                        .commit();
+                        .remove(Objects.requireNonNull(fragmentManager.findFragmentById(R.id.transaction_list)));
             }
+            if (fragmentManager.findFragmentById(R.id.transaction_detail) != null) {
+                fragmentManager.beginTransaction()
+                        .remove(Objects.requireNonNull(fragmentManager.findFragmentById(R.id.transaction_detail)));
+            }
+            Fragment fragment = fragmentManager.findFragmentById(R.id.transaction_list);
+            if(fragment instanceof BudgetFragment || fragment instanceof GraphsFragment){
+                fragmentManager.beginTransaction().remove(fragment).commit();
+                fragment = null;
+            }
+            masterFragment = (TransactionListFragment) fragment;
+            FrameLayout detailFrame = findViewById(R.id.transaction_detail);
+            if (masterFragment == null) {
+                masterFragment = TransactionListFragment.getInstance();
+                fragmentManager
+                        .beginTransaction()
+                        .add(R.id.transaction_list, masterFragment)
+                        .commit();
+
+            } else {
+                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            }
+            if (detailFrame != null) {
+                twoPane = true;
+                if (detailFragment == null) {
+                    detailFragment = new TransactionDetailFragment();
+                }
+                if (fragmentManager.findFragmentById(R.id.transaction_detail) == null) {
+                    fragmentManager.beginTransaction()
+                            .add(R.id.transaction_detail, detailFragment)
+                            .commit();
+                }
+            }
+        } else if (slider == 1) {
+            Fragment fragment = fragmentManager.findFragmentById(R.id.transaction_list);
+            if (fragment != null) {
+                fragmentManager.beginTransaction().remove(fragment).commit();
+            }
+            fragmentManager.beginTransaction().add(R.id.transaction_list, new BudgetFragment()).commit();
+        } else if (slider == 2) {
+            Fragment fragment = fragmentManager.findFragmentById(R.id.transaction_list);
+            if (fragment != null) {
+                fragmentManager.beginTransaction().remove(fragment).commit();
+            }
+            fragmentManager.beginTransaction().add(R.id.transaction_list, new GraphsFragment()).commit();
         }
     }
 
@@ -115,12 +120,13 @@ public class MainActivity extends FragmentActivity implements
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.transaction_list, detailFragment)
-//                .addToBackStack(null)
+                .addToBackStack(null)
         .commit();
     }
 
     public void afterSubmitActionOnDetailFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.popBackStack();
         fragmentManager.beginTransaction()
                 .replace(R.id.transaction_list, masterFragment)
                 .commit();
@@ -129,29 +135,22 @@ public class MainActivity extends FragmentActivity implements
     @Override
     public void onSwipe(int direction) {
         //Detect the swipe gestures and display toast
-        String showToastMessage = "";
-        System.out.println("DIRECTION UNKNOWN");
         switch (direction) {
-
             case SimpleGestureFilter.SWIPE_RIGHT:
-                showToastMessage = "You have Swiped Right.";
+                slider = (slider == 0) ? 2 : slider - 1;
+                cleanStartFragments();
                 break;
             case SimpleGestureFilter.SWIPE_LEFT:
-                showToastMessage = "You have Swiped Left.";
+                slider = (slider+1)%3;
+                cleanStartFragments();
                 break;
             case SimpleGestureFilter.SWIPE_DOWN:
-                showToastMessage = "You have Swiped Down.";
-                break;
             case SimpleGestureFilter.SWIPE_UP:
-                showToastMessage = "You have Swiped Up.";
                 break;
-
         }
-        Toast.makeText(this, showToastMessage, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onDoubleTap() {
-
     }
 }

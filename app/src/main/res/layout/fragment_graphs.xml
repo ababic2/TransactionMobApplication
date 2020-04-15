@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.GraphsFragment"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/paymentTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Statistics"
+        android:textSize="30sp"
+        android:textAlignment="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/intervalSpinnerContainer"
+        />
+
+    <RelativeLayout
+        android:id="@+id/intervalSpinnerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/paymentTitle"
+        app:layout_constraintBottom_toTopOf="@id/paymentChart"
+        android:background="@drawable/border"
+        android:padding="0dp"
+        >
+        <Spinner
+            style="@style/Widget.AppCompat.DropDownItem.Spinner"
+            android:id="@+id/intervalSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:clickable="true"
+            android:contextClickable="true"
+            android:focusable="true"
+            />
+    </RelativeLayout>
+
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/paymentChart"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        app:layout_constraintTop_toBottomOf="@id/intervalSpinnerContainer"
+        />
+
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/incomeChart"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        app:layout_constraintTop_toBottomOf="@id/paymentChart"
+        />
+
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/allChart"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        app:layout_constraintTop_toBottomOf="@id/incomeChart"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

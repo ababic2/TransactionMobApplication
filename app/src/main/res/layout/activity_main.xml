@@ -7,10 +7,10 @@
     android:weightSum="5"
     android:baselineAligned="false">
     <FrameLayout
+        android:id="@+id/transaction_list"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="5"
-        android:id="@+id/transaction_list"
         android:backgroundTint="@android:color/holo_blue_dark"
         >
     </FrameLayout>

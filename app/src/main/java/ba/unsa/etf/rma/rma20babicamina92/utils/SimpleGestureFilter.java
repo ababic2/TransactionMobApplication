@@ -108,13 +108,18 @@ public class SimpleGestureFilter extends GestureDetector.SimpleOnGestureListener
         final float xDistance = Math.abs(e1.getX() - e2.getX());
         final float yDistance = Math.abs(e1.getY() - e2.getY());
 
+        if (xDistance > this.swipe_Max_Distance
+                || yDistance > this.swipe_Max_Distance)
+            return false;
 
         velocityX = Math.abs(velocityX);
         velocityY = Math.abs(velocityY);
         boolean result = false;
 
-        if (velocityX > this.swipe_Min_Velocity
-                && xDistance > this.swipe_Min_Distance) {
+        if (velocityX>velocityY
+                && velocityX > this.swipe_Min_Velocity
+                && xDistance > this.swipe_Min_Distance
+                && xDistance < this.swipe_Max_Distance) {
             if (e1.getX() > e2.getX()) // right to left
                 this.listener.onSwipe(SWIPE_LEFT);
             else
