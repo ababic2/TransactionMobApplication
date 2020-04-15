@@ -196,4 +196,8 @@ public class ListFragmentPresenter {
     public void createTransaction(Transaction transaction) {
         model.addTransaction(transaction);
     }
+
+    public void updateTransaction(Transaction oldTransaction, Transaction transaction) {
+        model.updateTransaction(oldTransaction, transaction);
+    }
 }

@@ -84,7 +84,9 @@ public class TransactionDetailFragment extends Fragment {
         filterSpinnerAdapter = new FilterSpinnerAdapter(getActivity(), filterBySpinnerItems);
         typeSpinner.setAdapter(filterSpinnerAdapter);
         if (presenter.getTransaction() != null) {
+            oldTransaction = presenter.getTransaction();
             setInitialState(presenter.getTransaction());
+            saveButton.setOnClickListener(getUpdateListener());
         } else {
             deleteButton.setEnabled(false);
             saveButton.setOnClickListener(getCreateListener());
@@ -104,12 +106,11 @@ public class TransactionDetailFragment extends Fragment {
         setBackgroundsToDefault();
         Transaction transaction = presenter.getTransaction();
         if (transaction != null) {
+            oldTransaction = transaction;
             setInitialState(transaction);
             setBackgroundsToDefault();
             deleteButton.setEnabled(true);
-            saveButton.setOnClickListener((event)->{
-
-            });
+            saveButton.setOnClickListener(getUpdateListener());
         } else {
             deleteButton.setEnabled(false);
             titleTextView.setText(null);
@@ -162,6 +163,56 @@ public class TransactionDetailFragment extends Fragment {
                                 .setNegativeButton(android.R.string.cancel, null).show();
                     } else {
                         presenter.createTransaction(this.transaction);
+                        System.out.println(this.transaction);
+                        activity.afterSubmitActionOnDetailFragment();
+                    }
+                } catch (InvalidFieldValueException e) {
+                    Toast.makeText(getActivity(),e.getMessage(),Toast.LENGTH_LONG).show();
+                }
+
+            } catch (InvalidFieldValueException e) {
+
+            }
+        };
+    }
+
+    private View.OnClickListener getUpdateListener() {
+        return (event)->{
+            try {
+                validateFields();
+                extractTransaction();
+                String[] poruke = {
+                        "Over monthly limit. Continue?",
+                        "Over total limit. Continue?",
+                        "Over monthly and total limit. Continue?"
+                };
+                int kojaPoruka = -1;
+                try {
+                    validateFields();
+                    extractTransaction();
+                    if (MainModel.getInstance().isOverMonthlyLimit(this.oldTransaction,this.transaction)) {
+                        kojaPoruka = 0;
+                    }
+                    if (MainModel.getInstance().isOverTotalLimit(this.oldTransaction,this.transaction)) {
+                        if (kojaPoruka == 0) {
+                            kojaPoruka = 2;
+                        } else {
+                            kojaPoruka = 1;
+                        }
+                    }
+                    if (kojaPoruka != -1) {
+                        new AlertDialog
+                                .Builder(getActivity())
+                                .setTitle("Warning")
+                                .setMessage(poruke[kojaPoruka])
+                                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                                    presenter.updateTransaction(this.oldTransaction,this.transaction);
+                                    System.out.println(this.transaction);
+                                    activity.afterSubmitActionOnDetailFragment();
+                                })
+                                .setNegativeButton(android.R.string.cancel, null).show();
+                    } else {
+                        presenter.updateTransaction(this.oldTransaction,this.transaction);
                         System.out.println(this.transaction);
                         activity.afterSubmitActionOnDetailFragment();
                     }

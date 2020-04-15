@@ -506,7 +506,10 @@ public class MainModel {
             if (!that.getTitle().equals(transaction.getTitle())) {
                 continue;
             }
-            if (!that.getItemDescription().equals(transaction.getItemDescription())) {
+            if (xOrNull(that.getItemDescription(), transaction.getItemDescription())) {
+                continue;
+            }
+            if (that.getItemDescription()!=null && !that.getItemDescription().equals(transaction.getItemDescription())) {
                 continue;
             }
             if (!that.getAmount().equals(transaction.getAmount())) {
@@ -515,15 +518,26 @@ public class MainModel {
             if (!that.getDate().equals(transaction.getDate())) {
                 continue;
             }
-            if (!that.getEndDate().equals(transaction.getEndDate())) {
+            if (xOrNull(that.getEndDate(), transaction.getEndDate())) {
                 continue;
             }
-            if (!that.getTransactionInterval().equals(transaction.getTransactionInterval())) {
+            if (that.getEndDate()!=null && !that.getEndDate().equals(transaction.getEndDate())) {
+                continue;
+            }
+            if (xOrNull(that.getTransactionInterval(), transaction.getTransactionInterval())) {
+                continue;
+            }
+            if (that.getTransactionInterval()!=null && !that.getTransactionInterval().equals(transaction.getTransactionInterval())) {
                 continue;
             }
             return i;
         }
         return -1;
+    }
+
+    private boolean xOrNull(Object a, Object b) {
+        return (a == null && b !=null)
+                || (a != null && b ==null);
     }
 
 

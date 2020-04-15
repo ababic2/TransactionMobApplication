@@ -43,4 +43,8 @@ public class DetailFragmentPresenter {
     public void createTransaction(Transaction transaction) {
         listFragmentPresenter.createTransaction(transaction);
     }
+
+    public void updateTransaction(Transaction oldTransaction, Transaction transaction) {
+        listFragmentPresenter.updateTransaction(oldTransaction, transaction);
+    }
 }
