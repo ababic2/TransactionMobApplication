@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
+import java.util.Objects;
+
 import ba.unsa.etf.rma.rma20babicamina92.fragments.TransactionDetailFragment;
 import ba.unsa.etf.rma.rma20babicamina92.fragments.TransactionListFragment;
 
@@ -22,11 +24,45 @@ public class MainActivity extends FragmentActivity {
     }
 
     @Override
+    protected void onStart() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.popBackStack();
+        Fragment fragment = fragmentManager.findFragmentById(R.id.transaction_list);
+        if (fragment != null) {
+//            if (fragment instanceof TransactionListFragment) {
+//                fragmentManager
+//                        .beginTransaction()
+//                        .remove(masterFragment)
+//                        .commit();
+//            }
+            if (fragment instanceof TransactionDetailFragment) {
+                fragmentManager
+                        .beginTransaction()
+                        .remove(detailFragment)
+                        .commit();
+            }
+        }
+        super.onStart();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         twoPane = false;
         setContentView(R.layout.activity_main);
+        cleanStartFragments();
+    }
+
+    private void cleanStartFragments() {
         FragmentManager fragmentManager = getSupportFragmentManager();
+        if (fragmentManager.findFragmentById(R.id.transaction_list) != null) {
+            fragmentManager.beginTransaction()
+                    .remove(Objects.requireNonNull(fragmentManager.findFragmentById(R.id.transaction_list)));
+        }
+        if (fragmentManager.findFragmentById(R.id.transaction_detail) != null) {
+            fragmentManager.beginTransaction()
+                    .remove(Objects.requireNonNull(fragmentManager.findFragmentById(R.id.transaction_detail)));
+        }
         masterFragment = (TransactionListFragment) fragmentManager.findFragmentById(R.id.transaction_list);
         FrameLayout detailFrame = findViewById(R.id.transaction_detail);
         if (masterFragment == null) {
@@ -44,9 +80,11 @@ public class MainActivity extends FragmentActivity {
             if (detailFragment == null) {
                 detailFragment = new TransactionDetailFragment();
             }
-            fragmentManager.beginTransaction()
-                    .add(R.id.transaction_detail, detailFragment)
-                    .commit();
+            if (fragmentManager.findFragmentById(R.id.transaction_detail) == null) {
+                fragmentManager.beginTransaction()
+                        .add(R.id.transaction_detail, detailFragment)
+                        .commit();
+            }
         }
     }
 
@@ -57,12 +95,11 @@ public class MainActivity extends FragmentActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.transaction_list, detailFragment)
-                .addToBackStack(null)
+//                .addToBackStack(null)
         .commit();
     }
 
     public void afterSubmitActionOnDetailFragment() {
-        System.out.println(masterFragment);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.transaction_list, masterFragment)

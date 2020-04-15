@@ -157,13 +157,11 @@ public class TransactionDetailFragment extends Fragment {
                                 .setMessage(poruke[kojaPoruka])
                                 .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                                     presenter.createTransaction(this.transaction);
-                                    System.out.println(this.transaction);
                                     activity.afterSubmitActionOnDetailFragment();
                                 })
                                 .setNegativeButton(android.R.string.cancel, null).show();
                     } else {
                         presenter.createTransaction(this.transaction);
-                        System.out.println(this.transaction);
                         activity.afterSubmitActionOnDetailFragment();
                     }
                 } catch (InvalidFieldValueException e) {
@@ -207,13 +205,11 @@ public class TransactionDetailFragment extends Fragment {
                                 .setMessage(poruke[kojaPoruka])
                                 .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                                     presenter.updateTransaction(this.oldTransaction,this.transaction);
-                                    System.out.println(this.transaction);
                                     activity.afterSubmitActionOnDetailFragment();
                                 })
                                 .setNegativeButton(android.R.string.cancel, null).show();
                     } else {
                         presenter.updateTransaction(this.oldTransaction,this.transaction);
-                        System.out.println(this.transaction);
                         activity.afterSubmitActionOnDetailFragment();
                     }
                 } catch (InvalidFieldValueException e) {
@@ -275,7 +271,6 @@ public class TransactionDetailFragment extends Fragment {
     }
 
     private TextWatcher generateTextWatcher(EditText field) {
-        System.out.println(field.getId());
         return new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -285,7 +280,6 @@ public class TransactionDetailFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 field.setBackgroundColor(Color.GREEN);
-                System.out.println(s);
             }
 
             @Override
