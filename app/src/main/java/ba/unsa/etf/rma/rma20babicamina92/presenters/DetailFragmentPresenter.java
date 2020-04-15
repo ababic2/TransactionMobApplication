@@ -39,4 +39,8 @@ public class DetailFragmentPresenter {
     public void deleteTransaction(Transaction transaction) {
         listFragmentPresenter.deleteTransaction(transaction);
     }
+
+    public void createTransaction(Transaction transaction) {
+        listFragmentPresenter.createTransaction(transaction);
+    }
 }

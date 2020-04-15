@@ -169,8 +169,8 @@ public class TransactionListFragment extends Fragment implements ListFragmentInt
 
         listView.setOnItemClickListener((parent, view, position, id) -> {
             if (!MainActivity.twoPane) {
-                activity.clickedOnTransaction();
                 listPresenter.setCurrentlySelectedTransaction((Transaction) parent.getItemAtPosition(position));
+                activity.clickedOnTransaction();
                 return;
             }
             if (view.getBackground() == null) {
@@ -188,7 +188,10 @@ public class TransactionListFragment extends Fragment implements ListFragmentInt
                 listPresenter.setCurrentlySelectedTransaction(null);
             }
         });
-
+        addTransactionButton.setOnClickListener(event -> {
+            listPresenter.setCurrentlySelectedTransaction(null);
+            activity.clickedOnTransaction();
+        });
     }
 
 

@@ -192,4 +192,8 @@ public class ListFragmentPresenter {
         view.setTransactionListItems(getTransactions());
         detailFragmentPresenter.refresh();
     }
+
+    public void createTransaction(Transaction transaction) {
+        model.addTransaction(transaction);
+    }
 }

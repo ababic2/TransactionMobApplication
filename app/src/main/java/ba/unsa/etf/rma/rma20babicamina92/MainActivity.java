@@ -61,7 +61,7 @@ public class MainActivity extends FragmentActivity {
         .commit();
     }
 
-    public void afterDeleteTransaction() {
+    public void afterSubmitActionOnDetailFragment() {
         System.out.println(masterFragment);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()

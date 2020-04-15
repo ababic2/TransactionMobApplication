@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import android.text.Editable;
@@ -14,8 +15,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -27,6 +28,7 @@ import ba.unsa.etf.rma.rma20babicamina92.R;
 import ba.unsa.etf.rma.rma20babicamina92.adapters.FilterSpinnerAdapter;
 import ba.unsa.etf.rma.rma20babicamina92.exceptions.InvalidFieldValueException;
 import ba.unsa.etf.rma.rma20babicamina92.models.FilterItem;
+import ba.unsa.etf.rma.rma20babicamina92.models.MainModel;
 import ba.unsa.etf.rma.rma20babicamina92.models.Transaction;
 import ba.unsa.etf.rma.rma20babicamina92.presenters.DetailFragmentPresenter;
 
@@ -85,12 +87,13 @@ public class TransactionDetailFragment extends Fragment {
             setInitialState(presenter.getTransaction());
         } else {
             deleteButton.setEnabled(false);
+            saveButton.setOnClickListener(getCreateListener());
         }
 
         deleteButton.setOnClickListener(v -> {
             presenter.deleteTransaction(oldTransaction);
             if (!MainActivity.twoPane) {
-                activity.afterDeleteTransaction();
+                activity.afterSubmitActionOnDetailFragment();
             }
         });
 
@@ -104,6 +107,9 @@ public class TransactionDetailFragment extends Fragment {
             setInitialState(transaction);
             setBackgroundsToDefault();
             deleteButton.setEnabled(true);
+            saveButton.setOnClickListener((event)->{
+
+            });
         } else {
             deleteButton.setEnabled(false);
             titleTextView.setText(null);
@@ -114,8 +120,59 @@ public class TransactionDetailFragment extends Fragment {
             transactionIntervalTextView.setText(null);
             amountTextView.setText(null);
             typeSpinner.setSelection(0);
+            saveButton.setOnClickListener(getCreateListener());
             setBackgroundsToDefault();
         }
+    }
+
+    private View.OnClickListener getCreateListener() {
+        return (event)->{
+            try {
+                validateFields();
+                extractTransaction();
+                String[] poruke = {
+                        "Over monthly limit. Continue?",
+                        "Over total limit. Continue?",
+                        "Over monthly and total limit. Continue?"
+                };
+                int kojaPoruka = -1;
+                try {
+                    validateFields();
+                    extractTransaction();
+                    if (MainModel.getInstance().isOverMonthlyLimit(this.transaction)) {
+                        kojaPoruka = 0;
+                    }
+                    if (MainModel.getInstance().isOverTotalLimit(this.transaction)) {
+                        if (kojaPoruka == 0) {
+                            kojaPoruka = 2;
+                        } else {
+                            kojaPoruka = 1;
+                        }
+                    }
+                    if (kojaPoruka != -1) {
+                        new AlertDialog
+                                .Builder(getActivity())
+                                .setTitle("Warning")
+                                .setMessage(poruke[kojaPoruka])
+                                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                                    presenter.createTransaction(this.transaction);
+                                    System.out.println(this.transaction);
+                                    activity.afterSubmitActionOnDetailFragment();
+                                })
+                                .setNegativeButton(android.R.string.cancel, null).show();
+                    } else {
+                        presenter.createTransaction(this.transaction);
+                        System.out.println(this.transaction);
+                        activity.afterSubmitActionOnDetailFragment();
+                    }
+                } catch (InvalidFieldValueException e) {
+                    Toast.makeText(getActivity(),e.getMessage(),Toast.LENGTH_LONG).show();
+                }
+
+            } catch (InvalidFieldValueException e) {
+
+            }
+        };
     }
 
     private void setBackgroundsToDefault() {
@@ -232,6 +289,21 @@ public class TransactionDetailFragment extends Fragment {
                 descriptionTextView.setBackgroundColor(Color.RED);
                 throw new InvalidFieldValueException("Description is not set");
             }
+        }
+
+    }
+    private void extractTransaction() {
+        try {
+            transaction = new Transaction(
+                    new SimpleDateFormat("MMMM, yyyy", Locale.getDefault()).parse(dateTextView.getText().toString()),
+                    new BigDecimal(amountTextView.getText().toString()),
+                    titleTextView.getText().toString(),
+                    descriptionTextView.getText().toString(),
+                    Integer.parseInt(transactionIntervalTextView.getText().toString()),
+                    new SimpleDateFormat("MMMM, yyyy", Locale.getDefault()).parse(endDateTextView.getText().toString()),
+                    ((FilterItem)typeSpinner.getSelectedItem()).getFilterName());
+        } catch (ParseException e) {
+
         }
 
     }
