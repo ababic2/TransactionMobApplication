@@ -14,7 +14,7 @@ public class MainActivity extends FragmentActivity {
 
     private TransactionListFragment masterFragment;
     private TransactionDetailFragment detailFragment;
-    private boolean twoPane;
+    public static boolean twoPane;
 
     @Override
     protected void onPostResume() {
@@ -48,5 +48,24 @@ public class MainActivity extends FragmentActivity {
                     .add(R.id.transaction_detail, detailFragment)
                     .commit();
         }
+    }
+
+    public void clickedOnTransaction() {
+        if (detailFragment == null) {
+            detailFragment = new TransactionDetailFragment();
+        }
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.transaction_list, detailFragment)
+                .addToBackStack(null)
+        .commit();
+    }
+
+    public void afterDeleteTransaction() {
+        System.out.println(masterFragment);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.transaction_list, masterFragment)
+                .commit();
     }
 }

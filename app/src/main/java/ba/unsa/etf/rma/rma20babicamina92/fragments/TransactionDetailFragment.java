@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import ba.unsa.etf.rma.rma20babicamina92.MainActivity;
 import ba.unsa.etf.rma.rma20babicamina92.R;
 import ba.unsa.etf.rma.rma20babicamina92.adapters.FilterSpinnerAdapter;
 import ba.unsa.etf.rma.rma20babicamina92.exceptions.InvalidFieldValueException;
@@ -43,6 +44,7 @@ public class TransactionDetailFragment extends Fragment {
     private ArrayList<FilterItem> filterBySpinnerItems;
 
     private DetailFragmentPresenter presenter;
+    private MainActivity activity;
 
 
     public TransactionDetailFragment() {
@@ -55,6 +57,12 @@ public class TransactionDetailFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        refresh();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         presenter = DetailFragmentPresenter.getInstance();
@@ -62,6 +70,7 @@ public class TransactionDetailFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_transaction_detail, container, false);
         findViewsById(view);
         presenter.init(this);
+        activity = (MainActivity) getActivity();
 
         filterBySpinnerItems = new ArrayList<>();
         filterBySpinnerItems.add(new FilterItem("ALL",android.R.drawable.gallery_thumb));
@@ -80,36 +89,44 @@ public class TransactionDetailFragment extends Fragment {
 
         deleteButton.setOnClickListener(v -> {
             presenter.deleteTransaction(oldTransaction);
+            if (!MainActivity.twoPane) {
+                activity.afterDeleteTransaction();
+            }
         });
 
         return view;
     }
 
     public void refresh() {
+        setBackgroundsToDefault();
         Transaction transaction = presenter.getTransaction();
         if (transaction != null) {
             setInitialState(transaction);
+            setBackgroundsToDefault();
             deleteButton.setEnabled(true);
         } else {
             deleteButton.setEnabled(false);
             titleTextView.setText(null);
-            titleTextView.setBackground(defaultBackground);
             descriptionTextView.setText(null);
-            descriptionTextView.setBackground(defaultBackground);
             amountTextView.setText(null);
-            amountTextView.setBackground(defaultBackground);
             dateTextView.setText(null);
-            dateTextView.setBackground(defaultBackground);
             endDateTextView.setText(null);
-            endDateTextView.setBackground(defaultBackground);
             transactionIntervalTextView.setText(null);
-            transactionIntervalTextView.setBackground(defaultBackground);
             amountTextView.setText(null);
-            amountTextView.setBackground(defaultBackground);
             typeSpinner.setSelection(0);
+            setBackgroundsToDefault();
         }
     }
 
+    private void setBackgroundsToDefault() {
+        titleTextView.setBackground(defaultBackground);
+        descriptionTextView.setBackground(defaultBackground);
+        amountTextView.setBackground(defaultBackground);
+        dateTextView.setBackground(defaultBackground);
+        endDateTextView.setBackground(defaultBackground);
+        transactionIntervalTextView.setBackground(defaultBackground);
+        amountTextView.setBackground(defaultBackground);
+    }
 
 
     private void findViewsById(View view) {
@@ -150,6 +167,7 @@ public class TransactionDetailFragment extends Fragment {
     }
 
     private TextWatcher generateTextWatcher(EditText field) {
+        System.out.println(field.getId());
         return new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -159,6 +177,7 @@ public class TransactionDetailFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 field.setBackgroundColor(Color.GREEN);
+                System.out.println(s);
             }
 
             @Override

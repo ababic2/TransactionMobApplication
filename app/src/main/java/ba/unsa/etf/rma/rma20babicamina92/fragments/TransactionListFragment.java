@@ -54,9 +54,8 @@ public class TransactionListFragment extends Fragment implements ListFragmentInt
     private ArrayList<String> sortBySpinnerItems = new ArrayList<String>();
     private ArrayList<Transaction> transactionArrayList = new ArrayList<Transaction>();
     private String monthOfTransaction;
-    private int currentFilterPosition=0;
 
-    Activity activity;
+    MainActivity activity;
     private FilterSpinnerAdapter filterSpinnerAdapter;
     private ArrayAdapter<String> sortSpinnerAdapter;
 
@@ -102,6 +101,12 @@ public class TransactionListFragment extends Fragment implements ListFragmentInt
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        listPresenter.setCurrentlySelectedTransaction(null);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -116,7 +121,7 @@ public class TransactionListFragment extends Fragment implements ListFragmentInt
         globalAmountTextView = view.findViewById(R.id.globalAmountTextView);
         limitTextView = view.findViewById(R.id.limitTextView);
 
-        activity = getActivity();
+        activity = (MainActivity) getActivity();
         listPresenter = ListFragmentPresenter.getInstance();
         initViewData();
         listPresenter.init(this);
@@ -142,8 +147,6 @@ public class TransactionListFragment extends Fragment implements ListFragmentInt
 
         filterSpinnerAdapter = new FilterSpinnerAdapter(getActivity(), filterBySpinnerItems);
         filterSpinner.setAdapter(filterSpinnerAdapter);
-        filterSpinner.setSelection(currentFilterPosition);
-
         filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -165,6 +168,11 @@ public class TransactionListFragment extends Fragment implements ListFragmentInt
         listView.setAdapter(transactionListAdapter);
 
         listView.setOnItemClickListener((parent, view, position, id) -> {
+            if (!MainActivity.twoPane) {
+                activity.clickedOnTransaction();
+                listPresenter.setCurrentlySelectedTransaction((Transaction) parent.getItemAtPosition(position));
+                return;
+            }
             if (view.getBackground() == null) {
                 for (int i = 0; i < listView.getChildCount(); i++) {
                     View child = listView.getChildAt(i);
