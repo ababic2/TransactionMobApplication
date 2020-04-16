@@ -91,7 +91,7 @@ public class GraphsFragment extends Fragment {
         });
     }
 
-    private static void initializeBarChart(BarChart paymentChart) {
+    private void initializeBarChart(BarChart paymentChart) {
         paymentChart.setDrawBarShadow(false);
         paymentChart.setDrawValueAboveBar(true);
         paymentChart.getDescription().setEnabled(false);
@@ -122,7 +122,9 @@ public class GraphsFragment extends Fragment {
         });
         leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
         leftAxis.setSpaceTop(15f);
-        leftAxis.setAxisMinimum(0f);
+        if (paymentChart != this.allChart) {
+            leftAxis.setAxisMinimum(0f);
+        }
 
         Legend l = paymentChart.getLegend();
         l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);

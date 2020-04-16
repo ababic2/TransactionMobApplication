@@ -15,8 +15,6 @@ import ba.unsa.etf.rma.rma20babicamina92.models.MainModel;
 import ba.unsa.etf.rma.rma20babicamina92.models.Transaction;
 import ba.unsa.etf.rma.rma20babicamina92.utils.FloatTest;
 
-import static ba.unsa.etf.rma.rma20babicamina92.models.MainModel.millisecondsInADay;
-
 public class GraphsPresenter {
     private static GraphsPresenter instance;
     private GraphsFragment fragment;
@@ -76,6 +74,7 @@ public class GraphsPresenter {
 
     public void setInterval(String interval) {
         this.interval = interval;
+
         BarData costBarData = getBarData(a -> a > 0);
         fragment.setPaymentChartData(costBarData);
         fragment.setIncomeChartData(getBarData( a -> a < 0));
@@ -83,9 +82,14 @@ public class GraphsPresenter {
     }
 
     private BarData getBarData(FloatTest floatTest) {
-        ArrayList<ArrayList<Payment>> paymentValues = getPaymentsByInterval(getPaymentsFromTransactions(model.getTransactions()));
+        ArrayList<ArrayList<Payment>> paymentValues =
+                getPaymentsByInterval(
+                        getPaymentsFromTransactions(
+                                new ArrayList<>(model.getTransactions()
+                                )
+                        )
+                );
         ArrayList<BarEntry> entries = new ArrayList<>();
-        System.out.println(paymentValues.size());
         for (int i = 0; i < paymentValues.size(); i++) {
             ArrayList<Payment> payments = paymentValues.get(i);
             if (payments.size() == 0) {
@@ -93,7 +97,13 @@ public class GraphsPresenter {
             } else {
                 float sum = 0;
                 for (Payment payment : payments) {
-                    float value = (float) Double.parseDouble(String.format(Locale.getDefault(), "%.2f", payment.getAmount()));
+                    float value = (float) Double.parseDouble(
+                            String.format(
+                                    Locale.getDefault(),
+                                    "%.2f",
+                                    payment.getAmount()
+                            )
+                    );
                     if (floatTest.test(value)) {
                         if (floatTest.test(-1) && floatTest.test(1)) {
                             sum += -value;
@@ -117,16 +127,12 @@ public class GraphsPresenter {
     }
 
     private ArrayList<ArrayList<Payment>> getPaymentsByInterval(ArrayList<Payment> payments) {
-        System.out.println("START");
-        System.out.println(payments);
-        System.out.println("THIS YEAR");
         payments = extractPaymentsFromCurrentYear(payments);
-        System.out.println(payments);
-
         Collections.sort(payments,(a,b)->a.getDate().compareTo(b.getDate()));
         ArrayList<ArrayList<Payment>> result = new ArrayList<>();
         ArrayList<Payment> resultPayments;
         Date date = new Date();
+
         if (interval.equals("Month")) {
             for (int i = 0; i < 12; i++) {
                 int j = 0;
@@ -144,7 +150,6 @@ public class GraphsPresenter {
                 }
                 result.add(resultPayments);
             }
-            System.out.println(result);
         } else if (interval.equals("Day")) {
             Date start = new Date();
             start.setDate(1);
@@ -172,7 +177,6 @@ public class GraphsPresenter {
                     break;
                 }
                 start.setDate(start.getDate() + 1);
-
             }
         } else if (interval.equals("Week")) {
             Date start = new Date();
@@ -217,7 +221,9 @@ public class GraphsPresenter {
     }
 
     private ArrayList<Payment> getPaymentsFromTransactions(ArrayList<Transaction> transactions) {
+
         ArrayList<Payment> payments = new ArrayList<>();
+
         for (int i = 0; i < transactions.size(); i++) {
             Transaction element = transactions.get(i);
             if (element.getTransactionType().toString().contains("REGULAR")) {
@@ -227,9 +233,12 @@ public class GraphsPresenter {
                 if (element.getTransactionType().toString().contains("INCOME")) {
                     sign = new BigDecimal(-1);
                 }
-                payments.add(new Payment(element.getAmount().multiply(sign), element.getDate()));
+                payments.add(
+                        new Payment(element.getAmount().multiply(sign),
+                                new Date(element.getDate().getTime())));
             }
         }
+
         Collections.sort(payments, (a, b) -> a.getDate().compareTo(b.getDate()));
         return payments;
     }
@@ -241,14 +250,16 @@ public class GraphsPresenter {
         }
         ArrayList<Payment> payments = new ArrayList<>();
         // petlja koja prolazi kroz "dane" kada trebaju biti transakcije
-        for (Date date = transaction.getDate();
+        for (Date date = new Date(transaction.getDate().getTime());
              date.before(transaction.getEndDate())
                      || date.getTime() == transaction.getEndDate().getTime();
              date.setDate(date.getDate() + transaction.getTransactionInterval())) {
 
-            payments.add(new Payment(transaction.getAmount().multiply(sign), new Date(date.getTime())));
+            payments.add(new Payment(
+                    transaction.getAmount().multiply(sign),
+                    new Date(date.getTime())));
         }
-        return payments;
+        return new ArrayList<>(payments);
     }
 
 }
