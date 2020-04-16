@@ -3,10 +3,8 @@ package ba.unsa.etf.rma.rma20babicamina92.models;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 public class MainModel {
@@ -62,324 +60,164 @@ public class MainModel {
         transactions = new ArrayList<Transaction>(
                 Arrays.asList(
                         new Transaction(
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.JANUARY,
-                                        10
-                                ).getTime(),
+                                new Date(120,0,10),
                                 new BigDecimal(10),
                                 "prva",
                                 "description od prve",
                                 12,
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.FEBRUARY,
-                                        11
-                                ).getTime(),
+                                new Date(120,1,11),
                                 "INDIVIDUALPAYMENT"),
                         new Transaction(
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.JANUARY,
-                                        13
-                                ).getTime(),
+                                new Date(120,0,13),
                                 new BigDecimal(18),
                                 "druga",
                                 "description od druge",
                                 5,
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.FEBRUARY,
-                                        11
-                                ).getTime(),
+                                new Date(120,1,11),
                                 "REGULARPAYMENT"),
                         new Transaction(
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.FEBRUARY,
-                                        22
-                                ).getTime(),
+                                new Date(120,1,22),
                                 new BigDecimal(20),
                                 "treca",
                                 null,
                                 12,
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.FEBRUARY,
-                                        28
-                                ).getTime(),
+                                new Date(120,1,28),
                                 "INDIVIDUALINCOME"),
                         new Transaction(
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.MARCH,
-                                        2
-                                ).getTime(),
+                                new Date(120,2,2),
                                 new BigDecimal(55),
                                 "cetvrta",
                                 "description",
                                 12,
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.MARCH,
-                                        11
-                                ).getTime(),
+                                new Date(120,2,11),
                                 "PURCHASE"),
                         new Transaction(
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.MARCH,
-                                        17
-                                ).getTime(),
+                                new Date(120,2,17),
                                 new BigDecimal(20),
                                 "peta",
                                 "description od pete",
                                 12,
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.MARCH,
-                                        11
-                                ).getTime(),
+                                new Date(120,2,11),
                                 "INDIVIDUALPAYMENT"),
                         new Transaction(
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.MARCH,
-                                        29
-                                ).getTime(),
+                                new Date(120,2,29),
                                 new BigDecimal(33),
                                 "sesta",
                                 null,
                                 1,
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.APRIL,
-                                        22
-                                ).getTime(),
+                                new Date(120,3,22),
                                 "INDIVIDUALINCOME"),
                         new Transaction(
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.APRIL,
-                                        15
-                                ).getTime(),
+                                new Date(120,3,15),
                                 new BigDecimal(15),
                                 "sedma",
                                 null,
                                 7,
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.APRIL,
-                                        30
-                                ).getTime(),
+                                new Date(120,3,30),
                                 "REGULARINCOME"),
                         new Transaction(
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.MAY,
-                                        2
-                                ).getTime(),
+                                new Date(120,4,2),
                                 new BigDecimal(18),
                                 "osma",
                                 "description od osme",
                                 4,
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.MAY,
-                                        11
-                                ).getTime(),
+                                new Date(120,4,11),
                                 "REGULARPAYMENT"),
                         new Transaction(
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.MARCH,
-                                        10
-                                ).getTime(),
+                                new Date(120,2,10),
                                 new BigDecimal(12),
                                 "deveta",
                                 "description od devete",
                                 22,
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.MAY,
-                                        11
-                                ).getTime(),
+                                new Date(120,4,11),
                                 "PURCHASE"),
                         new Transaction(
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.APRIL,
-                                        22
-                                ).getTime(),
+                                new Date(120,3,22),
                                 new BigDecimal(20),
                                 "deseta",
                                 "description",
                                 5,
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.MAY,
-                                        11
-                                ).getTime(),
+                                new Date(120,4,11),
                                 "REGULARPAYMENT"),
                         new Transaction(
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.JANUARY,
-                                        11
-                                ).getTime(),
+                                new Date(120,0,11),
                                 new BigDecimal(10),
                                 "jedanaesta",
                                 "description od jedanaeste",
                                 12,
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.JANUARY,
-                                        11
-                                ).getTime(),
+                                new Date(120,0,11),
                                 "INDIVIDUALPAYMENT"),
                         new Transaction(
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.FEBRUARY,
-                                        15
-                                ).getTime(),
+                                new Date(120,1,15),
                                 new BigDecimal(100),
                                 "dvanaesta",
                                 null,
                                 15,
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.MAY,
-                                        11
-                                ).getTime(),
+                                new Date(120,4,11),
                                 "REGULARINCOME"),
                         new Transaction(
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.MARCH,
-                                        11
-                                ).getTime(),
+                                new Date(120,2,11),
                                 new BigDecimal(190),
                                 "trinaesta",
                                 null,
                                 12,
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.MARCH,
-                                        11
-                                ).getTime(),
+                                new Date(120,2,11),
                                 "INDIVIDUALINCOME"),
                         new Transaction(
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.JANUARY,
-                                        22
-                                ).getTime(),
+                                new Date(120,0,22),
                                 new BigDecimal(15),
                                 "cetrnaesta",
                                 "description od cetrnaeste",
                                 12,
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.MAY,
-                                        11
-                                ).getTime(),
+                                new Date(120,4,11),
                                 "REGULARPAYMENT"),
                         new Transaction(
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.APRIL,
-                                        11
-                                ).getTime(),
+                                new Date(120,3,11),
                                 new BigDecimal(10),
                                 "petnaesta",
                                 "description od petnaeste",
                                 12,
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.APRIL,
-                                        11
-                                ).getTime(),
+                                new Date(120,3,11),
                                 "INDIVIDUALPAYMENT"),
                         new Transaction(
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.FEBRUARY,
-                                        22
-                                ).getTime(),
+                                new Date(120,1,22),
                                 new BigDecimal(2),
                                 "SESNAESTA",
                                 null,
                                 12,
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.APRIL,
-                                        11
-                                ).getTime(),
+                                new Date(120,3,11),
                                 "REGULARINCOME"),
                         new Transaction(
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.MARCH,
-                                        11
-                                ).getTime(),
+                                new Date(120,2,11),
                                 new BigDecimal(22),
                                 "SEDAMNAESTAAAAA",
                                 "description od sedamnaesteeee",
                                 12,
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.MARCH,
-                                        11
-                                ).getTime(),
+                                new Date(120,2,11),
                                 "INDIVIDUALPAYMENT"),
                         new Transaction(
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.MAY,
-                                        24
-                                ).getTime(),
+                                new Date(120,4,24),
                                 new BigDecimal(1),
                                 "osamnaesta",
                                 "Idemo negdje na veceru. Na kolace i prohodati...",
                                 12,
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.MAY,
-                                        24
-                                ).getTime(),
+                                new Date(120,4,24),
                                 "INDIVIDUALPAYMENT"),
                         new Transaction(
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.JANUARY,
-                                        22
-                                ).getTime(),
+                                new Date(120,0,22),
                                 new BigDecimal(9),
                                 "devetnaesta",
                                 "description of 19",
                                 12,
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.FEBRUARY,
-                                        11
-                                ).getTime(),
+                                new Date(120,1,11),
                                 "REGULARPAYMENT"),
                         new Transaction(
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.APRIL,
-                                        11
-                                ).getTime(),
+                                new Date(120,3,11),
                                 new BigDecimal(18),
                                 "dvadeseta",
                                 "description",
                                 12,
-                                new GregorianCalendar(
-                                        2020,
-                                        Calendar.MAY,
-                                        11
-                                ).getTime(),
+                                new Date(120,4,11),
                                 "PURCHASE")
                 )
         );

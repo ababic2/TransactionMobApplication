@@ -49,6 +49,13 @@ public class GraphsPresenter {
             this.date = date;
         }
 
+        @Override
+        public String toString() {
+            return "Payment{" +
+                    "amount=" + amount +
+                    ", date=" + date +
+                    '}';
+        }
     }
 
 
@@ -89,7 +96,7 @@ public class GraphsPresenter {
                     float value = (float) Double.parseDouble(String.format(Locale.getDefault(), "%.2f", payment.getAmount()));
                     if (floatTest.test(value)) {
                         if (floatTest.test(-1) && floatTest.test(1)) {
-                            sum += value;
+                            sum += -value;
                         } else {
                             sum += Math.abs(value);
                         }
@@ -110,7 +117,12 @@ public class GraphsPresenter {
     }
 
     private ArrayList<ArrayList<Payment>> getPaymentsByInterval(ArrayList<Payment> payments) {
+        System.out.println("START");
+        System.out.println(payments);
+        System.out.println("THIS YEAR");
         payments = extractPaymentsFromCurrentYear(payments);
+        System.out.println(payments);
+
         Collections.sort(payments,(a,b)->a.getDate().compareTo(b.getDate()));
         ArrayList<ArrayList<Payment>> result = new ArrayList<>();
         ArrayList<Payment> resultPayments;
@@ -132,13 +144,14 @@ public class GraphsPresenter {
                 }
                 result.add(resultPayments);
             }
+            System.out.println(result);
         } else if (interval.equals("Day")) {
             Date start = new Date();
             start.setDate(1);
             start.setMonth(0);
-            int j = 0;
             for (int i = 1; ; i++) {
                 resultPayments = new ArrayList<>();
+                int j = 0;
                 while (j < payments.size()) {
                     Payment payment = payments.get(j);
                     if (payment.getDate().getMonth() == start.getMonth()
@@ -227,15 +240,14 @@ public class GraphsPresenter {
             sign = new BigDecimal(-1);
         }
         ArrayList<Payment> payments = new ArrayList<>();
-
         // petlja koja prolazi kroz "dane" kada trebaju biti transakcije
         for (Date date = transaction.getDate();
              date.before(transaction.getEndDate())
                      || date.getTime() == transaction.getEndDate().getTime();
-             date.setTime(date.getTime() + transaction.getTransactionInterval() * millisecondsInADay)) {
-            payments.add(new Payment(transaction.getAmount().multiply(sign), date));
-        }
+             date.setDate(date.getDate() + transaction.getTransactionInterval())) {
 
+            payments.add(new Payment(transaction.getAmount().multiply(sign), new Date(date.getTime())));
+        }
         return payments;
     }
 
