@@ -9,6 +9,7 @@ import java.util.Map;
 
 import ba.unsa.etf.rma.rma20babicamina92.R;
 import ba.unsa.etf.rma.rma20babicamina92.contracts.ListFragmentInterface;
+import ba.unsa.etf.rma.rma20babicamina92.interactor.TransactionTypeInteractor;
 import ba.unsa.etf.rma.rma20babicamina92.models.FilterItem;
 import ba.unsa.etf.rma.rma20babicamina92.models.MainModel;
 import ba.unsa.etf.rma.rma20babicamina92.models.Transaction;
@@ -68,6 +69,10 @@ public class ListFragmentPresenter {
         view.setSortItems(sortSpinnerItems);
         view.setMonthForTransactions(date);
         view.setTransactionListItems(getTransactions());
+    }
+
+    public void setFilterItems(ArrayList<FilterItem> filterItems) {
+        view.setFilterItems(filterItems);
     }
 
     private void setMaps() {
@@ -131,6 +136,7 @@ public class ListFragmentPresenter {
         filterItems.add(new FilterItem("INDIVIDUALINCOME", R.drawable.individualpay)); // dodaj slikicuuu
         filterItems.add(new FilterItem("REGULARINCOME", R.drawable.individualpay)); //addd phootoooo
         filterItems.add(new FilterItem("ALL", android.R.drawable.gallery_thumb)); //addd phootoooo
+        new TransactionTypeInteractor(view.getMainActivity(),this).execute();
     }
 
 
@@ -157,7 +163,7 @@ public class ListFragmentPresenter {
 
 
     public void setFilterMethod(FilterItem filterItem) {
-        type = Transaction.Type.valueOf(filterItem.getFilterName());
+        type = Transaction.Type.valueOf(filterItem.getFilterName().replace(" ","").toUpperCase());
         view.setTransactionListItems(getTransactions());
     }
 

@@ -55,12 +55,11 @@ public class TransactionListFragment extends Fragment implements ListFragmentInt
     private ArrayList<Transaction> transactionArrayList = new ArrayList<Transaction>();
     private String monthOfTransaction;
 
-    MainActivity activity;
+    private MainActivity activity;
     private FilterSpinnerAdapter filterSpinnerAdapter;
     private ArrayAdapter<String> sortSpinnerAdapter;
 
     private TransactionListAdapter transactionListAdapter;
-
 
     /**
      * drugi dio
@@ -230,4 +229,11 @@ public class TransactionListFragment extends Fragment implements ListFragmentInt
         globalAmountTextView.setText(String.format(Locale.getDefault(),"%.2f",account.getBudget()));
         limitTextView.setText(String.format(Locale.getDefault(),"%.2f",account.getTotalLimit()));
     }
+
+    @Override
+    public MainActivity getMainActivity() {
+        return activity;
+    }
+
+
 }

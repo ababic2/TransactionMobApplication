@@ -1,5 +1,6 @@
 package ba.unsa.etf.rma.rma20babicamina92;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.widget.FrameLayout;
@@ -14,11 +15,13 @@ import ba.unsa.etf.rma.rma20babicamina92.fragments.BudgetFragment;
 import ba.unsa.etf.rma.rma20babicamina92.fragments.GraphsFragment;
 import ba.unsa.etf.rma.rma20babicamina92.fragments.TransactionDetailFragment;
 import ba.unsa.etf.rma.rma20babicamina92.fragments.TransactionListFragment;
+import ba.unsa.etf.rma.rma20babicamina92.interactor.TransactionTypeInteractor;
 import ba.unsa.etf.rma.rma20babicamina92.utils.SimpleGestureFilter;
 
 public class MainActivity extends FragmentActivity implements
         SimpleGestureFilter.SimpleGestureListener {
 
+    private static ProgressDialog dialog;
     private SimpleGestureFilter detector;
 
     private TransactionListFragment masterFragment;
@@ -33,6 +36,18 @@ public class MainActivity extends FragmentActivity implements
         super.onPostResume();
     }
 
+    public static void loadingOn(MainActivity mainActivity) {
+        dialog = ProgressDialog.show(mainActivity, "",
+                "Loading. Please wait...", true);
+    }
+
+    public static void loadingOff(MainActivity mainActivity) {
+        if (dialog == null) {
+            return;
+        }
+        dialog.dismiss();
+        dialog = null;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +60,9 @@ public class MainActivity extends FragmentActivity implements
         if (!twoPane) {
             detector = new SimpleGestureFilter(MainActivity.this, this);
         }
-
+//        new TransactionTypeInteractor(this).execute();
+//        ProgressDialog dialog = ProgressDialog.show(MainActivity.this, "",
+//                "Loading. Please wait...", true);
     }
 
     @Override

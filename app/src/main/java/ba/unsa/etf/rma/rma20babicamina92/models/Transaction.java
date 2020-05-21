@@ -162,7 +162,7 @@ public class Transaction implements Comparable<Transaction>, Serializable, Parce
 
     @Override
     public int compareTo(Transaction o) {
-        return 0;
+        return amount.compareTo(o.amount);
     }
 
     @Override
