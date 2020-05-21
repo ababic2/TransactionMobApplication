@@ -15,10 +15,11 @@ import java.util.ArrayList;
 
 import ba.unsa.etf.rma.rma20babicamina92.R;
 import ba.unsa.etf.rma.rma20babicamina92.models.FilterItem;
+import ba.unsa.etf.rma.rma20babicamina92.models.TransactionType;
 
-public class FilterSpinnerAdapter extends ArrayAdapter<FilterItem>{
+public class FilterSpinnerAdapter extends ArrayAdapter<TransactionType>{
 
-    public FilterSpinnerAdapter(Context context, ArrayList<FilterItem> elements) {
+    public FilterSpinnerAdapter(Context context, ArrayList<TransactionType> elements) {
         super(context, 0, elements);
     }
 
@@ -72,11 +73,11 @@ public class FilterSpinnerAdapter extends ArrayAdapter<FilterItem>{
         }else{
             ImageView imageView = convertView.findViewById(R.id.imageView);
             TextView textView = convertView.findViewById(R.id.listItemTextView);
-            FilterItem currentItem = getItem(position);
+            TransactionType currentItem = getItem(position);
 
             if(currentItem != null) {
                 imageView.setImageResource(currentItem.getImage());
-                textView.setText(currentItem.getFilterName());
+                textView.setText(currentItem.getName());
             }
         }
 

@@ -58,168 +58,168 @@ public class MainModel {
 
     private void initializeTransactions() {
         transactions = new ArrayList<Transaction>(
-                Arrays.asList(
-                        new Transaction(
-                                new Date(120,0,10),
-                                new BigDecimal(10),
-                                "prva",
-                                "description od prve",
-                                12,
-                                new Date(120,1,11),
-                                "INDIVIDUALPAYMENT"),
-                        new Transaction(
-                                new Date(120,0,13),
-                                new BigDecimal(18),
-                                "druga",
-                                "description od druge",
-                                5,
-                                new Date(120,1,11),
-                                "REGULARPAYMENT"),
-                        new Transaction(
-                                new Date(120,1,22),
-                                new BigDecimal(20),
-                                "treca",
-                                null,
-                                12,
-                                new Date(120,1,28),
-                                "INDIVIDUALINCOME"),
-                        new Transaction(
-                                new Date(120,2,2),
-                                new BigDecimal(55),
-                                "cetvrta",
-                                "description",
-                                12,
-                                new Date(120,2,11),
-                                "PURCHASE"),
-                        new Transaction(
-                                new Date(120,2,17),
-                                new BigDecimal(20),
-                                "peta",
-                                "description od pete",
-                                12,
-                                new Date(120,2,11),
-                                "INDIVIDUALPAYMENT"),
-                        new Transaction(
-                                new Date(120,2,29),
-                                new BigDecimal(33),
-                                "sesta",
-                                null,
-                                1,
-                                new Date(120,3,22),
-                                "INDIVIDUALINCOME"),
-                        new Transaction(
-                                new Date(120,3,15),
-                                new BigDecimal(15),
-                                "sedma",
-                                null,
-                                7,
-                                new Date(120,3,30),
-                                "REGULARINCOME"),
-                        new Transaction(
-                                new Date(120,4,2),
-                                new BigDecimal(18),
-                                "osma",
-                                "description od osme",
-                                4,
-                                new Date(120,4,11),
-                                "REGULARPAYMENT"),
-                        new Transaction(
-                                new Date(120,2,10),
-                                new BigDecimal(12),
-                                "deveta",
-                                "description od devete",
-                                22,
-                                new Date(120,4,11),
-                                "PURCHASE"),
-                        new Transaction(
-                                new Date(120,3,22),
-                                new BigDecimal(20),
-                                "deseta",
-                                "description",
-                                5,
-                                new Date(120,4,11),
-                                "REGULARPAYMENT"),
-                        new Transaction(
-                                new Date(120,0,11),
-                                new BigDecimal(10),
-                                "jedanaesta",
-                                "description od jedanaeste",
-                                12,
-                                new Date(120,0,11),
-                                "INDIVIDUALPAYMENT"),
-                        new Transaction(
-                                new Date(120,1,15),
-                                new BigDecimal(100),
-                                "dvanaesta",
-                                null,
-                                15,
-                                new Date(120,4,11),
-                                "REGULARINCOME"),
-                        new Transaction(
-                                new Date(120,2,11),
-                                new BigDecimal(190),
-                                "trinaesta",
-                                null,
-                                12,
-                                new Date(120,2,11),
-                                "INDIVIDUALINCOME"),
-                        new Transaction(
-                                new Date(120,0,22),
-                                new BigDecimal(15),
-                                "cetrnaesta",
-                                "description od cetrnaeste",
-                                12,
-                                new Date(120,4,11),
-                                "REGULARPAYMENT"),
-                        new Transaction(
-                                new Date(120,3,11),
-                                new BigDecimal(10),
-                                "petnaesta",
-                                "description od petnaeste",
-                                12,
-                                new Date(120,3,11),
-                                "INDIVIDUALPAYMENT"),
-                        new Transaction(
-                                new Date(120,1,22),
-                                new BigDecimal(2),
-                                "SESNAESTA",
-                                null,
-                                12,
-                                new Date(120,3,11),
-                                "REGULARINCOME"),
-                        new Transaction(
-                                new Date(120,2,11),
-                                new BigDecimal(22),
-                                "SEDAMNAESTAAAAA",
-                                "description od sedamnaesteeee",
-                                12,
-                                new Date(120,2,11),
-                                "INDIVIDUALPAYMENT"),
-                        new Transaction(
-                                new Date(120,4,24),
-                                new BigDecimal(1),
-                                "osamnaesta",
-                                "Idemo negdje na veceru. Na kolace i prohodati...",
-                                12,
-                                new Date(120,4,24),
-                                "INDIVIDUALPAYMENT"),
-                        new Transaction(
-                                new Date(120,0,22),
-                                new BigDecimal(9),
-                                "devetnaesta",
-                                "description of 19",
-                                12,
-                                new Date(120,1,11),
-                                "REGULARPAYMENT"),
-                        new Transaction(
-                                new Date(120,3,11),
-                                new BigDecimal(18),
-                                "dvadeseta",
-                                "description",
-                                12,
-                                new Date(120,4,11),
-                                "PURCHASE")
-                )
+//                Arrays.asList(
+//                        new Transaction(
+//                                new Date(120,0,10),
+//                                new BigDecimal(10),
+//                                "prva",
+//                                "description od prve",
+//                                12,
+//                                new Date(120,1,11),
+//                                "INDIVIDUALPAYMENT"),
+//                        new Transaction(
+//                                new Date(120,0,13),
+//                                new BigDecimal(18),
+//                                "druga",
+//                                "description od druge",
+//                                5,
+//                                new Date(120,1,11),
+//                                "REGULARPAYMENT"),
+//                        new Transaction(
+//                                new Date(120,1,22),
+//                                new BigDecimal(20),
+//                                "treca",
+//                                null,
+//                                12,
+//                                new Date(120,1,28),
+//                                "INDIVIDUALINCOME"),
+//                        new Transaction(
+//                                new Date(120,2,2),
+//                                new BigDecimal(55),
+//                                "cetvrta",
+//                                "description",
+//                                12,
+//                                new Date(120,2,11),
+//                                "PURCHASE"),
+//                        new Transaction(
+//                                new Date(120,2,17),
+//                                new BigDecimal(20),
+//                                "peta",
+//                                "description od pete",
+//                                12,
+//                                new Date(120,2,11),
+//                                "INDIVIDUALPAYMENT"),
+//                        new Transaction(
+//                                new Date(120,2,29),
+//                                new BigDecimal(33),
+//                                "sesta",
+//                                null,
+//                                1,
+//                                new Date(120,3,22),
+//                                "INDIVIDUALINCOME"),
+//                        new Transaction(
+//                                new Date(120,3,15),
+//                                new BigDecimal(15),
+//                                "sedma",
+//                                null,
+//                                7,
+//                                new Date(120,3,30),
+//                                "REGULARINCOME"),
+//                        new Transaction(
+//                                new Date(120,4,2),
+//                                new BigDecimal(18),
+//                                "osma",
+//                                "description od osme",
+//                                4,
+//                                new Date(120,4,11),
+//                                "REGULARPAYMENT"),
+//                        new Transaction(
+//                                new Date(120,2,10),
+//                                new BigDecimal(12),
+//                                "deveta",
+//                                "description od devete",
+//                                22,
+//                                new Date(120,4,11),
+//                                "PURCHASE"),
+//                        new Transaction(
+//                                new Date(120,3,22),
+//                                new BigDecimal(20),
+//                                "deseta",
+//                                "description",
+//                                5,
+//                                new Date(120,4,11),
+//                                "REGULARPAYMENT"),
+//                        new Transaction(
+//                                new Date(120,0,11),
+//                                new BigDecimal(10),
+//                                "jedanaesta",
+//                                "description od jedanaeste",
+//                                12,
+//                                new Date(120,0,11),
+//                                "INDIVIDUALPAYMENT"),
+//                        new Transaction(
+//                                new Date(120,1,15),
+//                                new BigDecimal(100),
+//                                "dvanaesta",
+//                                null,
+//                                15,
+//                                new Date(120,4,11),
+//                                "REGULARINCOME"),
+//                        new Transaction(
+//                                new Date(120,2,11),
+//                                new BigDecimal(190),
+//                                "trinaesta",
+//                                null,
+//                                12,
+//                                new Date(120,2,11),
+//                                "INDIVIDUALINCOME"),
+//                        new Transaction(
+//                                new Date(120,0,22),
+//                                new BigDecimal(15),
+//                                "cetrnaesta",
+//                                "description od cetrnaeste",
+//                                12,
+//                                new Date(120,4,11),
+//                                "REGULARPAYMENT"),
+//                        new Transaction(
+//                                new Date(120,3,11),
+//                                new BigDecimal(10),
+//                                "petnaesta",
+//                                "description od petnaeste",
+//                                12,
+//                                new Date(120,3,11),
+//                                "INDIVIDUALPAYMENT"),
+//                        new Transaction(
+//                                new Date(120,1,22),
+//                                new BigDecimal(2),
+//                                "SESNAESTA",
+//                                null,
+//                                12,
+//                                new Date(120,3,11),
+//                                "REGULARINCOME"),
+//                        new Transaction(
+//                                new Date(120,2,11),
+//                                new BigDecimal(22),
+//                                "SEDAMNAESTAAAAA",
+//                                "description od sedamnaesteeee",
+//                                12,
+//                                new Date(120,2,11),
+//                                "INDIVIDUALPAYMENT"),
+//                        new Transaction(
+//                                new Date(120,4,24),
+//                                new BigDecimal(1),
+//                                "osamnaesta",
+//                                "Idemo negdje na veceru. Na kolace i prohodati...",
+//                                12,
+//                                new Date(120,4,24),
+//                                "INDIVIDUALPAYMENT"),
+//                        new Transaction(
+//                                new Date(120,0,22),
+//                                new BigDecimal(9),
+//                                "devetnaesta",
+//                                "description of 19",
+//                                12,
+//                                new Date(120,1,11),
+//                                "REGULARPAYMENT"),
+//                        new Transaction(
+//                                new Date(120,3,11),
+//                                new BigDecimal(18),
+//                                "dvadeseta",
+//                                "description",
+//                                12,
+//                                new Date(120,4,11),
+//                                "PURCHASE")
+//                )
         );
     }
 
@@ -242,11 +242,11 @@ public class MainModel {
         List<Payment> payments = new ArrayList<>();
         for (int i = 0; i < testTransactions.size(); i++) {
             Transaction element = testTransactions.get(i);
-            if (element.getTransactionType().toString().contains("REGULAR")) {
+            if (element.getTransactionType().getName().toUpperCase().contains("REGULAR")) {
                 payments.addAll(convertRegularToIndividual(element));
             } else {
                 BigDecimal sign = new BigDecimal(1);
-                if (element.getTransactionType().toString().contains("INCOME")) {
+                if (element.getTransactionType().getName().toUpperCase().contains("INCOME")) {
                     sign = new BigDecimal(-1);
                 }
                 payments.add(new Payment(element.getAmount().multiply(sign), element.getDate()));
@@ -290,8 +290,8 @@ public class MainModel {
 
         for (int i = 0; i < testTransactions.size(); i++) {
             Transaction element = testTransactions.get(i);
-            if (element.getTransactionType().toString().contains("INCOME")) {
-                if (element.getTransactionType().toString().equals("REGULARINCOME")) {
+            if (element.getTransactionType().getName().toUpperCase().contains("INCOME")) {
+                if (element.getTransactionType().getName().toUpperCase().replace(" ", "").equals("REGULARINCOME")) {
                     long difference = element.getEndDate().getTime() - element.getDate().getTime();
                     long days = difference / millisecondsInADay;
                     long times = days / element.getTransactionInterval();
@@ -300,7 +300,7 @@ public class MainModel {
                     status = status.subtract(element.getAmount());
                 }
             } else {
-                if (element.getTransactionType().toString().equals("REGULARPAYMENT")) {
+                if (element.getTransactionType().getName().toUpperCase().replace(" ","").equals("REGULARPAYMENT")) {
                     long difference = element.getEndDate().getTime() - element.getDate().getTime();
                     long days = difference / millisecondsInADay;
                     long times = days / element.getTransactionInterval();
@@ -338,7 +338,7 @@ public class MainModel {
     private int indexOf(Transaction that) {
         for (int i = 0; i < transactions.size(); i++) {
             Transaction transaction = transactions.get(i);
-            if (!that.getTransactionType().toString().equals(transaction.getTransactionType().toString())) {
+            if (!that.getTransactionType().equals(transaction.getTransactionType())) {
                 continue;
             }
             if (!that.getTitle().equals(transaction.getTitle())) {
@@ -385,7 +385,7 @@ public class MainModel {
 
     private List<Payment> convertRegularToIndividual(Transaction transaction){
         BigDecimal sign = new BigDecimal(1);
-        if (transaction.getTransactionType().toString().contains("INCOME")) {
+        if (transaction.getTransactionType().getName().toUpperCase().contains("INCOME")) {
             sign = new BigDecimal(-1);
         }
         List<Payment> payments = new ArrayList<>();

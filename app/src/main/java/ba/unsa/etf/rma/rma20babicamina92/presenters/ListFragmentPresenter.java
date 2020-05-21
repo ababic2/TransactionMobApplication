@@ -13,7 +13,9 @@ import ba.unsa.etf.rma.rma20babicamina92.interactor.TransactionTypeInteractor;
 import ba.unsa.etf.rma.rma20babicamina92.models.FilterItem;
 import ba.unsa.etf.rma.rma20babicamina92.models.MainModel;
 import ba.unsa.etf.rma.rma20babicamina92.models.Transaction;
+import ba.unsa.etf.rma.rma20babicamina92.models.TransactionType;
 import ba.unsa.etf.rma.rma20babicamina92.utils.Filter;
+import ba.unsa.etf.rma.rma20babicamina92.utils.TransactionFilter;
 
 public class ListFragmentPresenter {
     private static ListFragmentPresenter instance;
@@ -24,14 +26,16 @@ public class ListFragmentPresenter {
     private Map<String, Comparator<Transaction>> comparatorMap;
     private Map<String, Filter> filterMap;
     private Date date;
-    private Transaction.Type type;
+    private TransactionType type;
     private String sortBy;
 
-    private ArrayList<FilterItem> filterItems;
+    private ArrayList<TransactionType> filterItems;
     private ArrayList<String> sortSpinnerItems;
 
     private Transaction currentlySelectedTransaction;
     private DetailFragmentPresenter detailFragmentPresenter;
+
+    private TransactionFilter filter;
 
     private ListFragmentPresenter() {
 
@@ -58,11 +62,11 @@ public class ListFragmentPresenter {
         detailFragmentPresenter = DetailFragmentPresenter.getInstance();
         date = new Date();
         date.setDate(1);
-        type = Transaction.Type.ALL;
+        type = new TransactionType(0, "All", R.mipmap.ic_six);
         sortBy = "Default";
         setMaps();
         getSortItems();
-        getFilterItems();
+        getFilterItemsFromWeb();
         model = MainModel.getInstance();
         view.setAccountData(model.getAccount());
         view.setFilterItems(filterItems);
@@ -71,7 +75,13 @@ public class ListFragmentPresenter {
         view.setTransactionListItems(getTransactions());
     }
 
-    public void setFilterItems(ArrayList<FilterItem> filterItems) {
+    public ArrayList<TransactionType> getFilterItems() {
+        return filterItems;
+    }
+
+    public void setFilterItems(ArrayList<TransactionType> filterItems) {
+        this.filterItems.clear();
+        this.filterItems.addAll(filterItems);
         view.setFilterItems(filterItems);
     }
 
@@ -86,33 +96,34 @@ public class ListFragmentPresenter {
             put("Default", (a, b) -> 1);
         }};
 
-        filterMap = new HashMap<String, Filter>() {{
-            put(
-                    Transaction.Type.INDIVIDUALPAYMENT.toString(),
-                    (a) -> isInMonth(a) && a.getType().equals(Transaction.Type.INDIVIDUALPAYMENT.toString())
-            );
-            put(
-                    Transaction.Type.REGULARPAYMENT.toString(),
-                    (a) -> isInMonth(a) && a.getType().equals(Transaction.Type.REGULARPAYMENT.toString())
-            );
-            put(
-                    Transaction.Type.PURCHASE.toString(),
-                    (a) -> isInMonth(a) && a.getType().equals(Transaction.Type.PURCHASE.toString())
-            );
-            put(
-                    Transaction.Type.INDIVIDUALINCOME.toString(),
-                    (a) -> isInMonth(a) && a.getType().equals(Transaction.Type.INDIVIDUALINCOME.toString())
-            );
-            put(
-                    Transaction.Type.REGULARINCOME.toString(),
-                    (a) -> isInMonth(a) && a.getType().equals(Transaction.Type.REGULARINCOME.toString())
-            );
-            put(
-                    Transaction.Type.ALL.toString(),
-                    (a) -> isInMonth(a)
-            );
-
-        }};
+//        filterMap = new HashMap<String, Filter>() {{
+//            put(
+//                    Transaction.Type.INDIVIDUALPAYMENT.toString(),
+//                    (a) -> isInMonth(a) && a.getType().equals(Transaction.Type.INDIVIDUALPAYMENT.toString())
+//            );
+//            put(
+//                    Transaction.Type.REGULARPAYMENT.toString(),
+//                    (a) -> isInMonth(a) && a.getType().equals(Transaction.Type.REGULARPAYMENT.toString())
+//            );
+//            put(
+//                    Transaction.Type.PURCHASE.toString(),
+//                    (a) -> isInMonth(a) && a.getType().equals(Transaction.Type.PURCHASE.toString())
+//            );
+//            put(
+//                    Transaction.Type.INDIVIDUALINCOME.toString(),
+//                    (a) -> isInMonth(a) && a.getType().equals(Transaction.Type.INDIVIDUALINCOME.toString())
+//            );
+//            put(
+//                    Transaction.Type.REGULARINCOME.toString(),
+//                    (a) -> isInMonth(a) && a.getType().equals(Transaction.Type.REGULARINCOME.toString())
+//            );
+//            put(
+//                    Transaction.Type.ALL.toString(),
+//                    (a) -> isInMonth(a)
+//            );
+//
+//        }};
+        filter = (transactionType, transaction) -> transactionType.equals(transaction.getTransactionType());
     }
 
 
@@ -127,15 +138,8 @@ public class ListFragmentPresenter {
         sortSpinnerItems.add("Date - Descending");
     }
 
-    private void getFilterItems() {
-        filterItems = new ArrayList<FilterItem>();
-        filterItems.add(new FilterItem("ALL", R.drawable.individualpay));
-        filterItems.add(new FilterItem("INDIVIDUALPAYMENT", R.drawable.regularpayment));
-        filterItems.add(new FilterItem("REGULARPAYMENT", R.drawable.regularpayment));
-        filterItems.add(new FilterItem("PURCHASE", R.drawable.purchase));
-        filterItems.add(new FilterItem("INDIVIDUALINCOME", R.drawable.individualpay)); // dodaj slikicuuu
-        filterItems.add(new FilterItem("REGULARINCOME", R.drawable.individualpay)); //addd phootoooo
-        filterItems.add(new FilterItem("ALL", android.R.drawable.gallery_thumb)); //addd phootoooo
+    private void getFilterItemsFromWeb() {
+        filterItems = new ArrayList<>();
         new TransactionTypeInteractor(view.getMainActivity(),this).execute();
     }
 
@@ -162,8 +166,8 @@ public class ListFragmentPresenter {
     }
 
 
-    public void setFilterMethod(FilterItem filterItem) {
-        type = Transaction.Type.valueOf(filterItem.getFilterName().replace(" ","").toUpperCase());
+    public void setFilterMethod(TransactionType filterItem) {
+        type = filterItem;
         view.setTransactionListItems(getTransactions());
     }
 
@@ -171,7 +175,7 @@ public class ListFragmentPresenter {
         ArrayList<Transaction> transactions = new ArrayList<>();
         ArrayList<Transaction> transactionArrayList = model.getTransactions();
         for (int i = 0; i < transactionArrayList.size(); i++) {
-            if (filterMap.get(type.toString()).test(transactionArrayList.get(i))) {
+            if (filter.test(type, transactionArrayList.get(i))) {
                 transactions.add(transactionArrayList.get(i));
             }
         }
@@ -181,8 +185,7 @@ public class ListFragmentPresenter {
 
     private boolean isInMonth(Transaction transaction) {
         if (
-                transaction.getType().equals(Transaction.Type.REGULARINCOME.toString()) ||
-                        transaction.getType().equals(Transaction.Type.REGULARPAYMENT.toString())
+                transaction.getTransactionType().getName().toLowerCase().contains("regular")
         ) {
             return transaction.getDate().before(date) && transaction.getEndDate().after(date) ||
                     (transaction.getDate().getMonth() == date.getMonth() && transaction.getDate().getYear() == date.getYear()) ||

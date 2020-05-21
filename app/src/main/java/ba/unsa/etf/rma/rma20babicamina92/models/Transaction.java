@@ -39,7 +39,7 @@ public class Transaction implements Comparable<Transaction>, Serializable, Parce
             dest.writeByte((byte) 1);
             dest.writeInt(transactionInterval);
         }
-        dest.writeString(transactionType.toString());
+        dest.writeSerializable(transactionType);
     }
 
     public Transaction(Parcel parcel) {
@@ -54,20 +54,8 @@ public class Transaction implements Comparable<Transaction>, Serializable, Parce
         } else {
             transactionInterval = parcel.readInt();
         }
-        transactionType = Type.valueOf(parcel.readString());
+        transactionType = (TransactionType) parcel.readSerializable();
     }
-
-    public enum Type {
-        INDIVIDUALPAYMENT("INDIVIDUALPAYMENT"),
-        REGULARPAYMENT("REGULARPAYMENT"),
-        PURCHASE("PURCHASE"),
-        INDIVIDUALINCOME("INDIVIDUALINCOME"),
-        REGULARINCOME("REGULARINCOME"),
-        ALL("ALL");
-
-        Type(String method) {
-        }
-    };
 
     private String title;
     private String itemDescription;
@@ -75,16 +63,16 @@ public class Transaction implements Comparable<Transaction>, Serializable, Parce
     private Date date;
     private Date endDate;
     private Integer transactionInterval;
-    private Type transactionType;
+    private TransactionType transactionType;
 
-    public Transaction(Date date, BigDecimal amount, String title, String itemDescription, Integer transactionInterval, Date endDate, String transactionType) {
+    public Transaction(Date date, BigDecimal amount, String title, String itemDescription, Integer transactionInterval, Date endDate, TransactionType transactionType) {
         this.date = date;
         this.amount = amount;
         this.title = title;
         this.itemDescription = itemDescription;
         this.transactionInterval = transactionInterval;
         this.endDate = endDate;
-        this.transactionType =  Type.valueOf(transactionType);
+        this.transactionType = transactionType;
     }
 
     public Date getDate() {
@@ -95,11 +83,11 @@ public class Transaction implements Comparable<Transaction>, Serializable, Parce
         return transactionType.toString();
     }
 
-    public Type getTransactionType() {
+    public TransactionType getTransactionType() {
         return transactionType;
     }
 
-    public void setTransactionType(Type transactionType) {
+    public void setTransactionType(TransactionType transactionType) {
         this.transactionType = transactionType;
     }
 
@@ -181,7 +169,7 @@ public class Transaction implements Comparable<Transaction>, Serializable, Parce
             return false;
         if(endDate.getYear() != that.getEndDate().getYear()) return false;
         if(endDate.getMonth() != that.getEndDate().getMonth()) return false;
-        return transactionType.toString().equals(that.transactionType.toString());
+        return transactionType.equals(that.transactionType);
     }
 
     @Override

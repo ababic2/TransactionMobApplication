@@ -6,15 +6,17 @@ import android.os.Parcelable;
 import java.util.Objects;
 
 public class FilterItem implements Parcelable {
+    private int id;
     private String filterName;
     private int image;
 
-    public FilterItem(String filterName, int image) {
+    public FilterItem(int id, String filterName, int image) {
         this.filterName = filterName;
         this.image = image;
     }
 
     protected FilterItem(Parcel in) {
+        id = in.readInt();
         filterName = in.readString();
         image = in.readInt();
     }
@@ -39,6 +41,13 @@ public class FilterItem implements Parcelable {
         return image;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     @Override
     public boolean equals(Object o) {

@@ -30,7 +30,9 @@ import ba.unsa.etf.rma.rma20babicamina92.exceptions.InvalidFieldValueException;
 import ba.unsa.etf.rma.rma20babicamina92.models.FilterItem;
 import ba.unsa.etf.rma.rma20babicamina92.models.MainModel;
 import ba.unsa.etf.rma.rma20babicamina92.models.Transaction;
+import ba.unsa.etf.rma.rma20babicamina92.models.TransactionType;
 import ba.unsa.etf.rma.rma20babicamina92.presenters.DetailFragmentPresenter;
+import ba.unsa.etf.rma.rma20babicamina92.presenters.ListFragmentPresenter;
 
 
 public class TransactionDetailFragment extends Fragment {
@@ -43,7 +45,7 @@ public class TransactionDetailFragment extends Fragment {
     private Button saveButton, deleteButton;
 
     private FilterSpinnerAdapter filterSpinnerAdapter;
-    private ArrayList<FilterItem> filterBySpinnerItems;
+    private ArrayList<TransactionType> filterBySpinnerItems;
 
     private DetailFragmentPresenter presenter;
     private MainActivity activity;
@@ -75,12 +77,8 @@ public class TransactionDetailFragment extends Fragment {
         activity = (MainActivity) getActivity();
 
         filterBySpinnerItems = new ArrayList<>();
-        filterBySpinnerItems.add(new FilterItem("ALL",android.R.drawable.gallery_thumb));
-        filterBySpinnerItems.add(new FilterItem("INDIVIDUALPAYMENT", R.drawable.regularpayment));
-        filterBySpinnerItems.add(new FilterItem("REGULARPAYMENT",R.drawable.regularpayment));
-        filterBySpinnerItems.add(new FilterItem("PURCHASE",R.drawable.purchase));
-        filterBySpinnerItems.add(new FilterItem("INDIVIDUALINCOME",R.drawable.individualpay));
-        filterBySpinnerItems.add(new FilterItem("REGULARINCOME",R.drawable.individualpay));
+        filterBySpinnerItems.addAll(ListFragmentPresenter.getInstance().getFilterItems());
+        filterBySpinnerItems.remove(filterBySpinnerItems.size() - 1);
         filterSpinnerAdapter = new FilterSpinnerAdapter(getActivity(), filterBySpinnerItems);
         typeSpinner.setAdapter(filterSpinnerAdapter);
         if (presenter.getTransaction() != null) {
@@ -258,7 +256,7 @@ public class TransactionDetailFragment extends Fragment {
         transactionIntervalTextView.setText(String.format(Locale.getDefault(),"%d",oldTransaction.getTransactionInterval()));
         typeSpinner.setSelection(
                 filterBySpinnerItems.indexOf(
-                        new FilterItem(oldTransaction.getTransactionType().toString(), R.drawable.individualpay)
+                        oldTransaction.getTransactionType()
                 )
         );
         titleTextView.addTextChangedListener(generateTextWatcher(titleTextView));
@@ -346,7 +344,7 @@ public class TransactionDetailFragment extends Fragment {
                     descriptionTextView.getText().toString(),
                     Integer.parseInt(transactionIntervalTextView.getText().toString()),
                     new SimpleDateFormat("MMMM, yyyy", Locale.getDefault()).parse(endDateTextView.getText().toString()),
-                    ((FilterItem)typeSpinner.getSelectedItem()).getFilterName());
+                    (TransactionType) typeSpinner.getSelectedItem());
         } catch (ParseException e) {
 
         }

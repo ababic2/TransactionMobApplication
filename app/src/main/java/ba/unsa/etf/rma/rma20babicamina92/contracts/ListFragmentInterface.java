@@ -7,13 +7,14 @@ import ba.unsa.etf.rma.rma20babicamina92.MainActivity;
 import ba.unsa.etf.rma.rma20babicamina92.models.Account;
 import ba.unsa.etf.rma.rma20babicamina92.models.FilterItem;
 import ba.unsa.etf.rma.rma20babicamina92.models.Transaction;
+import ba.unsa.etf.rma.rma20babicamina92.models.TransactionType;
 
 public interface ListFragmentInterface {
     void setMonthForTransactions(Date date);
 
     void setTransactionListItems(ArrayList<Transaction> transactions);
 
-    void setFilterItems(ArrayList<FilterItem> filterItems);
+    void setFilterItems(ArrayList<TransactionType> filterItems);
 
     void setSortItems(ArrayList<String> sortItems);
 

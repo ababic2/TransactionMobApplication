@@ -14,6 +14,7 @@ import java.util.Scanner;
 import ba.unsa.etf.rma.rma20babicamina92.MainActivity;
 import ba.unsa.etf.rma.rma20babicamina92.R;
 import ba.unsa.etf.rma.rma20babicamina92.models.FilterItem;
+import ba.unsa.etf.rma.rma20babicamina92.models.TransactionType;
 import ba.unsa.etf.rma.rma20babicamina92.presenters.ListFragmentPresenter;
 
 public class TransactionTypeInteractor extends AsyncTask<String,Integer,String> {
@@ -41,20 +42,15 @@ public class TransactionTypeInteractor extends AsyncTask<String,Integer,String> 
 
     @Override
     protected String doInBackground(String... strings) {
-
         String result = "";
         try {
             String api = context.getResources().getString(R.string.api_url);
-            System.out.println(api);
             URL url = new URL(api + "/transactionTypes");
-            System.out.println(url.getPath());
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-            System.out.println("here");
             InputStream in = urlConnection.getInputStream();
-            System.out.println("Opened connection");
             result = readStream(in);
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            System.out.println("Malformed URL!");
         } catch (IOException e) {
             System.out.println("IOException: "+e.getMessage());
         }
@@ -72,12 +68,10 @@ public class TransactionTypeInteractor extends AsyncTask<String,Integer,String> 
 
     @Override
     protected void onPostExecute(String result) {
-        System.out.println(result + "something");
-        System.out.println("result");
-        ArrayList<FilterItem> filterItems = JsonDecoder.decodeTransactionTypes(result);
-        filterItems.add(0, new FilterItem("All", R.mipmap.ic_six));
-        filterItems.add(new FilterItem("All", R.mipmap.ic_six));
-        listFragmentPresenter.setFilterItems(filterItems);
+        ArrayList<TransactionType> transactionTypes = JsonDecoder.decodeTransactionTypes(result);
+        transactionTypes.add(0, new TransactionType(0,"All", R.mipmap.ic_six));
+        transactionTypes.add(new TransactionType(0,"All", R.mipmap.ic_six));
+        listFragmentPresenter.setFilterItems(transactionTypes);
         MainActivity.loadingOff(context);
 
     }

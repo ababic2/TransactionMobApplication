@@ -30,6 +30,7 @@ import ba.unsa.etf.rma.rma20babicamina92.contracts.ListFragmentInterface;
 import ba.unsa.etf.rma.rma20babicamina92.models.Account;
 import ba.unsa.etf.rma.rma20babicamina92.models.FilterItem;
 import ba.unsa.etf.rma.rma20babicamina92.models.Transaction;
+import ba.unsa.etf.rma.rma20babicamina92.models.TransactionType;
 import ba.unsa.etf.rma.rma20babicamina92.presenters.ListFragmentPresenter;
 import ba.unsa.etf.rma.rma20babicamina92.providers.AdapterProvider;
 
@@ -50,7 +51,7 @@ public class TransactionListFragment extends Fragment implements ListFragmentInt
     private TextView dateTextView;
     private EditText globalAmountTextView,limitTextView;
 
-    private ArrayList<FilterItem> filterBySpinnerItems = new ArrayList<FilterItem>();
+    private ArrayList<TransactionType> filterBySpinnerItems = new ArrayList<>();
     private ArrayList<String> sortBySpinnerItems = new ArrayList<String>();
     private ArrayList<Transaction> transactionArrayList = new ArrayList<Transaction>();
     private String monthOfTransaction;
@@ -149,7 +150,7 @@ public class TransactionListFragment extends Fragment implements ListFragmentInt
         filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                listPresenter.setFilterMethod((FilterItem) parent.getSelectedItem());
+                listPresenter.setFilterMethod((TransactionType) parent.getSelectedItem());
             }
 
             @Override
@@ -211,7 +212,7 @@ public class TransactionListFragment extends Fragment implements ListFragmentInt
     }
 
     @Override
-    public void setFilterItems(ArrayList<FilterItem> filterItems) {
+    public void setFilterItems(ArrayList<TransactionType> filterItems) {
         filterBySpinnerItems.clear();
         filterBySpinnerItems.addAll(filterItems);
         filterSpinnerAdapter.notifyDataSetChanged();

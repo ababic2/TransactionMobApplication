@@ -60,9 +60,6 @@ public class MainActivity extends FragmentActivity implements
         if (!twoPane) {
             detector = new SimpleGestureFilter(MainActivity.this, this);
         }
-//        new TransactionTypeInteractor(this).execute();
-//        ProgressDialog dialog = ProgressDialog.show(MainActivity.this, "",
-//                "Loading. Please wait...", true);
     }
 
     @Override
