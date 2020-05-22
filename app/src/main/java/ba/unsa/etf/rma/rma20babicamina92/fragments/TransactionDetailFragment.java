@@ -78,7 +78,9 @@ public class TransactionDetailFragment extends Fragment {
 
         filterBySpinnerItems = new ArrayList<>();
         filterBySpinnerItems.addAll(ListFragmentPresenter.getInstance().getFilterItems());
-        filterBySpinnerItems.remove(filterBySpinnerItems.size() - 1);
+        if (filterBySpinnerItems.size() > 0) {
+            filterBySpinnerItems.remove(filterBySpinnerItems.size() - 1);
+        }
         filterSpinnerAdapter = new FilterSpinnerAdapter(getActivity(), filterBySpinnerItems);
         typeSpinner.setAdapter(filterSpinnerAdapter);
         if (presenter.getTransaction() != null) {
