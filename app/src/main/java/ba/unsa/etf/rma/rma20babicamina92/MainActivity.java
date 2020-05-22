@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 import ba.unsa.etf.rma.rma20babicamina92.fragments.BudgetFragment;
@@ -22,6 +23,7 @@ public class MainActivity extends FragmentActivity implements
         SimpleGestureFilter.SimpleGestureListener {
 
     private static ProgressDialog dialog;
+    private static ArrayList<ProgressDialog> dialogs = new ArrayList<>();
     private SimpleGestureFilter detector;
 
     private TransactionListFragment masterFragment;
@@ -37,18 +39,19 @@ public class MainActivity extends FragmentActivity implements
     }
 
     public static void loadingOn(MainActivity mainActivity) {
-        if (dialog != null) {
-            dialog.dismiss();
-        }
+        System.out.println("MainActivity loadingOn " + dialogs.size());
         dialog = ProgressDialog.show(mainActivity, "",
                 "Loading. Please wait...", true);
+        dialogs.add(dialog);
     }
 
     public static void loadingOff(MainActivity mainActivity) {
-        if (dialog == null) {
-            return;
+        System.out.println("MainActivity loadingOff " + dialogs.size());
+        if (dialogs.size() > 0) {
+            dialog = dialogs.get(0);
+            dialogs.remove(0);
+            dialog.dismiss();
         }
-        dialog.dismiss();
         dialog = null;
     }
 

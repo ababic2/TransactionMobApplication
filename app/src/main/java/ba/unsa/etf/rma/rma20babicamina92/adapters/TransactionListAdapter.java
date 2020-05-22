@@ -44,19 +44,20 @@ public class TransactionListAdapter extends ArrayAdapter<Transaction> {
             TextView titleTextView = newView.findViewById(R.id.titleText);
             ImageView imageView = newView.findViewById(R.id.transactionImageView);
             titleTextView.setText(transaction.getTitle() + "\n" + transaction.getAmount());
-            switch (transaction.getType()) {
-                case "INDIVIDUALPAYMENT":
-                case "REGULARPAYMENT":
-                    imageView.setImageResource(R.drawable.regularpayment);
-                    break;
-                case "PURCHASE":
-                    imageView.setImageResource(R.drawable.purchase);
-                    break;
-                case "INDIVIDUALINCOME":
-                case "REGULARINCOME":
-                    imageView.setImageResource(R.drawable.individualpay);
-                    break;
-            }
+            imageView.setImageResource(transaction.getTransactionType().getImage());
+//            switch (transaction.getType()) {
+//                case "INDIVIDUALPAYMENT":
+//                case "REGULARPAYMENT":
+//                    imageView.setImageResource(R.drawable.regularpayment);
+//                    break;
+//                case "PURCHASE":
+//                    imageView.setImageResource(R.drawable.purchase);
+//                    break;
+//                case "INDIVIDUALINCOME":
+//                case "REGULARINCOME":
+//                    imageView.setImageResource(R.drawable.individualpay);
+//                    break;
+//            }
         }
         return newView;
     }

@@ -291,8 +291,8 @@ public class TransactionDetailFragment extends Fragment {
 
 
     public void validateFields() throws InvalidFieldValueException {
-        FilterItem filterItem = (FilterItem) typeSpinner.getSelectedItem();
-        if (filterItem.getFilterName().contains("ALL")) {
+        TransactionType filterItem = (TransactionType) typeSpinner.getSelectedItem();
+        if (filterItem.getName().toLowerCase().contains("all")) {
             throw new InvalidFieldValueException("Type is not set");
         }
         if (titleTextView.getText().toString().length() == 0) {
@@ -313,8 +313,8 @@ public class TransactionDetailFragment extends Fragment {
             throw new InvalidFieldValueException("Date is not valid");
         }
 
-        if (!filterItem.getFilterName().contains("INDIVIDUAL")
-                && !filterItem.getFilterName().contains("PURCHASE")) {
+        if (!filterItem.getName().toLowerCase().contains("individual")
+                && !filterItem.getName().toLowerCase().contains("purchase")) {
             try{
                 new SimpleDateFormat("MMMM, yyyy", Locale.getDefault()).parse(endDateTextView.getText().toString());
             } catch (ParseException e) {
@@ -329,7 +329,7 @@ public class TransactionDetailFragment extends Fragment {
             }
         }
 
-        if (!filterItem.getFilterName().contains("INCOME")) {
+        if (!filterItem.getName().toLowerCase().contains("income")) {
             if (descriptionTextView.getText().toString().length() == 0) {
                 descriptionTextView.setBackgroundColor(Color.RED);
                 throw new InvalidFieldValueException("Description is not set");

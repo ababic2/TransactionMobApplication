@@ -126,7 +126,6 @@ public class TransactionListFragment extends Fragment implements ListFragmentInt
         initViewData();
         listPresenter.init(this);
 
-
         return view;
     }
 

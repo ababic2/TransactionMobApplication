@@ -76,6 +76,7 @@ public class ListFragmentPresenter {
         view.setSortItems(sortSpinnerItems);
         view.setMonthForTransactions(date);
         view.setTransactionListItems(getTransactions());
+        System.out.println("ListFragmentPresenter init()");
     }
 
     private void getFilterItemsFromWeb() {
@@ -140,7 +141,7 @@ public class ListFragmentPresenter {
 //            );
 //
 //        }};
-        filter = (transactionType, transaction) -> transactionType.equals(transaction.getTransactionType());
+        filter = (transactionType, transaction) -> isInMonth(transaction) && (transactionType.equals(transaction.getTransactionType()) ^ transactionType.getName().toLowerCase().contains("all"));
     }
 
 
