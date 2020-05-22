@@ -47,6 +47,7 @@ public class MainModel {
         return instance;
     }
 
+
     private MainModel() {
         account = new Account(
                 new BigDecimal(19270.30),
@@ -54,6 +55,10 @@ public class MainModel {
                 new BigDecimal(1000.00)
         );
         initializeTransactions();
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     private void initializeTransactions() {

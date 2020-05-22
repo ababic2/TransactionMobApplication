@@ -37,6 +37,9 @@ public class MainActivity extends FragmentActivity implements
     }
 
     public static void loadingOn(MainActivity mainActivity) {
+        if (dialog != null) {
+            dialog.dismiss();
+        }
         dialog = ProgressDialog.show(mainActivity, "",
                 "Loading. Please wait...", true);
     }

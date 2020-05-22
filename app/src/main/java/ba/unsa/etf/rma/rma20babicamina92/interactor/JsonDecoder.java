@@ -4,10 +4,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import ba.unsa.etf.rma.rma20babicamina92.R;
+import ba.unsa.etf.rma.rma20babicamina92.models.Account;
 import ba.unsa.etf.rma.rma20babicamina92.models.TransactionType;
 
 class JsonDecoder {
@@ -24,5 +26,20 @@ class JsonDecoder {
 
         }
         return transactionTypes;
+    }
+
+    public static Account decodeAccount(String result) {
+        try {
+            JSONObject root = new JSONObject(result);
+            return new Account(
+                    root.getInt("id"),
+                    new BigDecimal(root.getInt("budget")),
+                    new BigDecimal(root.getInt("totalLimit")),
+                    new BigDecimal(root.getInt("monthLimit"))
+                    );
+        } catch (JSONException e) {
+            System.out.println("JSON not ok! --- Account decode");
+        }
+        return null;
     }
 }

@@ -9,7 +9,9 @@ import java.util.Map;
 
 import ba.unsa.etf.rma.rma20babicamina92.R;
 import ba.unsa.etf.rma.rma20babicamina92.contracts.ListFragmentInterface;
+import ba.unsa.etf.rma.rma20babicamina92.interactor.AccountInteractor;
 import ba.unsa.etf.rma.rma20babicamina92.interactor.TransactionTypeInteractor;
+import ba.unsa.etf.rma.rma20babicamina92.models.Account;
 import ba.unsa.etf.rma.rma20babicamina92.models.FilterItem;
 import ba.unsa.etf.rma.rma20babicamina92.models.MainModel;
 import ba.unsa.etf.rma.rma20babicamina92.models.Transaction;
@@ -67,12 +69,27 @@ public class ListFragmentPresenter {
         setMaps();
         getSortItems();
         getFilterItemsFromWeb();
+        getAccountFromWeb();
         model = MainModel.getInstance();
         view.setAccountData(model.getAccount());
         view.setFilterItems(filterItems);
         view.setSortItems(sortSpinnerItems);
         view.setMonthForTransactions(date);
         view.setTransactionListItems(getTransactions());
+    }
+
+    private void getFilterItemsFromWeb() {
+        filterItems = new ArrayList<>();
+        new TransactionTypeInteractor(view.getMainActivity(),this).execute();
+    }
+
+    private void getAccountFromWeb() {
+        new AccountInteractor(view.getMainActivity(), this).execute();
+    }
+
+    public void setAccount(Account account) {
+        model.setAccount(account);
+        view.setAccountData(account);
     }
 
     public ArrayList<TransactionType> getFilterItems() {
@@ -136,11 +153,6 @@ public class ListFragmentPresenter {
         sortSpinnerItems.add("Title - Descending");
         sortSpinnerItems.add("Date - Ascending");
         sortSpinnerItems.add("Date - Descending");
-    }
-
-    private void getFilterItemsFromWeb() {
-        filterItems = new ArrayList<>();
-        new TransactionTypeInteractor(view.getMainActivity(),this).execute();
     }
 
 

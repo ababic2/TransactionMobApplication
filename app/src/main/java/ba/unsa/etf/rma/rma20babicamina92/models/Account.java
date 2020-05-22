@@ -3,6 +3,7 @@ package ba.unsa.etf.rma.rma20babicamina92.models;
 import java.math.BigDecimal;
 
 public class Account {
+    private int id;
     private BigDecimal budget;
     private BigDecimal totalLimit;
     private BigDecimal monthLimit;
@@ -11,6 +12,21 @@ public class Account {
         this.budget = budget;
         this.totalLimit = totalLimit;
         this.monthLimit = monthLimit;
+    }
+
+    public Account(int id, BigDecimal budget, BigDecimal totalLimit, BigDecimal monthLimit) {
+        this.id = id;
+        this.budget = budget;
+        this.totalLimit = totalLimit;
+        this.monthLimit = monthLimit;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public BigDecimal getBudget() {

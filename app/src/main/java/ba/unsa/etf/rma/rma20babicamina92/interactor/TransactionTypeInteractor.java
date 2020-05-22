@@ -42,28 +42,8 @@ public class TransactionTypeInteractor extends AsyncTask<String,Integer,String> 
 
     @Override
     protected String doInBackground(String... strings) {
-        String result = "";
-        try {
-            String api = context.getResources().getString(R.string.api_url);
-            URL url = new URL(api + "/transactionTypes");
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-            InputStream in = urlConnection.getInputStream();
-            result = readStream(in);
-        } catch (MalformedURLException e) {
-            System.out.println("Malformed URL!");
-        } catch (IOException e) {
-            System.out.println("IOException: "+e.getMessage());
-        }
-        return result;
-    }
-
-    private String readStream(InputStream in) {
-        Scanner scanner = new Scanner(in);
-        String result = "";
-        while(scanner.hasNextLine()) {
-            result += scanner.nextLine();
-        }
-        return result;
+        String query = "/transactionTypes";
+        return Util.getResultFromWeb(query, context);
     }
 
     @Override
