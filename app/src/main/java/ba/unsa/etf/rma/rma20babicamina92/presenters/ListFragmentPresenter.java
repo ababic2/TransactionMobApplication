@@ -73,7 +73,7 @@ public class ListFragmentPresenter {
         getAccountFromWeb();
         model = MainModel.getInstance();
         model.getTransactions().clear();
-        new TransactionInteractor(view.getMainActivity()).execute("");
+        new TransactionInteractor(view.getMainActivity(),this).execute("");
         view.setAccountData(model.getAccount());
         view.setFilterItems(filterItems);
         view.setSortItems(sortSpinnerItems);

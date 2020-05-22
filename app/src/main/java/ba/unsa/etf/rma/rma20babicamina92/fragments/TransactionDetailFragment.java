@@ -21,6 +21,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 
 import ba.unsa.etf.rma.rma20babicamina92.MainActivity;
@@ -253,7 +254,10 @@ public class TransactionDetailFragment extends Fragment {
         amountTextView.setText(String.format(Locale.getDefault(),"%.2f",oldTransaction.getAmount()));
         String displayDate = new SimpleDateFormat("d.M.y", Locale.getDefault()).format(oldTransaction.getDate());
         dateTextView.setText(displayDate);
-        String displayEndDate = new SimpleDateFormat("d.M.y", Locale.getDefault()).format(oldTransaction.getEndDate());
+        String displayEndDate=null;
+        if (oldTransaction.getEndDate() != null) {
+            displayEndDate = new SimpleDateFormat("d.M.y", Locale.getDefault()).format(oldTransaction.getEndDate());
+        }
         endDateTextView.setText(displayEndDate);
         transactionIntervalTextView.setText(String.format(Locale.getDefault(),"%d",oldTransaction.getTransactionInterval()));
         typeSpinner.setSelection(
@@ -339,13 +343,14 @@ public class TransactionDetailFragment extends Fragment {
     }
     private void extractTransaction() {
         try {
+            Date endDate = endDateTextView.getText().toString().isEmpty() ? null : new SimpleDateFormat("d.M.y", Locale.getDefault()).parse(endDateTextView.getText().toString());
             transaction = new Transaction(
                     new SimpleDateFormat("d.M.y", Locale.getDefault()).parse(dateTextView.getText().toString()),
                     new BigDecimal(amountTextView.getText().toString()),
                     titleTextView.getText().toString(),
                     descriptionTextView.getText().toString(),
                     Integer.parseInt(transactionIntervalTextView.getText().toString()),
-                    new SimpleDateFormat("d.M.y", Locale.getDefault()).parse(endDateTextView.getText().toString()),
+                    endDate,
                     (TransactionType) typeSpinner.getSelectedItem());
         } catch (ParseException e) {
 

@@ -247,6 +247,7 @@ public class MainModel {
         List<Payment> payments = new ArrayList<>();
         for (int i = 0; i < testTransactions.size(); i++) {
             Transaction element = testTransactions.get(i);
+            System.out.println(element);
             if (element.getTransactionType().getName().toUpperCase().contains("REGULAR")) {
                 payments.addAll(convertRegularToIndividual(element));
             } else {

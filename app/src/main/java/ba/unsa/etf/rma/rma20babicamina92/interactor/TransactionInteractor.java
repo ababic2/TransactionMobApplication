@@ -11,13 +11,16 @@ import ba.unsa.etf.rma.rma20babicamina92.MainActivity;
 import ba.unsa.etf.rma.rma20babicamina92.R;
 import ba.unsa.etf.rma.rma20babicamina92.models.MainModel;
 import ba.unsa.etf.rma.rma20babicamina92.models.Transaction;
+import ba.unsa.etf.rma.rma20babicamina92.presenters.ListFragmentPresenter;
 
 public class TransactionInteractor extends AsyncTask<String, Integer, String> {
 
     private MainActivity mainActivity;
+    private ListFragmentPresenter presenter;
 
-    public TransactionInteractor(MainActivity mainActivity) {
+    public TransactionInteractor(MainActivity mainActivity, ListFragmentPresenter presenter) {
         this.mainActivity = mainActivity;
+        this.presenter = presenter;
     }
 
     @Override
@@ -42,7 +45,10 @@ public class TransactionInteractor extends AsyncTask<String, Integer, String> {
             MainModel.getInstance().addTransaction(transaction);
         }
         if (transactions.size() == 5) {
-            new TransactionInteractor(mainActivity).execute("page="+offset);
+            new TransactionInteractor(mainActivity, presenter).execute("page=" + offset);
+        } else {
+            presenter.datePickerClickedRight();
+            presenter.datePickerCLickedLeft();
         }
         MainActivity.loadingOff();
     }
