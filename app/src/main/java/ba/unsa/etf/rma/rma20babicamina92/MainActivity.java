@@ -38,11 +38,11 @@ public class MainActivity extends FragmentActivity implements
         super.onPostResume();
     }
 
-    public static void loadingOn(MainActivity mainActivity) {
+    public static void loadingOn(MainActivity mainActivity, String message) {
         System.out.println("MainActivity loadingOn " + dialogs.size());
         dialog = ProgressDialog.show(mainActivity, "",
-                "Loading. Please wait...", true);
-        dialogs.add(dialog);
+                message, true);
+        dialogs.add(0, dialog);
     }
 
     public static void loadingOff(MainActivity mainActivity) {

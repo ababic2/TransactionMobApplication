@@ -251,9 +251,9 @@ public class TransactionDetailFragment extends Fragment {
         titleTextView.setText(oldTransaction.getTitle());
         descriptionTextView.setText(oldTransaction.getItemDescription());
         amountTextView.setText(String.format(Locale.getDefault(),"%.2f",oldTransaction.getAmount()));
-        String displayDate = new SimpleDateFormat("MMMM, yyyy", Locale.getDefault()).format(oldTransaction.getDate());
+        String displayDate = new SimpleDateFormat("d.M.y", Locale.getDefault()).format(oldTransaction.getDate());
         dateTextView.setText(displayDate);
-        String displayEndDate = new SimpleDateFormat("MMMM, yyyy", Locale.getDefault()).format(oldTransaction.getEndDate());
+        String displayEndDate = new SimpleDateFormat("d.M.y", Locale.getDefault()).format(oldTransaction.getEndDate());
         endDateTextView.setText(displayEndDate);
         transactionIntervalTextView.setText(String.format(Locale.getDefault(),"%d",oldTransaction.getTransactionInterval()));
         typeSpinner.setSelection(
@@ -307,7 +307,7 @@ public class TransactionDetailFragment extends Fragment {
             throw new InvalidFieldValueException("Amount is not valid");
         }
         try{
-            new SimpleDateFormat("MMMM, yyyy", Locale.getDefault()).parse(dateTextView.getText().toString());
+            new SimpleDateFormat("d.M.y", Locale.getDefault()).parse(dateTextView.getText().toString());
         } catch (ParseException e) {
             dateTextView.setBackgroundColor(Color.RED);
             throw new InvalidFieldValueException("Date is not valid");
@@ -316,7 +316,7 @@ public class TransactionDetailFragment extends Fragment {
         if (!filterItem.getName().toLowerCase().contains("individual")
                 && !filterItem.getName().toLowerCase().contains("purchase")) {
             try{
-                new SimpleDateFormat("MMMM, yyyy", Locale.getDefault()).parse(endDateTextView.getText().toString());
+                new SimpleDateFormat("d.M.y", Locale.getDefault()).parse(endDateTextView.getText().toString());
             } catch (ParseException e) {
                 endDateTextView.setBackgroundColor(Color.RED);
                 throw new InvalidFieldValueException("End date is not valid");
@@ -340,12 +340,12 @@ public class TransactionDetailFragment extends Fragment {
     private void extractTransaction() {
         try {
             transaction = new Transaction(
-                    new SimpleDateFormat("MMMM, yyyy", Locale.getDefault()).parse(dateTextView.getText().toString()),
+                    new SimpleDateFormat("d.M.y", Locale.getDefault()).parse(dateTextView.getText().toString()),
                     new BigDecimal(amountTextView.getText().toString()),
                     titleTextView.getText().toString(),
                     descriptionTextView.getText().toString(),
                     Integer.parseInt(transactionIntervalTextView.getText().toString()),
-                    new SimpleDateFormat("MMMM, yyyy", Locale.getDefault()).parse(endDateTextView.getText().toString()),
+                    new SimpleDateFormat("d.M.y", Locale.getDefault()).parse(endDateTextView.getText().toString()),
                     (TransactionType) typeSpinner.getSelectedItem());
         } catch (ParseException e) {
 

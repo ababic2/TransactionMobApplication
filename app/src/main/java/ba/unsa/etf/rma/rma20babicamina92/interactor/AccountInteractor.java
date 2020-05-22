@@ -32,7 +32,7 @@ public class AccountInteractor extends AsyncTask<String,Integer,String> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        MainActivity.loadingOn(mainActivity);
+        MainActivity.loadingOn(mainActivity, "Fetching account data. Please wait.");
     }
 
     @Override
