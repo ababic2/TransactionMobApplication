@@ -3,7 +3,9 @@ package ba.unsa.etf.rma.rma20babicamina92.presenters;
 import java.math.BigDecimal;
 import java.util.Locale;
 
+import ba.unsa.etf.rma.rma20babicamina92.MainActivity;
 import ba.unsa.etf.rma.rma20babicamina92.fragments.BudgetFragment;
+import ba.unsa.etf.rma.rma20babicamina92.interactor.AccountPostInteractor;
 import ba.unsa.etf.rma.rma20babicamina92.models.MainModel;
 
 public class BudgetPresenter {
@@ -42,6 +44,7 @@ public class BudgetPresenter {
         model.getAccount().setMonthLimit(monthlyLimit);
         model.getAccount().setTotalLimit(totalLimit);
         updateFragment(fragment);
+        new AccountPostInteractor((MainActivity) fragment.getActivity(), this).execute(model.getAccount());
     }
 
 }

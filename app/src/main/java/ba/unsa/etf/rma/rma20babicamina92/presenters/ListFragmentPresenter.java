@@ -85,6 +85,7 @@ public class ListFragmentPresenter {
     }
 
     private void getAccountFromWeb() {
+        System.out.println("Get account from web");
         new AccountInteractor(view.getMainActivity(), this).execute();
     }
 
