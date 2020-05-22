@@ -57,6 +57,7 @@ public class Transaction implements Comparable<Transaction>, Serializable, Parce
         transactionType = (TransactionType) parcel.readSerializable();
     }
 
+    private Long id;
     private String title;
     private String itemDescription;
     private BigDecimal amount;
@@ -64,6 +65,17 @@ public class Transaction implements Comparable<Transaction>, Serializable, Parce
     private Date endDate;
     private Integer transactionInterval;
     private TransactionType transactionType;
+
+    public Transaction(Long id, String title, String itemDescription, BigDecimal amount, Date date, Date endDate, Integer transactionInterval, TransactionType transactionType) {
+        this.id = id;
+        this.title = title;
+        this.itemDescription = itemDescription;
+        this.amount = amount;
+        this.date = date;
+        this.endDate = endDate;
+        this.transactionInterval = transactionInterval;
+        this.transactionType = transactionType;
+    }
 
     public Transaction(Date date, BigDecimal amount, String title, String itemDescription, Integer transactionInterval, Date endDate, TransactionType transactionType) {
         this.date = date;
@@ -73,6 +85,14 @@ public class Transaction implements Comparable<Transaction>, Serializable, Parce
         this.transactionInterval = transactionInterval;
         this.endDate = endDate;
         this.transactionType = transactionType;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Date getDate() {

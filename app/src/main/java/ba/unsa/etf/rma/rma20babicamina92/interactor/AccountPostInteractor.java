@@ -32,6 +32,6 @@ public class AccountPostInteractor extends AsyncTask<Account, Integer, String> {
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
-        MainActivity.loadingOff(mainActivity);
+        MainActivity.loadingOff();
     }
 }

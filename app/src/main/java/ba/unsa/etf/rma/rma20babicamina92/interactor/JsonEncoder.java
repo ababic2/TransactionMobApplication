@@ -10,7 +10,7 @@ class JsonEncoder {
             return "";
         }
         return "{\n" +
-//                "\"budget\": "+account.getBudget()+",\n" +
+                "\"budget\": "+account.getBudget()+",\n" +
                 "\"monthLimit\": "+account.getMonthLimit()+",\n" +
                 "\"totalLimit\": "+account.getTotalLimit()+"\n" +
                 "}\n";

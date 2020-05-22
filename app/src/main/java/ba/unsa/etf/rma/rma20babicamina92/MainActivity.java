@@ -45,7 +45,7 @@ public class MainActivity extends FragmentActivity implements
         dialogs.add(0, dialog);
     }
 
-    public static void loadingOff(MainActivity mainActivity) {
+    public static void loadingOff() {
         System.out.println("MainActivity loadingOff " + dialogs.size());
         if (dialogs.size() > 0) {
             dialog = dialogs.get(0);

@@ -10,6 +10,7 @@ import java.util.Map;
 import ba.unsa.etf.rma.rma20babicamina92.R;
 import ba.unsa.etf.rma.rma20babicamina92.contracts.ListFragmentInterface;
 import ba.unsa.etf.rma.rma20babicamina92.interactor.AccountInteractor;
+import ba.unsa.etf.rma.rma20babicamina92.interactor.TransactionInteractor;
 import ba.unsa.etf.rma.rma20babicamina92.interactor.TransactionTypeInteractor;
 import ba.unsa.etf.rma.rma20babicamina92.models.Account;
 import ba.unsa.etf.rma.rma20babicamina92.models.FilterItem;
@@ -71,6 +72,8 @@ public class ListFragmentPresenter {
         getFilterItemsFromWeb();
         getAccountFromWeb();
         model = MainModel.getInstance();
+        model.getTransactions().clear();
+        new TransactionInteractor(view.getMainActivity()).execute("");
         view.setAccountData(model.getAccount());
         view.setFilterItems(filterItems);
         view.setSortItems(sortSpinnerItems);
