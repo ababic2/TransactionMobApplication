@@ -9,11 +9,9 @@ import ba.unsa.etf.rma.rma20babicamina92.presenters.BudgetPresenter;
 
 public class AccountPostInteractor extends AsyncTask<Account, Integer, String> {
     private MainActivity mainActivity;
-    private BudgetPresenter listFragmentPresenter;
 
-    public AccountPostInteractor(MainActivity mainActivity, BudgetPresenter presenter) {
+    public AccountPostInteractor(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
-        this.listFragmentPresenter = presenter;
     }
 
     @Override
@@ -26,7 +24,7 @@ public class AccountPostInteractor extends AsyncTask<Account, Integer, String> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        MainActivity.loadingOn(mainActivity, "Posting account data to web service. Please wait.");
+        MainActivity.loadingOn(mainActivity, "Slanje podataka o računu na web servis. Molimo sačekajte.");
     }
 
     @Override

@@ -25,7 +25,7 @@ public class AccountInteractor extends AsyncTask<String,Integer,String> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        MainActivity.loadingOn(mainActivity, "Fetching account data. Please wait.");
+        MainActivity.loadingOn(mainActivity, "Dohvatanje podataka o računu. Molimo sačekajte.");
     }
 
     @Override

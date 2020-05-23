@@ -30,7 +30,7 @@ public class TransactionTypeInteractor extends AsyncTask<String,Integer,String> 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        MainActivity.loadingOn(context, "Fetching transaction types. Please wait.");
+        MainActivity.loadingOn(context, "Dohvatanje tipova transakcija. Molimo sačekajte.");
     }
 
     @Override

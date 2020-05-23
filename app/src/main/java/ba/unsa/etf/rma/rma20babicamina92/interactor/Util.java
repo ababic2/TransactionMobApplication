@@ -43,26 +43,32 @@ public class Util {
     }
 
     public static String postResultToWeb(String query, MainActivity context, String data) {
+        System.out.println(data);
         String api = context.getResources().getString(R.string.api_url);
         URL url = null;
         try {
             url = new URL(api + query);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             try {
-                urlConnection.setRequestProperty("Content-Type","application/json");
+                urlConnection.setRequestProperty("Content-Type", "application/json");
                 urlConnection.setDoOutput(true);
+                urlConnection.setDoInput(true);
                 urlConnection.setChunkedStreamingMode(0);
-
+                System.out.println("ONE");
                 OutputStream out = urlConnection.getOutputStream();
                 writeStream(out, data);
+                System.out.println("TWO");
 
                 InputStream in = urlConnection.getInputStream();
+                System.out.println("THREE");
                 return readStream(in);
+            } catch (Exception e) {
+                e.printStackTrace();
             } finally {
                 urlConnection.disconnect();
             }
-        } catch (IOException ignored) {
-
+        } catch (IOException e) {
+            System.out.println("IOEXCEPTION::::"+e.getMessage());
         }
         return null;
     }
@@ -73,5 +79,30 @@ public class Util {
         } catch (IOException ignored) {
 
         }
+    }
+
+    public static String deleteActionToWeb(String query, MainActivity mainActivity) {
+        String api = mainActivity.getResources().getString(R.string.api_url);
+        URL url = null;
+        try {
+            url = new URL(api + query);
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            try {
+                urlConnection.setRequestProperty("Content-Type", "application/json");
+                urlConnection.setDoOutput(true);
+                urlConnection.setDoInput(true);
+                urlConnection.setChunkedStreamingMode(0);
+                urlConnection.setRequestMethod("DELETE");
+                InputStream in = urlConnection.getInputStream();
+                return readStream(in);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                urlConnection.disconnect();
+            }
+        } catch (IOException e) {
+            System.out.println("IOEXCEPTION::::"+e.getMessage());
+        }
+        return null;
     }
 }

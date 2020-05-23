@@ -44,7 +44,7 @@ public class BudgetPresenter {
         model.getAccount().setMonthLimit(monthlyLimit);
         model.getAccount().setTotalLimit(totalLimit);
         updateFragment(fragment);
-        new AccountPostInteractor((MainActivity) fragment.getActivity(), this).execute(model.getAccount());
+        new AccountPostInteractor((MainActivity) fragment.getActivity()).execute(model.getAccount());
     }
 
 }

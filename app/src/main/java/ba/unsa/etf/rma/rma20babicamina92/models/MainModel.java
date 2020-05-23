@@ -7,6 +7,12 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import ba.unsa.etf.rma.rma20babicamina92.interactor.AccountPostInteractor;
+import ba.unsa.etf.rma.rma20babicamina92.interactor.TransactionCreateInteractor;
+import ba.unsa.etf.rma.rma20babicamina92.interactor.TransactionDeleteInteractor;
+import ba.unsa.etf.rma.rma20babicamina92.interactor.TransactionUpdateInteractor;
+import ba.unsa.etf.rma.rma20babicamina92.presenters.ListFragmentPresenter;
+
 public class MainModel {
     private static class Payment {
 
@@ -62,170 +68,7 @@ public class MainModel {
     }
 
     private void initializeTransactions() {
-        transactions = new ArrayList<Transaction>(
-//                Arrays.asList(
-//                        new Transaction(
-//                                new Date(120,0,10),
-//                                new BigDecimal(10),
-//                                "prva",
-//                                "description od prve",
-//                                12,
-//                                new Date(120,1,11),
-//                                "INDIVIDUALPAYMENT"),
-//                        new Transaction(
-//                                new Date(120,0,13),
-//                                new BigDecimal(18),
-//                                "druga",
-//                                "description od druge",
-//                                5,
-//                                new Date(120,1,11),
-//                                "REGULARPAYMENT"),
-//                        new Transaction(
-//                                new Date(120,1,22),
-//                                new BigDecimal(20),
-//                                "treca",
-//                                null,
-//                                12,
-//                                new Date(120,1,28),
-//                                "INDIVIDUALINCOME"),
-//                        new Transaction(
-//                                new Date(120,2,2),
-//                                new BigDecimal(55),
-//                                "cetvrta",
-//                                "description",
-//                                12,
-//                                new Date(120,2,11),
-//                                "PURCHASE"),
-//                        new Transaction(
-//                                new Date(120,2,17),
-//                                new BigDecimal(20),
-//                                "peta",
-//                                "description od pete",
-//                                12,
-//                                new Date(120,2,11),
-//                                "INDIVIDUALPAYMENT"),
-//                        new Transaction(
-//                                new Date(120,2,29),
-//                                new BigDecimal(33),
-//                                "sesta",
-//                                null,
-//                                1,
-//                                new Date(120,3,22),
-//                                "INDIVIDUALINCOME"),
-//                        new Transaction(
-//                                new Date(120,3,15),
-//                                new BigDecimal(15),
-//                                "sedma",
-//                                null,
-//                                7,
-//                                new Date(120,3,30),
-//                                "REGULARINCOME"),
-//                        new Transaction(
-//                                new Date(120,4,2),
-//                                new BigDecimal(18),
-//                                "osma",
-//                                "description od osme",
-//                                4,
-//                                new Date(120,4,11),
-//                                "REGULARPAYMENT"),
-//                        new Transaction(
-//                                new Date(120,2,10),
-//                                new BigDecimal(12),
-//                                "deveta",
-//                                "description od devete",
-//                                22,
-//                                new Date(120,4,11),
-//                                "PURCHASE"),
-//                        new Transaction(
-//                                new Date(120,3,22),
-//                                new BigDecimal(20),
-//                                "deseta",
-//                                "description",
-//                                5,
-//                                new Date(120,4,11),
-//                                "REGULARPAYMENT"),
-//                        new Transaction(
-//                                new Date(120,0,11),
-//                                new BigDecimal(10),
-//                                "jedanaesta",
-//                                "description od jedanaeste",
-//                                12,
-//                                new Date(120,0,11),
-//                                "INDIVIDUALPAYMENT"),
-//                        new Transaction(
-//                                new Date(120,1,15),
-//                                new BigDecimal(100),
-//                                "dvanaesta",
-//                                null,
-//                                15,
-//                                new Date(120,4,11),
-//                                "REGULARINCOME"),
-//                        new Transaction(
-//                                new Date(120,2,11),
-//                                new BigDecimal(190),
-//                                "trinaesta",
-//                                null,
-//                                12,
-//                                new Date(120,2,11),
-//                                "INDIVIDUALINCOME"),
-//                        new Transaction(
-//                                new Date(120,0,22),
-//                                new BigDecimal(15),
-//                                "cetrnaesta",
-//                                "description od cetrnaeste",
-//                                12,
-//                                new Date(120,4,11),
-//                                "REGULARPAYMENT"),
-//                        new Transaction(
-//                                new Date(120,3,11),
-//                                new BigDecimal(10),
-//                                "petnaesta",
-//                                "description od petnaeste",
-//                                12,
-//                                new Date(120,3,11),
-//                                "INDIVIDUALPAYMENT"),
-//                        new Transaction(
-//                                new Date(120,1,22),
-//                                new BigDecimal(2),
-//                                "SESNAESTA",
-//                                null,
-//                                12,
-//                                new Date(120,3,11),
-//                                "REGULARINCOME"),
-//                        new Transaction(
-//                                new Date(120,2,11),
-//                                new BigDecimal(22),
-//                                "SEDAMNAESTAAAAA",
-//                                "description od sedamnaesteeee",
-//                                12,
-//                                new Date(120,2,11),
-//                                "INDIVIDUALPAYMENT"),
-//                        new Transaction(
-//                                new Date(120,4,24),
-//                                new BigDecimal(1),
-//                                "osamnaesta",
-//                                "Idemo negdje na veceru. Na kolace i prohodati...",
-//                                12,
-//                                new Date(120,4,24),
-//                                "INDIVIDUALPAYMENT"),
-//                        new Transaction(
-//                                new Date(120,0,22),
-//                                new BigDecimal(9),
-//                                "devetnaesta",
-//                                "description of 19",
-//                                12,
-//                                new Date(120,1,11),
-//                                "REGULARPAYMENT"),
-//                        new Transaction(
-//                                new Date(120,3,11),
-//                                new BigDecimal(18),
-//                                "dvadeseta",
-//                                "description",
-//                                12,
-//                                new Date(120,4,11),
-//                                "PURCHASE")
-//                )
-        );
+        transactions = new ArrayList<Transaction>();
     }
 
     public Account getAccount() {
@@ -332,12 +175,68 @@ public class MainModel {
         return testIfOverTotalLimit(testTransactions);
     }
 
+    public void addTransactionsFromWeb(ArrayList<Transaction> transactions) {
+        this.transactions.addAll(transactions);
+    }
+
     public void addTransaction(Transaction transaction) {
+        int saldo = 0;
+        if (transaction.getTransactionType().getName().toLowerCase().contains("regular")) {
+            List<Payment> payments = convertRegularToIndividual(transaction);
+            int old = 0;
+            for (Payment payment : payments) {
+                old -= payment.amount.intValue();
+            }
+            saldo = old;
+        } else {
+            if (transaction.getTransactionType().getName().toLowerCase().contains("income")) {
+                saldo = transaction.getAmount().intValue();
+            } else {
+                saldo = -transaction.getAmount().intValue();
+            }
+        }
+        account.setBudget(account.getBudget().add(new BigDecimal(saldo)));
+        new TransactionCreateInteractor(ListFragmentPresenter.getInstance().getView().getMainActivity()).execute(transaction);
+        new AccountPostInteractor(ListFragmentPresenter.getInstance().getView().getMainActivity()).execute(account);
         transactions.add(transaction);
     }
 
     public void updateTransaction(Transaction oldTransaction, Transaction newTransaction) {
         int index = indexOf(oldTransaction);
+        int before = 0;
+        int after = 0;
+        if (oldTransaction.getTransactionType().getName().toLowerCase().contains("regular")) {
+            List<Payment> payments = convertRegularToIndividual(oldTransaction);
+            int old = 0;
+            for (Payment payment : payments) {
+                old -= payment.amount.intValue();
+            }
+            before = old;
+        } else {
+            if (oldTransaction.getTransactionType().getName().toLowerCase().contains("income")) {
+                before = oldTransaction.getAmount().intValue();
+            } else {
+                before = -oldTransaction.getAmount().intValue();
+            }
+        }
+        if (newTransaction.getTransactionType().getName().toLowerCase().contains("regular")) {
+            List<Payment> payments = convertRegularToIndividual(newTransaction);
+            int old = 0;
+            for (Payment payment : payments) {
+                old -= payment.amount.intValue();
+            }
+            after = old;
+        } else {
+            if (newTransaction.getTransactionType().getName().toLowerCase().contains("income")) {
+                after = newTransaction.getAmount().intValue();
+            } else {
+                after = -newTransaction.getAmount().intValue();
+            }
+        }
+        account.setBudget(account.getBudget().add(new BigDecimal(after-before)));
+        newTransaction.setId(oldTransaction.getId());
+        new TransactionUpdateInteractor(ListFragmentPresenter.getInstance().getView().getMainActivity()).execute(newTransaction);
+        new AccountPostInteractor(ListFragmentPresenter.getInstance().getView().getMainActivity()).execute(account);
         transactions.set(index, newTransaction);
     }
 
@@ -386,6 +285,7 @@ public class MainModel {
 
 
     public void deleteTransaction(Transaction transaction) {
+        new TransactionDeleteInteractor(ListFragmentPresenter.getInstance().getView().getMainActivity()).execute(transaction);
         transactions.remove(transaction);
     }
 

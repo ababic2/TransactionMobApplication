@@ -41,9 +41,7 @@ public class TransactionInteractor extends AsyncTask<String, Integer, String> {
         }
         offset = offset/5 + 1;
         ArrayList<Transaction> transactions = JsonDecoder.decodeTransactions(result);
-        for (Transaction transaction : transactions) {
-            MainModel.getInstance().addTransaction(transaction);
-        }
+        MainModel.getInstance().addTransactionsFromWeb(transactions);
         if (transactions.size() == 5) {
             new TransactionInteractor(mainActivity, presenter).execute("page=" + offset);
         } else {

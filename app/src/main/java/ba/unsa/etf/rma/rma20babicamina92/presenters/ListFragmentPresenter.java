@@ -40,6 +40,10 @@ public class ListFragmentPresenter {
 
     private TransactionFilter filter;
 
+    public ListFragmentInterface getView() {
+        return view;
+    }
+
     private ListFragmentPresenter() {
 
     }
@@ -79,7 +83,6 @@ public class ListFragmentPresenter {
         view.setSortItems(sortSpinnerItems);
         view.setMonthForTransactions(date);
         view.setTransactionListItems(getTransactions());
-        System.out.println("ListFragmentPresenter init()");
     }
 
     private void getFilterItemsFromWeb() {
@@ -88,7 +91,6 @@ public class ListFragmentPresenter {
     }
 
     private void getAccountFromWeb() {
-        System.out.println("Get account from web");
         new AccountInteractor(view.getMainActivity(), this).execute();
     }
 
@@ -115,36 +117,9 @@ public class ListFragmentPresenter {
             put("Title - Descending", (a, b) -> b.getTitle().compareTo(a.getTitle()));
             put("Date - Ascending", (a, b) -> a.getDate().compareTo(b.getDate()));
             put("Date - Descending", (a, b) -> b.getDate().compareTo(a.getDate()));
-            put("Default", (a, b) -> 1);
+            put("Default", (a, b) -> 0);
         }};
 
-//        filterMap = new HashMap<String, Filter>() {{
-//            put(
-//                    Transaction.Type.INDIVIDUALPAYMENT.toString(),
-//                    (a) -> isInMonth(a) && a.getType().equals(Transaction.Type.INDIVIDUALPAYMENT.toString())
-//            );
-//            put(
-//                    Transaction.Type.REGULARPAYMENT.toString(),
-//                    (a) -> isInMonth(a) && a.getType().equals(Transaction.Type.REGULARPAYMENT.toString())
-//            );
-//            put(
-//                    Transaction.Type.PURCHASE.toString(),
-//                    (a) -> isInMonth(a) && a.getType().equals(Transaction.Type.PURCHASE.toString())
-//            );
-//            put(
-//                    Transaction.Type.INDIVIDUALINCOME.toString(),
-//                    (a) -> isInMonth(a) && a.getType().equals(Transaction.Type.INDIVIDUALINCOME.toString())
-//            );
-//            put(
-//                    Transaction.Type.REGULARINCOME.toString(),
-//                    (a) -> isInMonth(a) && a.getType().equals(Transaction.Type.REGULARINCOME.toString())
-//            );
-//            put(
-//                    Transaction.Type.ALL.toString(),
-//                    (a) -> isInMonth(a)
-//            );
-//
-//        }};
         filter = (transactionType, transaction) -> isInMonth(transaction) && (transactionType.equals(transaction.getTransactionType()) ^ transactionType.getName().toLowerCase().contains("all"));
     }
 
@@ -191,6 +166,7 @@ public class ListFragmentPresenter {
     private ArrayList<Transaction> getTransactions() {
         ArrayList<Transaction> transactions = new ArrayList<>();
         ArrayList<Transaction> transactionArrayList = model.getTransactions();
+
         for (int i = 0; i < transactionArrayList.size(); i++) {
             if (filter.test(type, transactionArrayList.get(i))) {
                 transactions.add(transactionArrayList.get(i));

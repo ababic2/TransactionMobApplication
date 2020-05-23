@@ -66,6 +66,7 @@ class JsonDecoder {
                 String date = transaction.getString("date").replace("T", " ").replace("Z", "");
                 String endDate = transaction.getString("endDate").replace("T", " ").replace("Z", "");
                 Date fixDate = !transaction.isNull("endDate") ? new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).parse(endDate) : null;
+//                Date fix2Date = !transaction.isNull("date") ? new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).parse(date) : null;
                 int interval = !transaction.isNull("transactionInterval") ? transaction.getInt("transactionInterval") : 0;
                 String description = !transaction.isNull("itemDescription") ? transaction.getString("itemDescription") : null;
                 result.add(new Transaction(
