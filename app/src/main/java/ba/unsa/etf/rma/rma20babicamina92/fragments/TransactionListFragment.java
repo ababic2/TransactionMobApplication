@@ -1,11 +1,7 @@
 package ba.unsa.etf.rma.rma20babicamina92.fragments;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +12,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -226,8 +224,11 @@ public class TransactionListFragment extends Fragment implements ListFragmentInt
 
     @Override
     public void setAccountData(Account account) {
-        globalAmountTextView.setText(String.format(Locale.getDefault(),"%.2f",account.getBudget()));
-        limitTextView.setText(String.format(Locale.getDefault(),"%.2f",account.getTotalLimit()));
+        if (account == null) {
+            return;
+        }
+        globalAmountTextView.setText(String.format(Locale.getDefault(),"%d",account.getBudget()));
+        limitTextView.setText(String.format(Locale.getDefault(),"%d",account.getTotalLimit()));
     }
 
     @Override

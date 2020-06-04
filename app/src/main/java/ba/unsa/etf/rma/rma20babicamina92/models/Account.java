@@ -4,20 +4,32 @@ import java.math.BigDecimal;
 
 public class Account {
     private int id;
-    private BigDecimal budget;
-    private BigDecimal totalLimit;
-    private BigDecimal monthLimit;
+    private int budget;
+    private int totalLimit;
+    private int monthLimit;
 
-    public Account(BigDecimal budget, BigDecimal totalLimit, BigDecimal monthLimit) {
+    public Account(int budget, int totalLimit, int monthLimit) {
         this.budget = budget;
         this.totalLimit = totalLimit;
         this.monthLimit = monthLimit;
     }
 
-    public Account(int id, BigDecimal budget, BigDecimal totalLimit, BigDecimal monthLimit) {
+    public Account(int id, int budget, int totalLimit, int monthLimit) {
         this.id = id;
         this.budget = budget;
         this.totalLimit = totalLimit;
+        this.monthLimit = monthLimit;
+    }
+
+    public void setBudget(int budget) {
+        this.budget = budget;
+    }
+
+    public void setTotalLimit(int totalLimit) {
+        this.totalLimit = totalLimit;
+    }
+
+    public void setMonthLimit(int monthLimit) {
         this.monthLimit = monthLimit;
     }
 
@@ -29,27 +41,15 @@ public class Account {
         this.id = id;
     }
 
-    public BigDecimal getBudget() {
+    public int getBudget() {
         return budget;
     }
 
-    public void setBudget(BigDecimal budget) {
-        this.budget = budget;
-    }
-
-    public BigDecimal getTotalLimit() {
+    public int getTotalLimit() {
         return totalLimit;
     }
 
-    public void setTotalLimit(BigDecimal totalLimit) {
-        this.totalLimit = totalLimit;
-    }
-
-    public BigDecimal getMonthLimit() {
+    public int getMonthLimit() {
         return monthLimit;
-    }
-
-    public void setMonthLimit(BigDecimal monthLimit) {
-        this.monthLimit = monthLimit;
     }
 }

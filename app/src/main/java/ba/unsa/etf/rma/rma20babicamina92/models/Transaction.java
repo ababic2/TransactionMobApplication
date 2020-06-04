@@ -30,7 +30,7 @@ public class Transaction implements Comparable<Transaction>, Serializable, Parce
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(title);
         dest.writeString(itemDescription);
-        dest.writeSerializable(amount);
+        dest.writeInt(amount);
         dest.writeSerializable(date);
         dest.writeSerializable(endDate);
         if (transactionInterval == null) {
@@ -46,7 +46,7 @@ public class Transaction implements Comparable<Transaction>, Serializable, Parce
 
         title = parcel.readString();
         itemDescription = parcel.readString();
-        amount = (BigDecimal) parcel.readSerializable();
+        amount =  parcel.readInt();
         date = (Date) parcel.readSerializable();
         endDate = (Date) parcel.readSerializable();
         if (parcel.readByte() == 0) {
@@ -60,13 +60,13 @@ public class Transaction implements Comparable<Transaction>, Serializable, Parce
     private Long id;
     private String title;
     private String itemDescription;
-    private BigDecimal amount;
+    private int amount;
     private Date date;
     private Date endDate;
     private Integer transactionInterval;
     private TransactionType transactionType;
 
-    public Transaction(Long id, String title, String itemDescription, BigDecimal amount, Date date, Date endDate, Integer transactionInterval, TransactionType transactionType) {
+    public Transaction(Long id, String title, String itemDescription, int amount, Date date, Date endDate, Integer transactionInterval, TransactionType transactionType) {
         this.id = id;
         this.title = title;
         this.itemDescription = itemDescription;
@@ -77,7 +77,7 @@ public class Transaction implements Comparable<Transaction>, Serializable, Parce
         this.transactionType = transactionType;
     }
 
-    public Transaction(Date date, BigDecimal amount, String title, String itemDescription, Integer transactionInterval, Date endDate, TransactionType transactionType) {
+    public Transaction(Date date, int amount, String title, String itemDescription, Integer transactionInterval, Date endDate, TransactionType transactionType) {
         this.date = date;
         this.amount = amount;
         this.title = title;
@@ -115,11 +115,11 @@ public class Transaction implements Comparable<Transaction>, Serializable, Parce
         this.date = date;
     }
 
-    public BigDecimal getAmount() {
+    public int getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
+    public void setAmount(int amount) {
         this.amount = amount;
     }
 
@@ -170,7 +170,7 @@ public class Transaction implements Comparable<Transaction>, Serializable, Parce
 
     @Override
     public int compareTo(Transaction o) {
-        return amount.compareTo(o.amount);
+        return Integer.compare(amount,o.amount);
     }
 
     @Override
@@ -180,7 +180,9 @@ public class Transaction implements Comparable<Transaction>, Serializable, Parce
 
         Transaction that = (Transaction) o;
 
-        if (amount.equals(that.amount)) return false;
+        if (amount == that.amount) {
+            return false;
+        }
         if (transactionInterval.equals(that.transactionInterval)) return false;
         if(date.getYear() != that.getDate().getYear()) return false;
         if(date.getMonth() != that.getDate().getMonth()) return false;
@@ -195,7 +197,7 @@ public class Transaction implements Comparable<Transaction>, Serializable, Parce
     @Override
     public int hashCode() {
         int result = date != null ? date.hashCode() : 0;
-        result = 31 * result + amount.hashCode();
+        result = 31 * result + amount;
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (itemDescription != null ? itemDescription.hashCode() : 0);
         result = 31 * result + transactionInterval;

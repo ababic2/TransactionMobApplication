@@ -251,7 +251,7 @@ public class TransactionDetailFragment extends Fragment {
         oldTransaction = transaction;
         titleTextView.setText(oldTransaction.getTitle());
         descriptionTextView.setText(oldTransaction.getItemDescription());
-        amountTextView.setText(String.format(Locale.getDefault(),"%.2f",oldTransaction.getAmount()));
+        amountTextView.setText(String.format(Locale.getDefault(),"%d",oldTransaction.getAmount()));
         String displayDate = new SimpleDateFormat("d.M.y", Locale.getDefault()).format(oldTransaction.getDate());
         dateTextView.setText(displayDate);
         String displayEndDate=null;
@@ -346,7 +346,7 @@ public class TransactionDetailFragment extends Fragment {
             Date endDate = endDateTextView.getText().toString().isEmpty() ? null : new SimpleDateFormat("d.M.y", Locale.getDefault()).parse(endDateTextView.getText().toString());
             transaction = new Transaction(
                     new SimpleDateFormat("d.M.y", Locale.getDefault()).parse(dateTextView.getText().toString()),
-                    new BigDecimal(amountTextView.getText().toString()),
+                    new BigDecimal(amountTextView.getText().toString()).intValue(),
                     titleTextView.getText().toString(),
                     descriptionTextView.getText().toString(),
                     Integer.parseInt(transactionIntervalTextView.getText().toString()),

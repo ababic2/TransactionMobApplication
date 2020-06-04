@@ -24,7 +24,7 @@ class JsonEncoder {
         String result = "{" +
                 "\"title\":\""+param.getTitle()+"\"," +
                 "\"itemDescription\":"+(param.getItemDescription()==null?"":"\"")+param.getItemDescription()+(param.getItemDescription()==null?"":"\"")+"," +
-                "\"amount\":"+param.getAmount().toBigInteger().intValue()+"," +
+                "\"amount\":"+param.getAmount()+"," +
                 "\"date\":"+(date==null?"":"\"")+date+(date==null?"":"\"")+"," +
                 "\"endDate\":"+(endDate==null?"":"\"")+endDate+(endDate==null?"":"\"")+"," +
                 "\"transactionInterval\":"+param.getTransactionInterval()+"," +

@@ -24,18 +24,18 @@ public class GraphsPresenter {
 
     private static class Payment {
 
-        private BigDecimal amount;
+        private int amount;
         private Date date;
-        Payment(BigDecimal amount, Date date) {
+        Payment(int amount, Date date) {
             this.amount = amount;
             this.date = date;
         }
 
-        BigDecimal getAmount() {
+        int getAmount() {
             return amount;
         }
 
-        public void setAmount(BigDecimal amount) {
+        public void setAmount(int amount) {
             this.amount = amount;
         }
 
@@ -229,12 +229,12 @@ public class GraphsPresenter {
             if (element.getTransactionType().toString().contains("REGULAR")) {
                 payments.addAll(convertRegularToIndividual(element));
             } else {
-                BigDecimal sign = new BigDecimal(1);
+                int sign = 1;
                 if (element.getTransactionType().toString().contains("INCOME")) {
-                    sign = new BigDecimal(-1);
+                    sign = -1;
                 }
                 payments.add(
-                        new Payment(element.getAmount().multiply(sign),
+                        new Payment(element.getAmount() * sign,
                                 new Date(element.getDate().getTime())));
             }
         }
@@ -244,9 +244,9 @@ public class GraphsPresenter {
     }
 
     private ArrayList<Payment> convertRegularToIndividual(Transaction transaction){
-        BigDecimal sign = new BigDecimal(1);
+        int sign = 1;
         if (transaction.getTransactionType().toString().contains("INCOME")) {
-            sign = new BigDecimal(-1);
+            sign = -1;
         }
         ArrayList<Payment> payments = new ArrayList<>();
         // petlja koja prolazi kroz "dane" kada trebaju biti transakcije
@@ -256,7 +256,7 @@ public class GraphsPresenter {
              date.setDate(date.getDate() + transaction.getTransactionInterval())) {
 
             payments.add(new Payment(
-                    transaction.getAmount().multiply(sign),
+                    transaction.getAmount() * sign,
                     new Date(date.getTime())));
         }
         return new ArrayList<>(payments);

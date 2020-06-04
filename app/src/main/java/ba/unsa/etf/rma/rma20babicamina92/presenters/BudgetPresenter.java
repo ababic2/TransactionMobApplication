@@ -30,17 +30,17 @@ public class BudgetPresenter {
     }
 
     private void updateFragment(BudgetFragment fragment) {
-        BigDecimal budget = model.getAccount().getBudget();
-        BigDecimal monthly = model.getAccount().getMonthLimit();
-        BigDecimal total = model.getAccount().getTotalLimit();
-        fragment.setBudgetFieldContent(String.format(Locale.getDefault(),"Budget: %.2f",budget));
-        fragment.setMonthlyFieldContent(String.format(Locale.getDefault(),"%.2f",monthly));
-        fragment.setTotalFieldContent(String.format(Locale.getDefault(),"%.2f",total));
+        int budget = model.getAccount().getBudget();
+        int monthly = model.getAccount().getMonthLimit();
+        int total = model.getAccount().getTotalLimit();
+        fragment.setBudgetFieldContent(String.format(Locale.getDefault(),"Budget: %d",budget));
+        fragment.setMonthlyFieldContent(String.format(Locale.getDefault(),"%d",monthly));
+        fragment.setTotalFieldContent(String.format(Locale.getDefault(),"%d",total));
     }
 
     public void updateLimits(String monthly, String total) {
-        BigDecimal monthlyLimit = new BigDecimal(monthly);
-        BigDecimal totalLimit = new BigDecimal(total);
+        int monthlyLimit = new BigDecimal(monthly).intValue();
+        int totalLimit = new BigDecimal(total).intValue();
         model.getAccount().setMonthLimit(monthlyLimit);
         model.getAccount().setTotalLimit(totalLimit);
         updateFragment(fragment);

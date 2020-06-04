@@ -1,9 +1,11 @@
 package ba.unsa.etf.rma.rma20babicamina92;
 
 import android.app.ProgressDialog;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -17,10 +19,11 @@ import ba.unsa.etf.rma.rma20babicamina92.fragments.GraphsFragment;
 import ba.unsa.etf.rma.rma20babicamina92.fragments.TransactionDetailFragment;
 import ba.unsa.etf.rma.rma20babicamina92.fragments.TransactionListFragment;
 import ba.unsa.etf.rma.rma20babicamina92.interactor.TransactionTypeInteractor;
+import ba.unsa.etf.rma.rma20babicamina92.offline_tools.ConnectivityChangeReceiver;
 import ba.unsa.etf.rma.rma20babicamina92.utils.SimpleGestureFilter;
 
 public class MainActivity extends FragmentActivity implements
-        SimpleGestureFilter.SimpleGestureListener {
+        SimpleGestureFilter.SimpleGestureListener, ConnectivityChangeReceiver.Receiver {
 
     private static ProgressDialog dialog;
     private static ArrayList<ProgressDialog> dialogs = new ArrayList<>();
@@ -32,6 +35,7 @@ public class MainActivity extends FragmentActivity implements
     public static int slider = 0;
 
     public static boolean twoPane;
+    private ConnectivityChangeReceiver myNetworkChangeReceiver;
 
     @Override
     protected void onPostResume() {
@@ -56,11 +60,21 @@ public class MainActivity extends FragmentActivity implements
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        this.unregisterReceiver(myNetworkChangeReceiver);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         twoPane = false;
         setContentView(R.layout.activity_main);
         cleanStartFragments();
+        myNetworkChangeReceiver = new ConnectivityChangeReceiver();
+        myNetworkChangeReceiver.setMyReceiver(this);
+        IntentFilter intentFilter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
+        this.registerReceiver(myNetworkChangeReceiver,intentFilter);
 
         // Detect touched area
         if (!twoPane) {
@@ -172,5 +186,10 @@ public class MainActivity extends FragmentActivity implements
 
     @Override
     public void onDoubleTap() {
+    }
+
+    @Override
+    public void onReceive(boolean connected) {
+        Toast.makeText(this, "Connected: " + connected, Toast.LENGTH_LONG).show();
     }
 }

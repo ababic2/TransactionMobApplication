@@ -16,18 +16,18 @@ import ba.unsa.etf.rma.rma20babicamina92.presenters.ListFragmentPresenter;
 public class MainModel {
     private static class Payment {
 
-        private BigDecimal amount;
+        private int amount;
         private Date date;
-        Payment(BigDecimal amount, Date date) {
+        Payment(int amount, Date date) {
             this.amount = amount;
             this.date = date;
         }
 
-        BigDecimal getAmount() {
+        int getAmount() {
             return amount;
         }
 
-        public void setAmount(BigDecimal amount) {
+        public void setAmount(int amount) {
             this.amount = amount;
         }
 
@@ -56,9 +56,9 @@ public class MainModel {
 
     private MainModel() {
         account = new Account(
-                new BigDecimal(19270.30),
-                new BigDecimal(15000.00),
-                new BigDecimal(1000.00)
+                19270,
+                15000,
+                1000
         );
         initializeTransactions();
     }
@@ -94,15 +94,15 @@ public class MainModel {
             if (element.getTransactionType().getName().toUpperCase().contains("REGULAR")) {
                 payments.addAll(convertRegularToIndividual(element));
             } else {
-                BigDecimal sign = new BigDecimal(1);
+                int sign = (1);
                 if (element.getTransactionType().getName().toUpperCase().contains("INCOME")) {
-                    sign = new BigDecimal(-1);
+                    sign = (-1);
                 }
-                payments.add(new Payment(element.getAmount().multiply(sign), element.getDate()));
+                payments.add(new Payment(element.getAmount()*(sign), element.getDate()));
             }
         }
         Collections.sort(payments, (a, b) -> a.getDate().compareTo(b.getDate()));
-        BigDecimal status = new BigDecimal(0);
+        int status = (0);
         if (payments.size() == 0) {
             return false;
         }
@@ -111,14 +111,14 @@ public class MainModel {
             Payment element = payments.get(i);
             if (current.getMonth() == element.getDate().getMonth()
                     && current.getYear() == element.getDate().getYear()) {
-                status = status.add(element.getAmount());
-                if (status.compareTo(account.getMonthLimit()) > 0) {
+                status = status + (element.getAmount());
+                if (status > account.getMonthLimit()) {
                     return true;
                 }
             } else {
                 current = element.getDate();
                 status = element.getAmount();
-                if (status.compareTo(account.getMonthLimit()) > 0) {
+                if (status > account.getMonthLimit()) {
                     return true;
                 }
             }
@@ -135,7 +135,7 @@ public class MainModel {
     }
 
     private boolean testIfOverTotalLimit(ArrayList<Transaction> testTransactions) {
-        BigDecimal status = new BigDecimal(0);
+        int status = (0);
 
         for (int i = 0; i < testTransactions.size(); i++) {
             Transaction element = testTransactions.get(i);
@@ -143,24 +143,24 @@ public class MainModel {
                 if (element.getTransactionType().getName().toUpperCase().replace(" ", "").equals("REGULARINCOME")) {
                     long difference = element.getEndDate().getTime() - element.getDate().getTime();
                     long days = difference / millisecondsInADay;
-                    long times = days / element.getTransactionInterval();
-                    status = status.subtract(element.getAmount().multiply(new BigDecimal(times)));
+                    int times = (int) (days / element.getTransactionInterval());
+                    status = status - (element.getAmount() * (times));
                 } else {
-                    status = status.subtract(element.getAmount());
+                    status = status - (element.getAmount());
                 }
             } else {
                 if (element.getTransactionType().getName().toUpperCase().replace(" ","").equals("REGULARPAYMENT")) {
                     long difference = element.getEndDate().getTime() - element.getDate().getTime();
                     long days = difference / millisecondsInADay;
-                    long times = days / element.getTransactionInterval();
-                    status = status.add(element.getAmount().multiply(new BigDecimal(times)));
+                    int times = (int) (days / element.getTransactionInterval());
+                    status = status + (element.getAmount()*(times));
                 } else {
-                    status = status.add(element.getAmount());
+                    status = status + (element.getAmount());
                 }
             }
         }
         //status veci od limita
-        return status.compareTo(account.getTotalLimit()) > 0;
+        return status > account.getTotalLimit();
     }
 
     public boolean isOverMonthlyLimit(Transaction transaction) {
@@ -185,17 +185,17 @@ public class MainModel {
             List<Payment> payments = convertRegularToIndividual(transaction);
             int old = 0;
             for (Payment payment : payments) {
-                old -= payment.amount.intValue();
+                old -= payment.amount;
             }
             saldo = old;
         } else {
             if (transaction.getTransactionType().getName().toLowerCase().contains("income")) {
-                saldo = transaction.getAmount().intValue();
+                saldo = transaction.getAmount();
             } else {
-                saldo = -transaction.getAmount().intValue();
+                saldo = -transaction.getAmount();
             }
         }
-        account.setBudget(account.getBudget().add(new BigDecimal(saldo)));
+        account.setBudget(account.getBudget() + (saldo));
         new TransactionCreateInteractor(ListFragmentPresenter.getInstance().getView().getMainActivity()).execute(transaction);
         new AccountPostInteractor(ListFragmentPresenter.getInstance().getView().getMainActivity()).execute(account);
         transactions.add(transaction);
@@ -209,31 +209,31 @@ public class MainModel {
             List<Payment> payments = convertRegularToIndividual(oldTransaction);
             int old = 0;
             for (Payment payment : payments) {
-                old -= payment.amount.intValue();
+                old -= payment.amount;
             }
             before = old;
         } else {
             if (oldTransaction.getTransactionType().getName().toLowerCase().contains("income")) {
-                before = oldTransaction.getAmount().intValue();
+                before = oldTransaction.getAmount();
             } else {
-                before = -oldTransaction.getAmount().intValue();
+                before = -oldTransaction.getAmount();
             }
         }
         if (newTransaction.getTransactionType().getName().toLowerCase().contains("regular")) {
             List<Payment> payments = convertRegularToIndividual(newTransaction);
             int old = 0;
             for (Payment payment : payments) {
-                old -= payment.amount.intValue();
+                old -= payment.amount;
             }
             after = old;
         } else {
             if (newTransaction.getTransactionType().getName().toLowerCase().contains("income")) {
-                after = newTransaction.getAmount().intValue();
+                after = newTransaction.getAmount();
             } else {
-                after = -newTransaction.getAmount().intValue();
+                after = -newTransaction.getAmount();
             }
         }
-        account.setBudget(account.getBudget().add(new BigDecimal(after-before)));
+        account.setBudget(account.getBudget()+(after-before));
         newTransaction.setId(oldTransaction.getId());
         new TransactionUpdateInteractor(ListFragmentPresenter.getInstance().getView().getMainActivity()).execute(newTransaction);
         new AccountPostInteractor(ListFragmentPresenter.getInstance().getView().getMainActivity()).execute(account);
@@ -255,7 +255,7 @@ public class MainModel {
             if (that.getItemDescription()!=null && !that.getItemDescription().equals(transaction.getItemDescription())) {
                 continue;
             }
-            if (!that.getAmount().equals(transaction.getAmount())) {
+            if (!(that.getAmount()==(transaction.getAmount()))) {
                 continue;
             }
             if (!that.getDate().equals(transaction.getDate())) {
@@ -290,9 +290,9 @@ public class MainModel {
     }
 
     private List<Payment> convertRegularToIndividual(Transaction transaction){
-        BigDecimal sign = new BigDecimal(1);
+        int sign = (1);
         if (transaction.getTransactionType().getName().toUpperCase().contains("INCOME")) {
-            sign = new BigDecimal(-1);
+            sign = (-1);
         }
         List<Payment> payments = new ArrayList<>();
 
@@ -301,7 +301,7 @@ public class MainModel {
              date.before(transaction.getEndDate())
                      || date.getTime() == transaction.getEndDate().getTime();
              date.setTime(date.getTime() + transaction.getTransactionInterval() * millisecondsInADay)) {
-            payments.add(new Payment(transaction.getAmount().multiply(sign), date));
+            payments.add(new Payment(transaction.getAmount()*(sign), date));
         }
 
         return payments;

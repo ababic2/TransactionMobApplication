@@ -39,9 +39,9 @@ class JsonDecoder {
             JSONObject root = new JSONObject(result);
             return new Account(
                     root.getInt("id"),
-                    new BigDecimal(root.getInt("budget")),
-                    new BigDecimal(root.getInt("totalLimit")),
-                    new BigDecimal(root.getInt("monthLimit"))
+                    root.getInt("budget"),
+                    root.getInt("totalLimit"),
+                    root.getInt("monthLimit")
                     );
         } catch (JSONException e) {
             System.out.println("JSON not ok! --- Account decode");
@@ -73,7 +73,7 @@ class JsonDecoder {
                     transaction.getLong("id"),
                     transaction.getString("title"),
                     description,
-                    new BigDecimal(transaction.getInt("amount")),
+                    transaction.getInt("amount"),
                     new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).parse(date),
                     fixDate,
                     interval,
