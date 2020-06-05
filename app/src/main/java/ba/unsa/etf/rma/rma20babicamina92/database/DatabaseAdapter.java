@@ -7,6 +7,8 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.Locale;
+
 import ba.unsa.etf.rma.rma20babicamina92.models.AccountAction;
 import ba.unsa.etf.rma.rma20babicamina92.models.TransactionAction;
 
@@ -76,6 +78,14 @@ public class DatabaseAdapter {
         return databaseAdapter;
     }
 
+    public boolean deleteTransaction(long id) {
+        return database.delete(TABLE_TRANSACTION_ACTIONS, String.format(Locale.getDefault(), "%s=%d", COLUMN_TRANSACTION_ID, id), null) > 0;
+    }
+
+    public boolean deleteAccount(long id) {
+        return database.delete(TABLE_ACCOUNT_ACTIONS, String.format(Locale.getDefault(), "%s=%d", COLUMN_ACCOUNT_ID, id), null) > 0;
+    }
+
     public Cursor getAccountListCursor() {
         return database.query(TABLE_ACCOUNT_ACTIONS, null, null, null, null, null, null);
     }
@@ -87,6 +97,20 @@ public class DatabaseAdapter {
     public static long getNextId(SQLiteDatabase database, String table) {
         return DatabaseUtils.queryNumEntries(database, table);
     }
+
+    public Cursor getTransactionByTransactionId(long id) {
+        return database.rawQuery("SELECT * FROM "+TABLE_TRANSACTION_ACTIONS+" WHERE "+COLUMN_TRANSACTION_ID+"="+id,null);
+    }
+
+    public boolean updateAccountAction(AccountAction accountAction) {
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_ACTION_NAME,accountAction.getName());
+        values.put(COLUMN_ACCOUNT_BUDGET,accountAction.getAccount().getBudget());
+        values.put(COLUMN_ACCOUNT_MONTHLY,accountAction.getAccount().getMonthLimit());
+        values.put(COLUMN_ACCOUNT_TOTAL,accountAction.getAccount().getTotalLimit());
+        return database.update(TABLE_ACCOUNT_ACTIONS, values, " " + COLUMN_ACCOUNT_ID + "=" + accountAction.getAccount().getId(), null)>0;
+    }
+
 
     public boolean insertAccountAction(AccountAction accountAction) {
         ContentValues values = new ContentValues();
@@ -100,6 +124,20 @@ public class DatabaseAdapter {
         NEXT_ACCOUNT_ID++;
         return result;
     }
+
+    public boolean updateTransactionAction(TransactionAction transactionAction) {
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_ACTION_NAME,transactionAction.getName());
+        values.put(COLUMN_TRANSACTION_TITLE,transactionAction.getTransaction().getTitle());
+        values.put(COLUMN_TRANSACTION_DESCRIPTION,transactionAction.getTransaction().getItemDescription());
+        values.put(COLUMN_TRANSACTION_AMOUNT,transactionAction.getTransaction().getAmount());
+        values.put(COLUMN_TRANSACTION_DATE, transactionAction.getTransaction().getDate().getTime());
+        values.put(COLUMN_TRANSACTION_END_DATE, transactionAction.getTransaction().getEndDate().getTime());
+        values.put(COLUMN_TRANSACTION_INTERVAL, transactionAction.getTransaction().getTransactionInterval());
+        values.put(COLUMN_TRANSACTION_TYPE, transactionAction.getTransaction().getTransactionType().getId());
+        return database.update(TABLE_TRANSACTION_ACTIONS, values, " "+COLUMN_TRANSACTION_ID+"="+transactionAction.getTransaction().getId(),null)>0;
+    }
+
 
     public boolean insertTransactionAction(TransactionAction transactionAction) {
         ContentValues values = new ContentValues();
