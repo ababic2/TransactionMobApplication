@@ -100,7 +100,7 @@ public class GraphsPresenter {
                     float value = (float) Double.parseDouble(
                             String.format(
                                     Locale.getDefault(),
-                                    "%.2f",
+                                    "%d",
                                     payment.getAmount()
                             )
                     );

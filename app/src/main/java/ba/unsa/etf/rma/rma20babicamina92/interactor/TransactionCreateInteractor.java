@@ -2,14 +2,8 @@ package ba.unsa.etf.rma.rma20babicamina92.interactor;
 
 import android.os.AsyncTask;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-
 import ba.unsa.etf.rma.rma20babicamina92.MainActivity;
 import ba.unsa.etf.rma.rma20babicamina92.R;
-import ba.unsa.etf.rma.rma20babicamina92.models.MainModel;
 import ba.unsa.etf.rma.rma20babicamina92.models.Transaction;
 
 public class TransactionCreateInteractor extends AsyncTask<Transaction, Integer, String> {
@@ -23,13 +17,13 @@ public class TransactionCreateInteractor extends AsyncTask<Transaction, Integer,
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        MainActivity.loadingOn(mainActivity, "Kreiranje transakcije. Molimo sačekajte.");
+        MainActivity.loadingOn(mainActivity, "TRANSACTION_CREATE", "Kreiranje transakcije. Molimo sačekajte.");
     }
 
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
-        MainActivity.loadingOff();
+        MainActivity.loadingOff("TRANSACTION_CREATE");
     }
 
     @Override

@@ -30,7 +30,7 @@ public class TransactionTypeInteractor extends AsyncTask<String,Integer,String> 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        MainActivity.loadingOn(context, "Dohvatanje tipova transakcija. Molimo sačekajte.");
+        MainActivity.loadingOn(context, "TRANSACTION_TYPE_GET", "Dohvatanje tipova transakcija. Molimo sačekajte.");
     }
 
     @Override
@@ -45,7 +45,7 @@ public class TransactionTypeInteractor extends AsyncTask<String,Integer,String> 
         transactionTypes.add(0, new TransactionType(0,"All", R.mipmap.ic_six));
         transactionTypes.add(new TransactionType(0,"All", R.mipmap.ic_six));
         listFragmentPresenter.setFilterItems(transactionTypes);
-        MainActivity.loadingOff();
+        MainActivity.loadingOff("TRANSACTION_TYPE_GET");
 
     }
 }

@@ -12,21 +12,24 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import ba.unsa.etf.rma.rma20babicamina92.fragments.BudgetFragment;
 import ba.unsa.etf.rma.rma20babicamina92.fragments.GraphsFragment;
 import ba.unsa.etf.rma.rma20babicamina92.fragments.TransactionDetailFragment;
 import ba.unsa.etf.rma.rma20babicamina92.fragments.TransactionListFragment;
-import ba.unsa.etf.rma.rma20babicamina92.interactor.TransactionTypeInteractor;
 import ba.unsa.etf.rma.rma20babicamina92.offline_tools.ConnectivityChangeReceiver;
 import ba.unsa.etf.rma.rma20babicamina92.utils.SimpleGestureFilter;
 
 public class MainActivity extends FragmentActivity implements
         SimpleGestureFilter.SimpleGestureListener, ConnectivityChangeReceiver.Receiver {
+    public static boolean isConnected = false;
 
     private static ProgressDialog dialog;
     private static ArrayList<ProgressDialog> dialogs = new ArrayList<>();
+    private static Map<String, ProgressDialog> dialogMap = new HashMap<>();
     private SimpleGestureFilter detector;
 
     private TransactionListFragment masterFragment;
@@ -42,20 +45,25 @@ public class MainActivity extends FragmentActivity implements
         super.onPostResume();
     }
 
-    public static void loadingOn(MainActivity mainActivity, String message) {
-        System.out.println("MainActivity loadingOn " + dialogs.size());
-        dialog = ProgressDialog.show(mainActivity, "",
+    public static void loadingOn(MainActivity mainActivity, String key, String message) {
+        loadingOff(key);
+        dialog = ProgressDialog.show(mainActivity, "Info",
                 message, true);
-        dialogs.add(0, dialog);
+        dialogMap.put(key, dialog);
+//        dialogs.add(0, dialog);
     }
 
-    public static void loadingOff() {
-        System.out.println("MainActivity loadingOff " + dialogs.size());
-        if (dialogs.size() > 0) {
-            dialog = dialogs.get(0);
-            dialogs.remove(0);
+    public static void loadingOff(String key) {
+        dialog = dialogMap.get(key);
+        if (dialog != null) {
             dialog.dismiss();
         }
+        dialogMap.remove(key);
+//        if (dialogs.size() > 0) {
+//            dialog = dialogs.get(0);
+//            dialogs.remove(0);
+//            dialog.dismiss();
+//        }
         dialog = null;
     }
 
@@ -190,6 +198,7 @@ public class MainActivity extends FragmentActivity implements
 
     @Override
     public void onReceive(boolean connected) {
+        isConnected = connected;
         Toast.makeText(this, "Connected: " + connected, Toast.LENGTH_LONG).show();
     }
 }

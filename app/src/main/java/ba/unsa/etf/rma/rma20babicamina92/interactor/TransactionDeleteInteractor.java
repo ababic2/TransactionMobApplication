@@ -17,13 +17,13 @@ public class TransactionDeleteInteractor extends AsyncTask<Transaction,Integer,S
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        MainActivity.loadingOn(mainActivity, "Brisanje transakcije. Molimo sačekajte.");
+        MainActivity.loadingOn(mainActivity, "TRANSACTION_DELETE", "Brisanje transakcije. Molimo sačekajte.");
     }
 
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
-        MainActivity.loadingOff();
+        MainActivity.loadingOff("TRANSACTION_DELETE");
     }
 
     @Override

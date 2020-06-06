@@ -25,7 +25,7 @@ public class AccountInteractor extends AsyncTask<String,Integer,String> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        MainActivity.loadingOn(mainActivity, "Dohvatanje podataka o računu. Molimo sačekajte.");
+        MainActivity.loadingOn(mainActivity,"ACCOUNT_GET", "Dohvatanje podataka o računu. Molimo sačekajte.");
     }
 
     @Override
@@ -33,6 +33,6 @@ public class AccountInteractor extends AsyncTask<String,Integer,String> {
         super.onPostExecute(result);
         Account account = JsonDecoder.decodeAccount(result);
         listFragmentPresenter.setAccount(account);
-        MainActivity.loadingOff();
+        MainActivity.loadingOff("ACCOUNT_GET");
     }
 }

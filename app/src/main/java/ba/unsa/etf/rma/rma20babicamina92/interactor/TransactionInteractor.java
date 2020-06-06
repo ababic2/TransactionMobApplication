@@ -26,7 +26,7 @@ public class TransactionInteractor extends AsyncTask<String, Integer, String> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        MainActivity.loadingOn(mainActivity, "Dohvatanje transakcija. Molimo sačekajte.");
+        MainActivity.loadingOn(mainActivity, "TRANSACTION_GET", "Dohvatanje transakcija. Molimo sačekajte.");
     }
 
     @Override
@@ -48,7 +48,7 @@ public class TransactionInteractor extends AsyncTask<String, Integer, String> {
             presenter.datePickerClickedRight();
             presenter.datePickerCLickedLeft();
         }
-        MainActivity.loadingOff();
+        MainActivity.loadingOff("TRANSACTION_GET");
     }
 
     @Override

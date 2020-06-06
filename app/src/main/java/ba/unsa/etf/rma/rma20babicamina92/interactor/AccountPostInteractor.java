@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import ba.unsa.etf.rma.rma20babicamina92.MainActivity;
 import ba.unsa.etf.rma.rma20babicamina92.R;
 import ba.unsa.etf.rma.rma20babicamina92.models.Account;
-import ba.unsa.etf.rma.rma20babicamina92.presenters.BudgetPresenter;
 
 public class AccountPostInteractor extends AsyncTask<Account, Integer, String> {
     private MainActivity mainActivity;
@@ -24,12 +23,12 @@ public class AccountPostInteractor extends AsyncTask<Account, Integer, String> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        MainActivity.loadingOn(mainActivity, "Slanje podataka o računu na web servis. Molimo sačekajte.");
+        MainActivity.loadingOn(mainActivity, "ACCOUNT_POST", "Slanje podataka o računu na web servis. Molimo sačekajte.");
     }
 
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
-        MainActivity.loadingOff();
+        MainActivity.loadingOff("ACCOUNT_POST");
     }
 }

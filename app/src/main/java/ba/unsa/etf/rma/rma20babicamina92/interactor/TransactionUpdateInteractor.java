@@ -17,13 +17,13 @@ public class TransactionUpdateInteractor extends AsyncTask<Transaction, Integer,
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        MainActivity.loadingOn(mainActivity, "Ažuriranje transakcije. Molimo sačekajte.");
+        MainActivity.loadingOn(mainActivity, "TRANSACTION_UPDATE", "Ažuriranje transakcije. Molimo sačekajte.");
     }
 
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
-        MainActivity.loadingOff();
+        MainActivity.loadingOff("TRANSACTION_UPDATE");
     }
 
     @Override
