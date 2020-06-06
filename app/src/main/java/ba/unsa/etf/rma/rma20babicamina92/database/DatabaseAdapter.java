@@ -78,14 +78,15 @@ public class DatabaseAdapter {
         return databaseAdapter;
     }
 
-    public boolean deleteTransaction(long id) {
-        return database.delete(TABLE_TRANSACTION_ACTIONS, String.format(Locale.getDefault(), "%s=%d", COLUMN_TRANSACTION_ID, id), null) > 0;
+    public int deleteTransaction(String clause, String[] args) {
+        return database.delete(TABLE_TRANSACTION_ACTIONS, clause, args);
     }
+    //String.format(Locale.getDefault(), "%s=%d", COLUMN_TRANSACTION_ID
 
-    public boolean deleteAccount(long id) {
-        return database.delete(TABLE_ACCOUNT_ACTIONS, String.format(Locale.getDefault(), "%s=%d", COLUMN_ACCOUNT_ID, id), null) > 0;
+    public int deleteAccount(String clause, String[] args) {
+        return database.delete(TABLE_ACCOUNT_ACTIONS, clause, args);
     }
-
+    //String.format(Locale.getDefault(), "%s=%d", COLUMN_ACCOUNT_ID, id)
     public Cursor getAccountListCursor() {
         return database.query(TABLE_ACCOUNT_ACTIONS, null, null, null, null, null, null);
     }
@@ -102,58 +103,60 @@ public class DatabaseAdapter {
         return database.rawQuery("SELECT * FROM "+TABLE_TRANSACTION_ACTIONS+" WHERE "+COLUMN_TRANSACTION_ID+"="+id,null);
     }
 
-    public boolean updateAccountAction(AccountAction accountAction) {
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_ACTION_NAME,accountAction.getName());
-        values.put(COLUMN_ACCOUNT_BUDGET,accountAction.getAccount().getBudget());
-        values.put(COLUMN_ACCOUNT_MONTHLY,accountAction.getAccount().getMonthLimit());
-        values.put(COLUMN_ACCOUNT_TOTAL,accountAction.getAccount().getTotalLimit());
-        return database.update(TABLE_ACCOUNT_ACTIONS, values, " " + COLUMN_ACCOUNT_ID + "=" + accountAction.getAccount().getId(), null)>0;
+    public int updateAccountAction(ContentValues values, String clause, String[] args) {
+//        ContentValues values = new ContentValues();
+//        values.put(COLUMN_ACTION_NAME,accountAction.getName());
+//        values.put(COLUMN_ACCOUNT_BUDGET,accountAction.getAccount().getBudget());
+//        values.put(COLUMN_ACCOUNT_MONTHLY,accountAction.getAccount().getMonthLimit());
+//        values.put(COLUMN_ACCOUNT_TOTAL,accountAction.getAccount().getTotalLimit());
+        return database.update(TABLE_ACCOUNT_ACTIONS, values, clause, args);
     }
+    // " " + COLUMN_ACCOUNT_ID + "=" + values.getAsInteger(COLUMN_ACCOUNT_ID)
 
 
-    public boolean insertAccountAction(AccountAction accountAction) {
-        ContentValues values = new ContentValues();
+    public long insertAccountAction(ContentValues values) {
+//        ContentValues values = new ContentValues();
         values.put(COLUMN_ACTION_ID, NEXT_ACCOUNT_ID);
-        values.put(COLUMN_ACTION_NAME,accountAction.getName());
-        values.put(COLUMN_ACCOUNT_ID,accountAction.getAccount().getId());
-        values.put(COLUMN_ACCOUNT_BUDGET,accountAction.getAccount().getBudget());
-        values.put(COLUMN_ACCOUNT_MONTHLY,accountAction.getAccount().getMonthLimit());
-        values.put(COLUMN_ACCOUNT_TOTAL,accountAction.getAccount().getTotalLimit());
+//        values.put(COLUMN_ACTION_NAME,accountAction.getName());
+//        values.put(COLUMN_ACCOUNT_ID,accountAction.getAccount().getId());
+//        values.put(COLUMN_ACCOUNT_BUDGET,accountAction.getAccount().getBudget());
+//        values.put(COLUMN_ACCOUNT_MONTHLY,accountAction.getAccount().getMonthLimit());
+//        values.put(COLUMN_ACCOUNT_TOTAL,accountAction.getAccount().getTotalLimit());
         boolean result = database.insert(TABLE_ACCOUNT_ACTIONS, null, values)>0;
         NEXT_ACCOUNT_ID++;
-        return result;
+        return NEXT_ACCOUNT_ID;
     }
 
-    public boolean updateTransactionAction(TransactionAction transactionAction) {
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_ACTION_NAME,transactionAction.getName());
-        values.put(COLUMN_TRANSACTION_TITLE,transactionAction.getTransaction().getTitle());
-        values.put(COLUMN_TRANSACTION_DESCRIPTION,transactionAction.getTransaction().getItemDescription());
-        values.put(COLUMN_TRANSACTION_AMOUNT,transactionAction.getTransaction().getAmount());
-        values.put(COLUMN_TRANSACTION_DATE, transactionAction.getTransaction().getDate().getTime());
-        values.put(COLUMN_TRANSACTION_END_DATE, transactionAction.getTransaction().getEndDate().getTime());
-        values.put(COLUMN_TRANSACTION_INTERVAL, transactionAction.getTransaction().getTransactionInterval());
-        values.put(COLUMN_TRANSACTION_TYPE, transactionAction.getTransaction().getTransactionType().getId());
-        return database.update(TABLE_TRANSACTION_ACTIONS, values, " "+COLUMN_TRANSACTION_ID+"="+transactionAction.getTransaction().getId(),null)>0;
+    public int updateTransactionAction(ContentValues values, String clause, String[] args) {
+//        ContentValues values = new ContentValues();
+//        values.put(COLUMN_ACTION_NAME,transactionAction.getName());
+//        values.put(COLUMN_TRANSACTION_TITLE,transactionAction.getTransaction().getTitle());
+//        values.put(COLUMN_TRANSACTION_DESCRIPTION,transactionAction.getTransaction().getItemDescription());
+//        values.put(COLUMN_TRANSACTION_AMOUNT,transactionAction.getTransaction().getAmount());
+//        values.put(COLUMN_TRANSACTION_DATE, transactionAction.getTransaction().getDate().getTime());
+//        values.put(COLUMN_TRANSACTION_END_DATE, transactionAction.getTransaction().getEndDate().getTime());
+//        values.put(COLUMN_TRANSACTION_INTERVAL, transactionAction.getTransaction().getTransactionInterval());
+//        values.put(COLUMN_TRANSACTION_TYPE, transactionAction.getTransaction().getTransactionType().getId());
+        return database.update(TABLE_TRANSACTION_ACTIONS, values, clause,args);
+        // " "+COLUMN_TRANSACTION_ID+"="+values.get(COLUMN_TRANSACTION_ID)
     }
 
 
-    public boolean insertTransactionAction(TransactionAction transactionAction) {
-        ContentValues values = new ContentValues();
+    public long insertTransactionAction(ContentValues values) {
+//        ContentValues values = new ContentValues();
         values.put(COLUMN_ACTION_ID, NEXT_ACCOUNT_ID);
-        values.put(COLUMN_ACTION_NAME,transactionAction.getName());
-        values.put(COLUMN_TRANSACTION_ID,transactionAction.getTransaction().getId());
-        values.put(COLUMN_TRANSACTION_TITLE,transactionAction.getTransaction().getTitle());
-        values.put(COLUMN_TRANSACTION_DESCRIPTION,transactionAction.getTransaction().getItemDescription());
-        values.put(COLUMN_TRANSACTION_AMOUNT,transactionAction.getTransaction().getAmount());
-        values.put(COLUMN_TRANSACTION_DATE, transactionAction.getTransaction().getDate().getTime());
-        values.put(COLUMN_TRANSACTION_END_DATE, transactionAction.getTransaction().getEndDate().getTime());
-        values.put(COLUMN_TRANSACTION_INTERVAL, transactionAction.getTransaction().getTransactionInterval());
-        values.put(COLUMN_TRANSACTION_TYPE, transactionAction.getTransaction().getTransactionType().getId());
+//        values.put(COLUMN_ACTION_NAME,transactionAction.getName());
+//        values.put(COLUMN_TRANSACTION_ID,transactionAction.getTransaction().getId());
+//        values.put(COLUMN_TRANSACTION_TITLE,transactionAction.getTransaction().getTitle());
+//        values.put(COLUMN_TRANSACTION_DESCRIPTION,transactionAction.getTransaction().getItemDescription());
+//        values.put(COLUMN_TRANSACTION_AMOUNT,transactionAction.getTransaction().getAmount());
+//        values.put(COLUMN_TRANSACTION_DATE, transactionAction.getTransaction().getDate().getTime());
+//        values.put(COLUMN_TRANSACTION_END_DATE, transactionAction.getTransaction().getEndDate().getTime());
+//        values.put(COLUMN_TRANSACTION_INTERVAL, transactionAction.getTransaction().getTransactionInterval());
+//        values.put(COLUMN_TRANSACTION_TYPE, transactionAction.getTransaction().getTransactionType().getId());
         boolean result = database.insert(TABLE_TRANSACTION_ACTIONS, null, values)>0;
         NEXT_TRANSACTION_ID++;
-        return result;
+        return NEXT_TRANSACTION_ID-1;
     }
 
     private static class SQLiteHelper extends SQLiteOpenHelper {
