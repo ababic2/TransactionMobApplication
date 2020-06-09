@@ -62,6 +62,7 @@ public class TransactionListAdapter extends ArrayAdapter<Transaction> {
                     offlineStatus.setBackgroundColor(Color.YELLOW);
                 } else if (status.equals("BRISANJE")) {
                     offlineStatus.setBackgroundColor(Color.rgb(255, 182, 193));
+                    // lajt pink
                 } else if (status.equals("DODAVANJE")) {
                     offlineStatus.setBackgroundColor(Color.GREEN);
                 }

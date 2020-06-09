@@ -20,7 +20,10 @@ import ba.unsa.etf.rma.rma20babicamina92.fragments.BudgetFragment;
 import ba.unsa.etf.rma.rma20babicamina92.fragments.GraphsFragment;
 import ba.unsa.etf.rma.rma20babicamina92.fragments.TransactionDetailFragment;
 import ba.unsa.etf.rma.rma20babicamina92.fragments.TransactionListFragment;
+import ba.unsa.etf.rma.rma20babicamina92.interactor.AccountInteractor;
+import ba.unsa.etf.rma.rma20babicamina92.models.AccountAction;
 import ba.unsa.etf.rma.rma20babicamina92.offline_tools.ConnectivityChangeReceiver;
+import ba.unsa.etf.rma.rma20babicamina92.offline_tools.ConnectivityGetter;
 import ba.unsa.etf.rma.rma20babicamina92.utils.SimpleGestureFilter;
 
 public class MainActivity extends FragmentActivity implements
@@ -39,7 +42,7 @@ public class MainActivity extends FragmentActivity implements
     public static boolean twoPane;
     private ConnectivityChangeReceiver myNetworkChangeReceiver;
 
-    private BankResolver bankResolver;
+    public static BankResolver bankResolver;
 
     @Override
     protected void onPostResume() {
@@ -73,17 +76,25 @@ public class MainActivity extends FragmentActivity implements
         super.onCreate(savedInstanceState);
         twoPane = false;
         setContentView(R.layout.activity_main);
-        cleanStartFragments();
         myNetworkChangeReceiver = new ConnectivityChangeReceiver();
         myNetworkChangeReceiver.setMyReceiver(this);
         IntentFilter intentFilter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
         this.registerReceiver(myNetworkChangeReceiver,intentFilter);
-
+        if (ConnectivityGetter.getConnectivityStatus(this) != 0) {
+            isConnected = true;
+        }
         // Detect touched area
         if (!twoPane) {
             detector = new SimpleGestureFilter(MainActivity.this, this);
         }
         bankResolver = new BankResolver(getContentResolver());
+        AccountAction action = bankResolver.getAccountAction();
+        if (action == null) {
+            if (MainActivity.isConnected) {
+                new AccountInteractor(this, null);
+            }
+        }
+        cleanStartFragments();
     }
 
     @Override

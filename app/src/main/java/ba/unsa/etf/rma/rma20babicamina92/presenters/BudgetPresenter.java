@@ -4,8 +4,10 @@ import java.math.BigDecimal;
 import java.util.Locale;
 
 import ba.unsa.etf.rma.rma20babicamina92.MainActivity;
+import ba.unsa.etf.rma.rma20babicamina92.database.BankResolver;
 import ba.unsa.etf.rma.rma20babicamina92.fragments.BudgetFragment;
 import ba.unsa.etf.rma.rma20babicamina92.interactor.AccountPostInteractor;
+import ba.unsa.etf.rma.rma20babicamina92.models.AccountAction;
 import ba.unsa.etf.rma.rma20babicamina92.models.MainModel;
 
 public class BudgetPresenter {
@@ -44,7 +46,13 @@ public class BudgetPresenter {
         model.getAccount().setMonthLimit(monthlyLimit);
         model.getAccount().setTotalLimit(totalLimit);
         updateFragment(fragment);
-        new AccountPostInteractor((MainActivity) fragment.getActivity()).execute(model.getAccount());
+        if (MainActivity.isConnected) {
+            new AccountPostInteractor((MainActivity) fragment.getActivity()).execute(model.getAccount());
+        } else {
+            MainActivity mainActivity = (MainActivity) fragment.getActivity();
+            BankResolver bankResolver = mainActivity.bankResolver;
+            bankResolver.updateAccountAction(new AccountAction("IZMJENA", model.getAccount()));
+        }
     }
 
 }

@@ -54,13 +54,10 @@ public class Util {
                 urlConnection.setDoOutput(true);
                 urlConnection.setDoInput(true);
                 urlConnection.setChunkedStreamingMode(0);
-                System.out.println("ONE");
                 OutputStream out = urlConnection.getOutputStream();
                 writeStream(out, data);
-                System.out.println("TWO");
 
                 InputStream in = urlConnection.getInputStream();
-                System.out.println("THREE");
                 return readStream(in);
             } catch (Exception e) {
                 e.printStackTrace();

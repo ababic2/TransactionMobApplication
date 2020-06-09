@@ -1,21 +1,27 @@
 package ba.unsa.etf.rma.rma20babicamina92.presenters;
 
+import android.widget.Toast;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import ba.unsa.etf.rma.rma20babicamina92.MainActivity;
 import ba.unsa.etf.rma.rma20babicamina92.R;
 import ba.unsa.etf.rma.rma20babicamina92.contracts.ListFragmentInterface;
 import ba.unsa.etf.rma.rma20babicamina92.interactor.AccountInteractor;
 import ba.unsa.etf.rma.rma20babicamina92.interactor.TransactionInteractor;
 import ba.unsa.etf.rma.rma20babicamina92.interactor.TransactionTypeInteractor;
 import ba.unsa.etf.rma.rma20babicamina92.models.Account;
+import ba.unsa.etf.rma.rma20babicamina92.models.AccountAction;
 import ba.unsa.etf.rma.rma20babicamina92.models.FilterItem;
 import ba.unsa.etf.rma.rma20babicamina92.models.MainModel;
 import ba.unsa.etf.rma.rma20babicamina92.models.Transaction;
+import ba.unsa.etf.rma.rma20babicamina92.models.TransactionAction;
 import ba.unsa.etf.rma.rma20babicamina92.models.TransactionType;
 import ba.unsa.etf.rma.rma20babicamina92.utils.Filter;
 import ba.unsa.etf.rma.rma20babicamina92.utils.TransactionFilter;
@@ -32,7 +38,7 @@ public class ListFragmentPresenter {
     private TransactionType type;
     private String sortBy;
 
-    private ArrayList<TransactionType> filterItems;
+    public ArrayList<TransactionType> filterItems;
     private ArrayList<String> sortSpinnerItems;
 
     private Transaction currentlySelectedTransaction;
@@ -76,8 +82,21 @@ public class ListFragmentPresenter {
         getFilterItemsFromWeb();
         getAccountFromWeb();
         model = MainModel.getInstance();
-        model.getTransactions().clear();
-        new TransactionInteractor(view.getMainActivity(),this).execute("");
+
+        if (MainActivity.isConnected) {
+            model.getTransactions().clear();
+            new TransactionInteractor(view.getMainActivity(), this).execute("");
+        } else {
+            if (model.getTransactions().size() == 0) {
+                ArrayList<TransactionAction> actions = MainActivity.bankResolver.getTransactionActions();
+                for (TransactionAction action : actions) {
+                    model.getTransactions().add(action.getTransaction());
+                }
+            }
+            model.setTransactionActions(MainActivity.bankResolver.getTransactionActions());
+            model.setAccountActions(MainActivity.bankResolver.getAccountAction());
+
+        }
         view.setAccountData(model.getAccount());
         view.setFilterItems(filterItems);
         view.setSortItems(sortSpinnerItems);
@@ -86,12 +105,48 @@ public class ListFragmentPresenter {
     }
 
     private void getFilterItemsFromWeb() {
-        filterItems = new ArrayList<>();
-        new TransactionTypeInteractor(view.getMainActivity(),this).execute();
+        if (filterItems == null) {
+            filterItems = new ArrayList<>();
+        }
+        if (MainActivity.isConnected) {
+            new TransactionTypeInteractor(view.getMainActivity(), this).execute();
+        } else {
+            ArrayList<TransactionType> transactionTypes = new ArrayList<>();
+            ArrayList<Integer> icons = new ArrayList<>(Arrays.asList(R.mipmap.ic_one, R.mipmap.ic_two, R.mipmap.ic_three, R.mipmap.ic_four, R.mipmap.ic_five, R.mipmap.ic_six));
+            transactionTypes.add(new TransactionType(1, "Regular payment", icons.get(1)));
+            transactionTypes.add(new TransactionType(2, "Regular income", icons.get(2)));
+            transactionTypes.add(new TransactionType(3, "Purchase", icons.get(3)));
+            transactionTypes.add(new TransactionType(4, "Individual income", icons.get(4)));
+            transactionTypes.add(new TransactionType(5, "Regular income", icons.get(5)));
+            transactionTypes.add(0, new TransactionType(0,"All", R.mipmap.ic_six));
+            transactionTypes.add(new TransactionType(0,"All", R.mipmap.ic_six));
+            setFilterItems(transactionTypes);
+        }
     }
 
     private void getAccountFromWeb() {
-        new AccountInteractor(view.getMainActivity(), this).execute();
+        if (MainActivity.isConnected) {
+            new AccountInteractor(view.getMainActivity(), this).execute();
+        } else {
+            if (model == null) {
+                model = MainModel.getInstance();
+            }
+
+            if (model.getAccount() == null) {
+                AccountAction accountAction = view.getMainActivity().bankResolver.getAccountAction();
+                if (accountAction == null) {
+                    Toast.makeText(view.getMainActivity(), "Mora se bar jednom konektovati na internet", Toast.LENGTH_LONG).show();
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+
+                    }
+                    view.getMainActivity().finish();
+                } else {
+                    model.setAccount(accountAction.getAccount());
+                }
+            }
+        }
     }
 
     public void setAccount(Account account) {

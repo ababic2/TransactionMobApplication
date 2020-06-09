@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import ba.unsa.etf.rma.rma20babicamina92.MainActivity;
 import ba.unsa.etf.rma.rma20babicamina92.R;
 import ba.unsa.etf.rma.rma20babicamina92.models.Account;
+import ba.unsa.etf.rma.rma20babicamina92.models.AccountAction;
 import ba.unsa.etf.rma.rma20babicamina92.presenters.ListFragmentPresenter;
 
 public class AccountInteractor extends AsyncTask<String,Integer,String> {
@@ -32,7 +33,11 @@ public class AccountInteractor extends AsyncTask<String,Integer,String> {
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
         Account account = JsonDecoder.decodeAccount(result);
-        listFragmentPresenter.setAccount(account);
+        if (listFragmentPresenter != null) {
+            listFragmentPresenter.setAccount(account);
+        } else {
+            MainActivity.bankResolver.insertAccountAction(new AccountAction("DODAVANJE", account));
+        }
         MainActivity.loadingOff("ACCOUNT_GET");
     }
 }

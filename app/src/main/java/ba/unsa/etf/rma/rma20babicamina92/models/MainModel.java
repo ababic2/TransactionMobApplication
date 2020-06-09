@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import ba.unsa.etf.rma.rma20babicamina92.MainActivity;
 import ba.unsa.etf.rma.rma20babicamina92.interactor.AccountPostInteractor;
 import ba.unsa.etf.rma.rma20babicamina92.interactor.TransactionCreateInteractor;
 import ba.unsa.etf.rma.rma20babicamina92.interactor.TransactionDeleteInteractor;
@@ -49,7 +50,7 @@ public class MainModel {
 
 
     private ArrayList<TransactionAction> transactionActions;
-    private ArrayList<AccountAction> accountActions;
+    private AccountAction accountActions;
 
     public ArrayList<TransactionAction> getTransactionActions() {
         return transactionActions;
@@ -59,11 +60,11 @@ public class MainModel {
         this.transactionActions = transactionActions;
     }
 
-    public ArrayList<AccountAction> getAccountActions() {
+    public AccountAction getAccountActions() {
         return accountActions;
     }
 
-    public void setAccountActions(ArrayList<AccountAction> accountActions) {
+    public void setAccountActions(AccountAction accountActions) {
         this.accountActions = accountActions;
     }
 
@@ -83,7 +84,7 @@ public class MainModel {
         );
         initializeTransactions();
         transactionActions = new ArrayList<>();
-        transactionActions.add(new TransactionAction("BRISANJE", new Transaction(1532L, "title", "", 0, new Date(), new Date(), 1, new TransactionType(1, "", 1))));
+//        transactionActions.add(new TransactionAction("BRISANJE", new Transaction(1532L, "title", "", 0, new Date(), new Date(), 1, new TransactionType(1, "", 1))));
     }
 
     public TransactionAction getPendingTransactionAction(Transaction transaction) {
@@ -227,8 +228,22 @@ public class MainModel {
             }
         }
         account.setBudget(account.getBudget() + (saldo));
-        new TransactionCreateInteractor(ListFragmentPresenter.getInstance().getView().getMainActivity()).execute(transaction);
-        new AccountPostInteractor(ListFragmentPresenter.getInstance().getView().getMainActivity()).execute(account);
+        if (MainActivity.isConnected) {
+            new TransactionCreateInteractor(ListFragmentPresenter.getInstance().getView().getMainActivity()).execute(transaction);
+            new AccountPostInteractor(ListFragmentPresenter.getInstance().getView().getMainActivity()).execute(account);
+            MainActivity.bankResolver.updateAccountAction(new AccountAction("IZMJENA", account));
+        } else {
+            ArrayList<TransactionAction> actions = MainActivity.bankResolver.getTransactionActions();
+            int next = 0;
+            for (TransactionAction action : actions) {
+                if (action.getTransaction().getId() <= next) {
+                    next = action.getTransaction().getId().intValue()-1;
+                }
+            }
+            transaction.setId((long) next);
+            MainActivity.bankResolver.insertTransactionAction(new TransactionAction("DODAVANJE", transaction));
+            MainActivity.bankResolver.updateAccountAction(new AccountAction("IZMJENA", account));
+        }
         transactions.add(transaction);
     }
 
@@ -266,8 +281,14 @@ public class MainModel {
         }
         account.setBudget(account.getBudget()+(after-before));
         newTransaction.setId(oldTransaction.getId());
-        new TransactionUpdateInteractor(ListFragmentPresenter.getInstance().getView().getMainActivity()).execute(newTransaction);
-        new AccountPostInteractor(ListFragmentPresenter.getInstance().getView().getMainActivity()).execute(account);
+        if (MainActivity.isConnected) {
+            new TransactionUpdateInteractor(ListFragmentPresenter.getInstance().getView().getMainActivity()).execute(newTransaction);
+            new AccountPostInteractor(ListFragmentPresenter.getInstance().getView().getMainActivity()).execute(account);
+            MainActivity.bankResolver.updateAccountAction(new AccountAction("IZMJENA", account));
+        } else {
+            MainActivity.bankResolver.updateTransactionAction(new TransactionAction("IZMJENA", newTransaction));
+            MainActivity.bankResolver.updateAccountAction(new AccountAction("IZMJENA", account));
+        }
         transactions.set(index, newTransaction);
     }
 
@@ -316,8 +337,15 @@ public class MainModel {
 
 
     public void deleteTransaction(Transaction transaction) {
-        new TransactionDeleteInteractor(ListFragmentPresenter.getInstance().getView().getMainActivity()).execute(transaction);
-        transactions.remove(transaction);
+        Transaction newTransaction = new Transaction(transaction.getId(), transaction.getTitle(), transaction.getItemDescription(), transaction.getAmount(), transaction.getDate(), transaction.getEndDate(), transaction.getTransactionInterval(), transaction.getTransactionType());
+        updateTransaction(transaction,newTransaction);
+        if (MainActivity.isConnected) {
+            new TransactionDeleteInteractor(ListFragmentPresenter.getInstance().getView().getMainActivity()).execute(newTransaction);
+            transactions.remove(newTransaction);
+        } else {
+            MainActivity.bankResolver.updateTransactionAction(new TransactionAction("BRISANJE", transaction));
+        }
+
     }
 
     private List<Payment> convertRegularToIndividual(Transaction transaction){
