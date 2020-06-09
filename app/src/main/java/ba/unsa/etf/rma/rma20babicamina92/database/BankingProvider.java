@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 
 public class BankingProvider extends ContentProvider {
 
-    public static final String AUTHORITY = "ba.unsa.etf.rma.rma20babicamina92";
+    public static final String AUTHORITY = "ba.unsa.etf.rma.rma20babicamina92.database";
     public static final String PATH_ACCOUNT_ACTIONS = "ACCOUNT_ACTIONS";
     public static final String PATH_TRANSACTION_ACTIONS = "TRANSACTION_ACTIONS";
 

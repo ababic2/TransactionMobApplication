@@ -11,11 +11,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import ba.unsa.etf.rma.rma20babicamina92.database.BankResolver;
 import ba.unsa.etf.rma.rma20babicamina92.fragments.BudgetFragment;
 import ba.unsa.etf.rma.rma20babicamina92.fragments.GraphsFragment;
 import ba.unsa.etf.rma.rma20babicamina92.fragments.TransactionDetailFragment;
@@ -28,7 +28,6 @@ public class MainActivity extends FragmentActivity implements
     public static boolean isConnected = false;
 
     private static ProgressDialog dialog;
-    private static ArrayList<ProgressDialog> dialogs = new ArrayList<>();
     private static Map<String, ProgressDialog> dialogMap = new HashMap<>();
     private SimpleGestureFilter detector;
 
@@ -40,6 +39,8 @@ public class MainActivity extends FragmentActivity implements
     public static boolean twoPane;
     private ConnectivityChangeReceiver myNetworkChangeReceiver;
 
+    private BankResolver bankResolver;
+
     @Override
     protected void onPostResume() {
         super.onPostResume();
@@ -50,7 +51,6 @@ public class MainActivity extends FragmentActivity implements
         dialog = ProgressDialog.show(mainActivity, "Info",
                 message, true);
         dialogMap.put(key, dialog);
-//        dialogs.add(0, dialog);
     }
 
     public static void loadingOff(String key) {
@@ -59,11 +59,6 @@ public class MainActivity extends FragmentActivity implements
             dialog.dismiss();
         }
         dialogMap.remove(key);
-//        if (dialogs.size() > 0) {
-//            dialog = dialogs.get(0);
-//            dialogs.remove(0);
-//            dialog.dismiss();
-//        }
         dialog = null;
     }
 
@@ -88,6 +83,7 @@ public class MainActivity extends FragmentActivity implements
         if (!twoPane) {
             detector = new SimpleGestureFilter(MainActivity.this, this);
         }
+        bankResolver = new BankResolver(getContentResolver());
     }
 
     @Override

@@ -18,5 +18,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <provider
+            android:authorities="ba.unsa.etf.rma.rma20babicamina92.database"
+            android:name=".database.BankingProvider"
+            android:exported="false" />
     </application>
 </manifest>

@@ -39,7 +39,7 @@ public class DatabaseAdapter {
     public static final String COLUMN_TRANSACTION_TYPE="transaction_type";
 
     // query strings for database creation
-    public static String CREATE_TABLE_ACCOUNT_ACTIONS = "CREATE TABLE " + TABLE_ACCOUNT_ACTIONS + "(" +
+    public static String CREATE_TABLE_ACCOUNT_ACTIONS = "CREATE TABLE IF NOT EXISTS " + TABLE_ACCOUNT_ACTIONS + "(" +
             COLUMN_ACTION_ID + " integer primary key," +
             COLUMN_ACTION_NAME + " text," +
             COLUMN_ACCOUNT_ID + " text," +
@@ -47,7 +47,7 @@ public class DatabaseAdapter {
             COLUMN_ACCOUNT_MONTHLY + " integer," +
             COLUMN_ACCOUNT_TOTAL + " integer )";
 
-    public static String CREATE_TABLE_TRANSACTION_ACTIONS = "CREATE TABLE " + TABLE_TRANSACTION_ACTIONS + "(" +
+    public static String CREATE_TABLE_TRANSACTION_ACTIONS = "CREATE TABLE IF NOT EXISTS " + TABLE_TRANSACTION_ACTIONS + "(" +
             COLUMN_ACTION_ID + " integer primary key," +
             COLUMN_ACTION_NAME + " text," +
             COLUMN_TRANSACTION_ID + " text," +
