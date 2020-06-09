@@ -16,6 +16,15 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_toEndOf="@+id/transactionImageView"
-        android:textAlignment="center"/>
+        android:textAlignment="center"
+        />
 
+    <TextView
+        android:padding="3dp"
+        android:id="@+id/offlineStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        />
 </RelativeLayout>

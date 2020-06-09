@@ -46,6 +46,27 @@ public class MainModel {
     private Account account;
 
     private ArrayList<Transaction> transactions;
+
+
+    private ArrayList<TransactionAction> transactionActions;
+    private ArrayList<AccountAction> accountActions;
+
+    public ArrayList<TransactionAction> getTransactionActions() {
+        return transactionActions;
+    }
+
+    public void setTransactionActions(ArrayList<TransactionAction> transactionActions) {
+        this.transactionActions = transactionActions;
+    }
+
+    public ArrayList<AccountAction> getAccountActions() {
+        return accountActions;
+    }
+
+    public void setAccountActions(ArrayList<AccountAction> accountActions) {
+        this.accountActions = accountActions;
+    }
+
     public static MainModel getInstance() {
         if (instance == null) {
             instance = new MainModel();
@@ -61,8 +82,18 @@ public class MainModel {
                 1000
         );
         initializeTransactions();
+        transactionActions = new ArrayList<>();
+        transactionActions.add(new TransactionAction("BRISANJE", new Transaction(1532L, "title", "", 0, new Date(), new Date(), 1, new TransactionType(1, "", 1))));
     }
 
+    public TransactionAction getPendingTransactionAction(Transaction transaction) {
+        for (TransactionAction transactionAction : transactionActions) {
+            if (transactionAction.getTransaction().getId().equals(transaction.getId())) {
+                return transactionAction;
+            }
+        }
+        return null;
+    }
     public void setAccount(Account account) {
         this.account = account;
     }

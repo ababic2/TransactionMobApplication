@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.math.BigDecimal;
@@ -31,6 +32,7 @@ import ba.unsa.etf.rma.rma20babicamina92.exceptions.InvalidFieldValueException;
 import ba.unsa.etf.rma.rma20babicamina92.models.FilterItem;
 import ba.unsa.etf.rma.rma20babicamina92.models.MainModel;
 import ba.unsa.etf.rma.rma20babicamina92.models.Transaction;
+import ba.unsa.etf.rma.rma20babicamina92.models.TransactionAction;
 import ba.unsa.etf.rma.rma20babicamina92.models.TransactionType;
 import ba.unsa.etf.rma.rma20babicamina92.presenters.DetailFragmentPresenter;
 import ba.unsa.etf.rma.rma20babicamina92.presenters.ListFragmentPresenter;
@@ -38,6 +40,8 @@ import ba.unsa.etf.rma.rma20babicamina92.presenters.ListFragmentPresenter;
 
 public class TransactionDetailFragment extends Fragment {
     private Drawable defaultBackground;
+
+    private TextView offlineStatus;
 
     private Transaction oldTransaction, transaction;
     private EditText titleTextView, descriptionTextView, amountTextView,
@@ -235,6 +239,7 @@ public class TransactionDetailFragment extends Fragment {
 
 
     private void findViewsById(View view) {
+        offlineStatus = view.findViewById(R.id.offlineStatus);
         typeSpinner = view.findViewById(R.id.spinner);
         titleTextView = view.findViewById(R.id.titleTextView);
         descriptionTextView = view.findViewById(R.id.descriptionTextView);
@@ -248,6 +253,22 @@ public class TransactionDetailFragment extends Fragment {
     }
 
     private void setInitialState(Transaction transaction) {
+        TransactionAction action = MainModel.getInstance().getPendingTransactionAction(transaction);
+        if (action != null) {
+            String status = action.getName();
+            switch (status) {
+                case "IZMJENA":
+                    offlineStatus.setBackgroundColor(Color.YELLOW);
+                    break;
+                case "BRISANJE":
+                    offlineStatus.setBackgroundColor(Color.rgb(255, 182, 193));
+                    break;
+                case "DODAVANJE":
+                    offlineStatus.setBackgroundColor(Color.GREEN);
+                    break;
+            }
+            offlineStatus.setText(status);
+        }
         oldTransaction = transaction;
         titleTextView.setText(oldTransaction.getTitle());
         descriptionTextView.setText(oldTransaction.getItemDescription());
