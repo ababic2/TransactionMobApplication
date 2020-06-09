@@ -56,17 +56,20 @@ public class TransactionListAdapter extends ArrayAdapter<Transaction> {
             }
 
             TextView titleTextView = newView.findViewById(R.id.titleText);
+            TextView offlineStatus = newView.findViewById(R.id.offlineStatus);
             if (isLocal) {
-                TextView offlineStatus = newView.findViewById(R.id.offlineStatus);
                 if (status.equals("IZMJENA")) {
                     offlineStatus.setBackgroundColor(Color.YELLOW);
                 } else if (status.equals("BRISANJE")) {
-                    offlineStatus.setBackgroundColor(Color.rgb(255,182,193));
+                    offlineStatus.setBackgroundColor(Color.rgb(255, 182, 193));
                 } else if (status.equals("DODAVANJE")) {
                     offlineStatus.setBackgroundColor(Color.GREEN);
                 }
                 offlineStatus.setText(status);
 
+            } else {
+                offlineStatus.setText("");
+                offlineStatus.setBackgroundColor(Color.TRANSPARENT);
             }
             ImageView imageView = newView.findViewById(R.id.transactionImageView);
             titleTextView.setText(transaction.getTitle() + "\n" + transaction.getAmount());
