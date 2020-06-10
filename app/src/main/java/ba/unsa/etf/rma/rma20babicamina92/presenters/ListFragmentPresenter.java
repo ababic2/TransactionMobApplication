@@ -113,11 +113,11 @@ public class ListFragmentPresenter {
         } else {
             ArrayList<TransactionType> transactionTypes = new ArrayList<>();
             ArrayList<Integer> icons = new ArrayList<>(Arrays.asList(R.mipmap.ic_one, R.mipmap.ic_two, R.mipmap.ic_three, R.mipmap.ic_four, R.mipmap.ic_five, R.mipmap.ic_six));
-            transactionTypes.add(new TransactionType(1, "Regular payment", icons.get(1)));
-            transactionTypes.add(new TransactionType(2, "Regular income", icons.get(2)));
-            transactionTypes.add(new TransactionType(3, "Purchase", icons.get(3)));
-            transactionTypes.add(new TransactionType(4, "Individual income", icons.get(4)));
-            transactionTypes.add(new TransactionType(5, "Regular income", icons.get(5)));
+            transactionTypes.add(new TransactionType(1, "Regular payment", icons.get(0)));
+            transactionTypes.add(new TransactionType(2, "Regular income", icons.get(1)));
+            transactionTypes.add(new TransactionType(3, "Purchase", icons.get(2)));
+            transactionTypes.add(new TransactionType(4, "Individual income", icons.get(3)));
+            transactionTypes.add(new TransactionType(5, "Regular income", icons.get(4)));
             transactionTypes.add(0, new TransactionType(0,"All", R.mipmap.ic_six));
             transactionTypes.add(new TransactionType(0,"All", R.mipmap.ic_six));
             setFilterItems(transactionTypes);

@@ -33,4 +33,8 @@ public class AccountAction {
     public void setAccount(Account account) {
         this.account = account;
     }
+
+    public String toString() {
+        return id + " " + name + " " + account;
+    }
 }

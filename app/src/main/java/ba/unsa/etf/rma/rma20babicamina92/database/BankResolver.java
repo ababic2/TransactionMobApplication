@@ -12,7 +12,6 @@ import java.util.Date;
 import ba.unsa.etf.rma.rma20babicamina92.R;
 import ba.unsa.etf.rma.rma20babicamina92.models.Account;
 import ba.unsa.etf.rma.rma20babicamina92.models.AccountAction;
-import ba.unsa.etf.rma.rma20babicamina92.models.MainModel;
 import ba.unsa.etf.rma.rma20babicamina92.models.Transaction;
 import ba.unsa.etf.rma.rma20babicamina92.models.TransactionAction;
 import ba.unsa.etf.rma.rma20babicamina92.models.TransactionType;
@@ -22,7 +21,6 @@ import static ba.unsa.etf.rma.rma20babicamina92.database.DatabaseAdapter.COLUMN_
 import static ba.unsa.etf.rma.rma20babicamina92.database.DatabaseAdapter.COLUMN_ACCOUNT_ID;
 import static ba.unsa.etf.rma.rma20babicamina92.database.DatabaseAdapter.COLUMN_ACCOUNT_MONTHLY;
 import static ba.unsa.etf.rma.rma20babicamina92.database.DatabaseAdapter.COLUMN_ACCOUNT_TOTAL;
-import static ba.unsa.etf.rma.rma20babicamina92.database.DatabaseAdapter.COLUMN_ACTION_ID;
 import static ba.unsa.etf.rma.rma20babicamina92.database.DatabaseAdapter.COLUMN_ACTION_NAME;
 import static ba.unsa.etf.rma.rma20babicamina92.database.DatabaseAdapter.COLUMN_TRANSACTION_AMOUNT;
 import static ba.unsa.etf.rma.rma20babicamina92.database.DatabaseAdapter.COLUMN_TRANSACTION_DATE;
@@ -57,9 +55,11 @@ public class BankResolver {
         if (numberOfAccounts == 0) {
             return null;
         }
+        cursor.moveToFirst();
         for (int i = 0; i < numberOfAccounts; i++) {
-            accountAction = new AccountAction(cursor.getString(2), new Account(cursor.getInt(3), cursor.getInt(4), cursor.getInt(6), cursor.getInt(5)));
-            accountAction.setId(cursor.getInt(1));
+            accountAction = new AccountAction(cursor.getString(1), new Account(cursor.getInt(2), cursor.getInt(3), cursor.getInt(5), cursor.getInt(4)));
+            accountAction.setId(cursor.getInt(0));
+            if(!cursor.moveToNext())break;
         }
         cursor.close();
         return accountAction;
@@ -74,33 +74,36 @@ public class BankResolver {
         int numberOfTransactions = cursor.getCount();
 
         ArrayList<TransactionType> transactionTypes = ListFragmentPresenter.getInstance().filterItems;
-        if (transactionTypes == null) {
+        if (transactionTypes == null || transactionTypes.size()==0) {
             transactionTypes = new ArrayList<>();
             ArrayList<Integer> icons = new ArrayList<>(Arrays.asList(R.mipmap.ic_one, R.mipmap.ic_two, R.mipmap.ic_three, R.mipmap.ic_four, R.mipmap.ic_five, R.mipmap.ic_six));
-            transactionTypes.add(new TransactionType(1, "Regular payment", icons.get(1)));
-            transactionTypes.add(new TransactionType(2, "Regular income", icons.get(2)));
-            transactionTypes.add(new TransactionType(3, "Purchase", icons.get(3)));
-            transactionTypes.add(new TransactionType(4, "Individual income", icons.get(4)));
-            transactionTypes.add(new TransactionType(5, "Regular income", icons.get(5)));
+            transactionTypes.add(new TransactionType(1, "Regular payment", icons.get(0)));
+            transactionTypes.add(new TransactionType(2, "Regular income", icons.get(1)));
+            transactionTypes.add(new TransactionType(3, "Purchase", icons.get(2)));
+            transactionTypes.add(new TransactionType(4, "Individual income", icons.get(3)));
+            transactionTypes.add(new TransactionType(5, "Regular income", icons.get(4)));
             transactionTypes.add(0, new TransactionType(0,"All", R.mipmap.ic_six));
             transactionTypes.add(new TransactionType(0,"All", R.mipmap.ic_six));
         }
+        cursor.moveToFirst();
         for (int i = 0; i < numberOfTransactions; i++) {
             transactionActions.add(
                     new TransactionAction(
-                            cursor.getString(2),
+                            cursor.getString(1),
                             new Transaction(
-                                    (long) cursor.getInt(3),
+                                    (long) cursor.getInt(2),
+                                    cursor.getString(3),
                                     cursor.getString(4),
-                                    cursor.getString(5),
-                                    cursor.getInt(6),
+                                    cursor.getInt(5),
+                                    new Date(cursor.getLong(6)),
                                     new Date(cursor.getLong(7)),
-                                    new Date(cursor.getLong(8)),
-                                    cursor.getInt(9),
-                                    transactionTypes.get(cursor.getInt(10))
+                                    cursor.getInt(8),
+                                    transactionTypes.get(cursor.getInt(9))
                             )
                     )
             );
+            System.out.println(cursor.getString(4));
+            cursor.moveToNext();
         }
         cursor.close();
         return transactionActions;
@@ -140,7 +143,12 @@ public class BankResolver {
         values.put(COLUMN_ACCOUNT_BUDGET,accountAction.getAccount().getBudget());
         values.put(COLUMN_ACCOUNT_MONTHLY,accountAction.getAccount().getMonthLimit());
         values.put(COLUMN_ACCOUNT_TOTAL,accountAction.getAccount().getTotalLimit());
-        contentResolver.update(ACCOUNT_ACTIONS, values, " " + COLUMN_ACCOUNT_ID + "=" + accountAction.getAccount().getId(), null);
+        int result = contentResolver.update(ACCOUNT_ACTIONS, values, " " + COLUMN_ACCOUNT_ID + "=" + accountAction.getAccount().getId(), null);
+        if (result == 0) {
+            values.put(COLUMN_ACCOUNT_ID,accountAction.getAccount().getId());
+            contentResolver.insert(ACCOUNT_ACTIONS, values);
+
+        }
         return true;
     }
 
@@ -154,7 +162,14 @@ public class BankResolver {
         values.put(COLUMN_TRANSACTION_END_DATE, transactionAction.getTransaction().getEndDate()==null?0:transactionAction.getTransaction().getEndDate().getTime());
         values.put(COLUMN_TRANSACTION_INTERVAL, transactionAction.getTransaction().getTransactionInterval());
         values.put(COLUMN_TRANSACTION_TYPE, transactionAction.getTransaction().getTransactionType().getId());
-        contentResolver.update(TRANSACTION_ACTIONS, values, " " + COLUMN_TRANSACTION_ID + "=" + transactionAction.getTransaction().getId(), null);
+        int result = contentResolver.update(TRANSACTION_ACTIONS, values, " " + COLUMN_TRANSACTION_ID + "=" + transactionAction.getTransaction().getId(), null);
+        System.out.println(result);
+        System.out.println("TR");
+        if (result == 0) {
+            System.out.println("Created");
+            values.put(COLUMN_TRANSACTION_ID,transactionAction.getTransaction().getId());
+            contentResolver.insert(TRANSACTION_ACTIONS, values);
+        }
         return true;
     }
 
@@ -169,5 +184,4 @@ public class BankResolver {
         System.out.println(result);
         return true;
     }
-
 }

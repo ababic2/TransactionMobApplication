@@ -2,6 +2,8 @@ package ba.unsa.etf.rma.rma20babicamina92.interactor;
 
 import android.os.AsyncTask;
 
+import java.util.ArrayList;
+
 import ba.unsa.etf.rma.rma20babicamina92.MainActivity;
 import ba.unsa.etf.rma.rma20babicamina92.R;
 import ba.unsa.etf.rma.rma20babicamina92.models.MainModel;
@@ -51,7 +53,10 @@ public class OfflineTransactionsInteractor extends AsyncTask<TransactionAction,I
         if (index + 1 < MainModel.getInstance().getTransactionActions().size()) {
             new OfflineTransactionsInteractor(mainActivity, index + 1).execute(MainModel.getInstance().getTransactionActions().get(index + 1));
         } else {
-            new AccountPostInteractor(mainActivity).execute(MainModel.getInstance().getAccountActions().getAccount());
+            if (MainModel.getInstance().getAccountActions() != null) {
+                new AccountPostInteractor(mainActivity).execute(MainModel.getInstance().getAccountActions().getAccount());
+            }
+            MainModel.getInstance().setTransactionActions(new ArrayList<>());
         }
     }
 }

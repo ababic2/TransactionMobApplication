@@ -18,25 +18,25 @@ public class DatabaseAdapter {
     public static final String DB_NAME="banking.db";
     public static final int DB_VERSION=1;
 
-    public static final String TABLE_ACCOUNT_ACTIONS="table_account_actions";
+    public static final String TABLE_ACCOUNT_ACTIONS="tableaccountactions";
     public static long NEXT_ACCOUNT_ID =1;
-    public static final String COLUMN_ACTION_ID="action_id";
-    public static final String COLUMN_ACTION_NAME="action_name";
-    public static final String COLUMN_ACCOUNT_ID="account_id";
-    public static final String COLUMN_ACCOUNT_BUDGET="account_budget";
-    public static final String COLUMN_ACCOUNT_MONTHLY="account_monthly";
-    public static final String COLUMN_ACCOUNT_TOTAL="account_total";
+    public static final String COLUMN_ACTION_ID="actionid";
+    public static final String COLUMN_ACTION_NAME="actionname";
+    public static final String COLUMN_ACCOUNT_ID="accountid";
+    public static final String COLUMN_ACCOUNT_BUDGET="accountbudget";
+    public static final String COLUMN_ACCOUNT_MONTHLY="accountmonthly";
+    public static final String COLUMN_ACCOUNT_TOTAL="accounttotal";
 
-    public static final String TABLE_TRANSACTION_ACTIONS="table_account_actions";
+    public static final String TABLE_TRANSACTION_ACTIONS="tabletransactionactions";
     public static long NEXT_TRANSACTION_ID=1;
-    public static final String COLUMN_TRANSACTION_ID="transaction_id";
-    public static final String COLUMN_TRANSACTION_TITLE="transaction_title";
-    public static final String COLUMN_TRANSACTION_DESCRIPTION="transaction_description";
-    public static final String COLUMN_TRANSACTION_AMOUNT="transaction_amount";
-    public static final String COLUMN_TRANSACTION_DATE="transaction_date";
-    public static final String COLUMN_TRANSACTION_END_DATE="transaction_end_date";
-    public static final String COLUMN_TRANSACTION_INTERVAL="transaction_interval";
-    public static final String COLUMN_TRANSACTION_TYPE="transaction_type";
+    public static final String COLUMN_TRANSACTION_ID="transactionid";
+    public static final String COLUMN_TRANSACTION_TITLE="title";
+    public static final String COLUMN_TRANSACTION_DESCRIPTION="transactiondescription";
+    public static final String COLUMN_TRANSACTION_AMOUNT="transactionamount";
+    public static final String COLUMN_TRANSACTION_DATE="transactiondate";
+    public static final String COLUMN_TRANSACTION_END_DATE="enddate";
+    public static final String COLUMN_TRANSACTION_INTERVAL="transactioninterval";
+    public static final String COLUMN_TRANSACTION_TYPE="transactiontype";
 
     // query strings for database creation
     public static String CREATE_TABLE_ACCOUNT_ACTIONS = "CREATE TABLE IF NOT EXISTS " + TABLE_ACCOUNT_ACTIONS + "(" +
@@ -96,7 +96,14 @@ public class DatabaseAdapter {
     }
 
     public static long getNextId(SQLiteDatabase database, String table) {
-        return DatabaseUtils.queryNumEntries(database, table);
+        Cursor cursor = database.rawQuery("SELECT max(actionid) from " + table, null);
+        cursor.moveToFirst();
+        int id = 1;
+        if (cursor.getCount() > 0) {
+            id = cursor.getInt(0);
+        }
+        cursor.close();
+        return id;
     }
 
     public Cursor getTransactionByTransactionId(long id) {
@@ -144,7 +151,7 @@ public class DatabaseAdapter {
 
     public long insertTransactionAction(ContentValues values) {
 //        ContentValues values = new ContentValues();
-        values.put(COLUMN_ACTION_ID, NEXT_ACCOUNT_ID);
+        values.put(COLUMN_ACTION_ID, NEXT_TRANSACTION_ID);
 //        values.put(COLUMN_ACTION_NAME,transactionAction.getName());
 //        values.put(COLUMN_TRANSACTION_ID,transactionAction.getTransaction().getId());
 //        values.put(COLUMN_TRANSACTION_TITLE,transactionAction.getTransaction().getTitle());

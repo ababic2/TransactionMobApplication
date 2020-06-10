@@ -50,4 +50,8 @@ public class Account {
     public int getMonthLimit() {
         return monthLimit;
     }
+
+    public String toString() {
+        return " " + id + " " + budget + " " + monthLimit + " " + totalLimit;
+    }
 }

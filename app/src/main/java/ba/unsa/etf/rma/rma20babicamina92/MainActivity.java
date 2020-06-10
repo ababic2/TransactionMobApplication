@@ -21,7 +21,9 @@ import ba.unsa.etf.rma.rma20babicamina92.fragments.GraphsFragment;
 import ba.unsa.etf.rma.rma20babicamina92.fragments.TransactionDetailFragment;
 import ba.unsa.etf.rma.rma20babicamina92.fragments.TransactionListFragment;
 import ba.unsa.etf.rma.rma20babicamina92.interactor.AccountInteractor;
+import ba.unsa.etf.rma.rma20babicamina92.interactor.OfflineTransactionsInteractor;
 import ba.unsa.etf.rma.rma20babicamina92.models.AccountAction;
+import ba.unsa.etf.rma.rma20babicamina92.models.MainModel;
 import ba.unsa.etf.rma.rma20babicamina92.offline_tools.ConnectivityChangeReceiver;
 import ba.unsa.etf.rma.rma20babicamina92.offline_tools.ConnectivityGetter;
 import ba.unsa.etf.rma.rma20babicamina92.utils.SimpleGestureFilter;
@@ -94,6 +96,7 @@ public class MainActivity extends FragmentActivity implements
                 new AccountInteractor(this, null);
             }
         }
+        System.out.println(action);
         cleanStartFragments();
     }
 
@@ -207,5 +210,12 @@ public class MainActivity extends FragmentActivity implements
     public void onReceive(boolean connected) {
         isConnected = connected;
         Toast.makeText(this, "Connected: " + connected, Toast.LENGTH_LONG).show();
+        if (connected) {
+            MainModel.getInstance().setTransactionActions(bankResolver.getTransactionActions());
+            MainModel.getInstance().setAccountActions(bankResolver.getAccountAction());
+            if (MainModel.getInstance().getTransactionActions().size() > 0) {
+                new OfflineTransactionsInteractor(this, 0).execute(MainModel.getInstance().getTransactionActions().get(0));
+            }
+        }
     }
 }
