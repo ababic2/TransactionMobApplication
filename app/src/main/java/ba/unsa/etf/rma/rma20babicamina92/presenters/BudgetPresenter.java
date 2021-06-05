@@ -32,9 +32,14 @@ public class BudgetPresenter {
     }
 
     private void updateFragment(BudgetFragment fragment) {
-        int budget = model.getAccount().getBudget();
-        int monthly = model.getAccount().getMonthLimit();
-        int total = model.getAccount().getTotalLimit();
+        int budget = 0;
+        int monthly = 0;
+        int total = 0;
+        if(model.getAccount()!= null) {
+            budget = model.getAccount().getBudget();
+            monthly = model.getAccount().getMonthLimit();
+            total = model.getAccount().getTotalLimit();
+        }
         fragment.setBudgetFieldContent(String.format(Locale.getDefault(),"Budget: %d",budget));
         fragment.setMonthlyFieldContent(String.format(Locale.getDefault(),"%d",monthly));
         fragment.setTotalFieldContent(String.format(Locale.getDefault(),"%d",total));
