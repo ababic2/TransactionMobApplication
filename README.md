@@ -9,7 +9,7 @@ Prvobitno pushana na Bitbucket repozitorij.
 
 ## Demo
 
-<img src= /AppPhoto/rma.gif width="300" height="550" />
+<img src= /AppGif/rma.gif width="300" height="550" />
 
 
 ## Status
